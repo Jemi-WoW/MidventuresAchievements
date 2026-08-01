@@ -12,8 +12,17 @@ ns.TAB_ID = 4               -- next free CA_Database tab after player/guild/stat
 ns.ID_OFFSET = 500000       -- reserved id range for our categories, achievements and criteria
 ns.TAB_LABEL = 'Midventures'
 ns.POINTS_LABEL = 'Midi Points'
+ns.ANNIVERSARY_LABEL = 'Achievement Points'
+
+-- Leaderboard sidebar rows are fake categories, kept below ID_OFFSET so ns.Owns ignores them.
+ns.LEADERBOARD_ID_BASE = 400000
+ns.LEADERBOARD_LABEL = 'Leaderboard'
+ns.SECTION_ANNIVERSARY = 'A'
+ns.SECTION_MIDVENTURES = 'M'
+ns.COMM_PREFIX = 'MVACH'
 
 ns.active = false           -- true while the Midventures view is on screen
+ns.leaderboard = false      -- true while the leaderboard view is on screen
 ns.achievements = {}        -- short name -> achievement, for metas and the summary
 
 -- All our ids sit above the offset.

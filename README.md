@@ -12,6 +12,8 @@ your own score, kept separate from the regular Anniversary Achievement Points.
 - Custom achievements across General, Quests, Exploration, Dungeons & Raids, Professions and more
 - **Midi Points**, tracked apart from your normal Anniversary Achievement Points
 - Summary page with your latest unlocks and progress per category
+- **Guild leaderboard**, ranking everyone in the guild by their combined score,
+  with every achievement they have earned on either side
 - Track achievements on screen, with the popup and sound when you earn one
 - Search, filter and link achievements in chat
 
@@ -19,11 +21,6 @@ your own score, kept separate from the regular Anniversary Achievement Points.
 
 [Anniversary Achievements](https://www.curseforge.com/wow/addons/anniversary-achievements)
 Midventures Achievements builds on top of it.
-
-## Coming soon
-
-- Guild leaderboard: every Midventures player in the guild, their Midi Points,
-  and what they have earned
 
 ---
 

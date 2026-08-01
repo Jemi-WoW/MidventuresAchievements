@@ -5,6 +5,7 @@
 ## Notes: Custom Midventures achievements and Midi Points, built on Anniversary Achievements.
 ## Category: Achievements
 ## Dependencies: AnniversaryAchievements
+## SavedVariables: MidventuresLeaderboardDB
 
 core/Namespace.lua
 core/Database.lua
@@ -20,6 +21,16 @@ achievements/dungeons-raids/DungeonsAndRaids.lua
 achievements/professions/Professions.lua
 achievements/Register.lua
 
+core/Snapshot.lua
+core/Roster.lua
+core/Sync.lua
+
 ui/Tab.lua
 ui/View.lua
 ui/Live.lua
+
+ui/leaderboard/Remote.lua
+ui/leaderboard/Players.lua
+ui/leaderboard/Detail.lua
+ui/leaderboard/Tab.lua
+ui/leaderboard/View.lua
