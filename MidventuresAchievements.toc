@@ -10,7 +10,9 @@
 core/Namespace.lua
 core/Database.lua
 core/Builder.lua
+core/Anniversary.lua
 core/Categories.lua
+core/Guild.lua
 core/Points.lua
 core/Progress.lua
 
@@ -19,6 +21,8 @@ achievements/quests/Quests.lua
 achievements/exploration/Exploration.lua
 achievements/dungeons-raids/DungeonsAndRaids.lua
 achievements/professions/Professions.lua
+achievements/pvp/PvP.lua
+achievements/reputation/Reputation.lua
 achievements/Register.lua
 
 core/Snapshot.lua

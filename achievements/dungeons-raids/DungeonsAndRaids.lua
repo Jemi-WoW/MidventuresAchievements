@@ -2,18 +2,29 @@ local _, ns = ...
 if ns.disabled then return end
 
 local TYPE = CA_Criterias.TYPE
-local dungeons, A = ns.categories.dungeons, ns.achievements
-local classic, tbc = ns.categories.dungeonsClassic, ns.categories.dungeonsTBC
+local A = ns.achievements
+local classic, tbc, raids =
+    ns.categories.dungeonsClassic, ns.categories.dungeonsTBC, ns.categories.dungeonsRaids
 
 -- How to write these: .AchievementGuide/DungeonsAndRaids.md
 -- Append new achievements at the bottom, ids are handed out in load order.
 
-A.TEST_B = ns.Achievement(tbc, {
-    name   = 'TEST_B',
-    desc   = 'Kill 5 monsters.',
-    points = 20,
-    icon   = '-INV_Misc_Bone_HumanSkull_01',
+A.INTO_THE_FIRE = ns.Achievement(classic, {
+    name   = 'Into the Fire',
+    desc   = 'Defeat Taragaman the Hungerer in Ragefire Chasm.',
+    points = 15,
+    icon   = '-Spell_Shadow_Summonimp',
     criteria = {
-        { TYPE.KILL_ANY_NPC, nil, 5, 'Monsters killed' },
+        { TYPE.KILL_NPC, {11520} },
+    },
+})
+
+A.MINE_ALL_MINE = ns.Achievement(classic, {
+    name   = 'Mine, All Mine',
+    desc   = 'Defeat Edwin VanCleef in the Deadmines.',
+    points = 15,
+    icon   = '-Inv_Sword_39',
+    criteria = {
+        { TYPE.KILL_NPC, {639} },
     },
 })
