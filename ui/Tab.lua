@@ -26,9 +26,12 @@ for _, t in ipairs({ tab1, tab }) do
 end
 
 -- Fallback for clients whose PanelTemplates ignores those fields.
+-- The leaderboard owns neither tab, so both sit deselected while it is up.
 function ns.UpdateTabText()
-    tab1.text:SetPoint('CENTER', 0, ns.active and TEXT_Y_DESELECTED or TEXT_Y_SELECTED)
-    tab.text:SetPoint('CENTER', 0, ns.active and TEXT_Y_SELECTED or TEXT_Y_DESELECTED)
+    local midventures = ns.active and not ns.leaderboard
+    local anniversary = not ns.active and not ns.leaderboard
+    tab1.text:SetPoint('CENTER', 0, anniversary and TEXT_Y_SELECTED or TEXT_Y_DESELECTED)
+    tab.text:SetPoint('CENTER', 0, midventures and TEXT_Y_SELECTED or TEXT_Y_DESELECTED)
 end
 
 PanelTemplates_SetNumTabs(frame, 2)

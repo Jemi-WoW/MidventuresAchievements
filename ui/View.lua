@@ -9,6 +9,9 @@ local anniversaryFunctions = ACHIEVEMENT_FUNCTIONS
 local anniversarySummaryCategories = ACHIEVEMENTUI_SUMMARYCATEGORIES
 local anniversaryDefaultSummary = ACHIEVEMENTUI_DEFAULTSUMMARYACHIEVEMENTS
 
+-- The leaderboard view swaps these out too, so it needs them by name.
+ns.anniversaryFunctions = anniversaryFunctions
+
 local midventuresFunctions = {
     categoryAccessor = function()
         local ids = {}
@@ -39,6 +42,7 @@ local function applyHeader()
     end
     ns.UpdateTabText()
 end
+ns.ApplyHeader = applyHeader
 
 -- The summary only rebuilds in OnShow, which won't fire if it is already up.
 local function refreshSummary()
@@ -208,7 +212,7 @@ end)
 local baseToggle = AchievementFrame_ToggleAchievementFrame
 AchievementFrame_ToggleAchievementFrame = function(toggleStatFrame, toggleGuildView)
     -- Anniversary only closes on toggle while tab 1 is selected.
-    if not toggleStatFrame and frame:IsShown() and ns.active then
+    if not toggleStatFrame and frame:IsShown() and (ns.active or ns.leaderboard) then
         frame.selectedTab = 1
     end
 
