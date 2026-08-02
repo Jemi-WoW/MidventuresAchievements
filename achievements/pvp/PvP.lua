@@ -10,23 +10,5 @@ local battlegrounds, arenas = ns.categories.pvpBattlegrounds, ns.categories.pvpA
 
 local WARSONG_GULCH = 1460
 
-A.INTO_THE_GULCH = ns.Achievement(battlegrounds, {
-    name   = 'Into the Gulch',
-    desc   = 'Win a Warsong Gulch match.',
-    points = 15,
-    icon   = '-Inv_Shield_05',
-    criteria = {
-        { TYPE.BATTLEFIELD_WINS, {WARSONG_GULCH} },
-    },
-})
-
-A.FLAG_RUNNER = ns.Achievement(battlegrounds, {
-    name     = 'Flag Runner',
-    desc     = 'Win 5 Warsong Gulch matches.',
-    points   = 20,
-    icon     = '-Inv_Sword_47',
-    previous = A.INTO_THE_GULCH,
-    criteria = {
-        { TYPE.BATTLEFIELD_WINS, {WARSONG_GULCH}, 5, 'Warsong Gulch wins' },
-    },
-})
+-- Anniversary already has win counts of 1, 5, 10, 25 and 50 for every battleground, so
+-- those duplicate it. Use the score and stat types instead, or gate on theirs.
