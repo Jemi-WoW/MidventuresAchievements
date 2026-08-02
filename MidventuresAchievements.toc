@@ -1,7 +1,7 @@
 ## Interface: 20506
-## Title: <|cff00ff00Midventures Achievements|r> v0.1
+## Title: <|cff00ff00Midventures Achievements|r> v0.2
 ## Author: Jamie/Jemi
-## Version: 0.1
+## Version: 0.2
 ## Notes: Custom Midventures achievements and Midi Points, built on Anniversary Achievements.
 ## Category: Achievements
 ## Dependencies: AnniversaryAchievements

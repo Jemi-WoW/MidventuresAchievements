@@ -4,7 +4,7 @@ if ns.disabled then return end
 local POINTS_THROTTLE = 10       -- seconds between our own points broadcasts
 local PING_THROTTLE = 15         -- seconds between "who is out there" pings
 local DETAIL_THROTTLE = 15       -- seconds between detail requests for one player
-local RELAY_THROTTLE = 30        -- seconds between roster relays to one player
+local RELAY_THROTTLE = 300       -- seconds between roster relays to one player
 local RELAY_LIMIT = 40           -- players per relay, highest ranked first
 local LOGIN_DELAY = 10           -- let the guild roster arrive before the first broadcast
 local EARN_DELAY = 5             -- coalesce a burst of achievements into one broadcast
@@ -162,7 +162,8 @@ end
 -- Relayed records are always older news than the player's own broadcast, so they yield to it.
 local function receiveRoster(fields)
     local learned = 0
-    for i = 2, #fields do
+    -- Nobody may relay us more players than we would ever relay ourselves.
+    for i = 2, math.min(#fields, RELAY_LIMIT + 1) do
         local parts = {}
         for part in (fields[i] .. '~'):gmatch('([^~]*)~') do parts[#parts + 1] = part end
 
