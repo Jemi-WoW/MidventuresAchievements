@@ -5,7 +5,12 @@ local leaderboard = ns.Leaderboard
 
 local CLASS_ICONS = 'Interface\\GLUES\\CHARACTERCREATE\\UI-CHARACTERCREATE-CLASSES'
 local TINY_SHIELD = 'Interface\\AddOns\\AnniversaryAchievements\\textures\\UI-Achievement-TinyShield'
-local LABEL_INSET, LABEL_INSET_WITH_ICON = 16, 34
+-- The friends list' own dots, so online means the same thing in both windows.
+local STATUS_ONLINE = 'Interface\\FriendsFrame\\StatusIcon-Online'
+local STATUS_OFFLINE = 'Interface\\FriendsFrame\\StatusIcon-Offline'
+
+-- Player rows always carry a status dot, and a class icon whenever we know the class.
+local LABEL_INSET, LABEL_INSET_WITH_DOT, LABEL_INSET_WITH_BOTH = 16, 22, 40
 local LABEL_RIGHT, LABEL_RIGHT_WITH_POINTS = -8, -52
 
 -- Ranked ids, in the order the sidebar should list them.
@@ -42,12 +47,24 @@ function leaderboard.UpdateSidebarMessage()
     message:Show()
 end
 
+-- Online state, in the leftmost slot the friends list puts it in too.
+local function statusDot(button)
+    if not button.mvStatus then
+        local dot = button:CreateTexture(nil, 'ARTWORK')
+        dot:SetSize(14, 14)
+        -- Same drop as the score, for the row background hanging 7px low.
+        dot:SetPoint('LEFT', 4, -3)
+        button.mvStatus = dot
+    end
+    return button.mvStatus
+end
+
 local function classIcon(button)
     if not button.mvClassIcon then
         local icon = button:CreateTexture(nil, 'ARTWORK')
         icon:SetSize(16, 16)
-        -- Same drop as the score, for the row background hanging 7px low.
-        icon:SetPoint('LEFT', 14, -3)
+        -- Sits right of the status dot, dropped the same 3px as everything else.
+        icon:SetPoint('LEFT', 20, -3)
         button.mvClassIcon = icon
     end
     return button.mvClassIcon
@@ -94,7 +111,7 @@ local function playerTooltip(self)
     GameTooltip:Show()
 end
 
--- Player rows get a class icon and a class-coloured name; everything else is untouched.
+-- Player rows get a status dot, a class icon and a class-coloured name; everything else is untouched.
 local baseDisplayButton = AchievementFrameCategories_DisplayButton
 
 AchievementFrameCategories_DisplayButton = function(button, element)
@@ -104,6 +121,7 @@ AchievementFrameCategories_DisplayButton = function(button, element)
     local record = leaderboard.RecordFor(element.id)
     if not record then
         if button.mvClassIcon then button.mvClassIcon:Hide() end
+        if button.mvStatus then button.mvStatus:Hide() end
         if button.mvPoints then
             button.mvPoints:Hide()
             button.mvShield:Hide()
@@ -118,16 +136,22 @@ AchievementFrameCategories_DisplayButton = function(button, element)
         return
     end
 
+    -- Our own row is always online, whether or not the guild roster has landed yet.
+    local online = record.online or record.isPlayer
+    local dot = statusDot(button)
+    dot:SetTexture(online and STATUS_ONLINE or STATUS_OFFLINE)
+    dot:Show()
+
     local icon = classIcon(button)
     local coords = record.class and CLASS_ICON_TCOORDS[record.class]
     if coords then
         icon:SetTexture(CLASS_ICONS)
         icon:SetTexCoord(unpack(coords))
         icon:Show()
-        button.label:SetPoint('BOTTOMLEFT', LABEL_INSET_WITH_ICON, 4)
+        button.label:SetPoint('BOTTOMLEFT', LABEL_INSET_WITH_BOTH, 4)
     else
         icon:Hide()
-        button.label:SetPoint('BOTTOMLEFT', LABEL_INSET, 4)
+        button.label:SetPoint('BOTTOMLEFT', LABEL_INSET_WITH_DOT, 4)
     end
 
     local points = pointsText(button)
@@ -139,7 +163,7 @@ AchievementFrameCategories_DisplayButton = function(button, element)
     local color = record.class and RAID_CLASS_COLORS[record.class]
     button.label:SetTextColor(color and color.r or 1, color and color.g or 0.82, color and color.b or 0)
     button.mvColoured = true
-    icon:SetDesaturated(not (record.online or record.isPlayer))
+    icon:SetDesaturated(not online)
 
     button.name = record.name
     button.showTooltipFunc = playerTooltip
