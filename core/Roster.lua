@@ -57,6 +57,51 @@ function roster.Put(name, fields)
     return record
 end
 
+-- Second-hand records, so guildmates who are offline still rank while nobody can hear them.
+function roster.Relay(name, fields)
+    local records = store()
+    if not records then return nil end
+
+    name = plainName(name)
+    if not name or name == UnitName('player') then return nil end
+
+    -- Passing an old record around must not undo a prune.
+    local lastSeen = fields.lastSeen or 0
+    if lastSeen < time() - PRUNE_AFTER then return nil end
+
+    local record = records[name]
+    -- Anything we heard first hand is fresher than what someone else remembers.
+    if record and (record.lastSeen or 0) >= lastSeen then return nil end
+
+    if not record then
+        record = { name = name }
+        records[name] = record
+    end
+
+    record.annPoints, record.midiPoints = fields.annPoints or 0, fields.midiPoints or 0
+    record.annDone, record.midiDone = fields.annDone or 0, fields.midiDone or 0
+    record.class = fields.class or record.class
+    record.className = fields.className or record.className
+    record.level = fields.level or record.level
+    record.ver = ns.Snapshot.Version(record.annPoints, record.midiPoints, record.annDone, record.midiDone)
+    record.lastSeen = lastSeen
+    sortedDirty = true
+    return record
+end
+
+-- What we can pass on about everyone else, best ranked first when the list is capped.
+function roster.Shareable(exclude, limit)
+    local mine = UnitName('player')
+    local out = {}
+    for _, record in ipairs(roster.Get()) do
+        if record.name ~= mine and record.name ~= exclude then
+            out[#out + 1] = record
+            if limit and #out >= limit then break end
+        end
+    end
+    return out
+end
+
 -- Our own numbers are always fresher than anything on the wire.
 function roster.RefreshSelf()
     local records = store()
@@ -70,14 +115,20 @@ function roster.RefreshSelf()
 end
 
 -- Class, level and online state come from the guild roster, not the wire.
+-- Offline members are only listed while the guild frame's "show offline" box is ticked,
+-- so absence means offline, never that the player left.
 function roster.MergeGuildRoster()
     local records = store()
     if not records then return end
 
+    -- An empty roster means it has not arrived yet, not that the guild went offline.
+    local total = GetNumGuildMembers() or 0
+    if total == 0 then return end
+
     for _, record in pairs(records) do record.online = false end
 
     -- Index 5 is the localised class name, index 11 the file name colours and icons need.
-    for i = 1, (GetNumGuildMembers() or 0) do
+    for i = 1, total do
         local name, _, _, level, className, _, _, _, online, _, classFile = GetGuildRosterInfo(i)
         local record = name and records[plainName(name)]
         if record then

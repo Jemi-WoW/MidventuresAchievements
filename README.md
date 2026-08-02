@@ -13,7 +13,7 @@ your own score, kept separate from the regular Anniversary Achievement Points.
 - **Midi Points**, tracked apart from your normal Anniversary Achievement Points
 - Summary page with your latest unlocks and progress per category
 - **Guild leaderboard**, ranking everyone in the guild by their combined score,
-  with every achievement they have earned on either side
+  offline guildmates included, with every achievement they have earned on either side
 - Track achievements on screen, with the popup and sound when you earn one
 - Search, filter and link achievements in chat
 
