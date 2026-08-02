@@ -19,13 +19,4 @@ A.ODD_JOBS = ns.Achievement(azeroth, {
     },
 })
 
-A.ERRAND_RUNNER = ns.Achievement(azeroth, {
-    name     = 'Errand Runner',
-    desc     = 'Complete 50 quests.',
-    points   = 15,
-    icon     = '-Inv_Misc_Book_07',
-    previous = A.ODD_JOBS,
-    criteria = {
-        { TYPE.COMPLETE_QUESTS, nil, 50, 'Quests completed' },
-    },
-})
+-- Anniversary's quest counters start at 50, so keep ours under that or gate on theirs.
