@@ -2,6 +2,7 @@
 ## Title: <|cff00ff00Midventures Achievements|r> v0.3
 ## Author: Jamie/Jemi
 ## Version: 0.3
+## IconTexture: Interface/AddOns/AnniversaryAchievements/logo.tga
 ## Notes: Custom Midventures achievements and Midi Points, built on Anniversary Achievements.
 ## Category: Achievements
 ## Dependencies: AnniversaryAchievements
