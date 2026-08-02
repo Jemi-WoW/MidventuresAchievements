@@ -116,7 +116,6 @@ function ns.HideLeaderboard()
 
     detail:Hide()
     leaderboard.sidebarMessage:Hide()
-    leaderboard.listMessage:Hide()
     AchievementFrameAchievementsContainer:Show()
     setListInset(0)
     AchievementFrameHeaderShield:Show()
