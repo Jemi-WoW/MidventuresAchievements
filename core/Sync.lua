@@ -4,6 +4,8 @@ if ns.disabled then return end
 local POINTS_THROTTLE = 10       -- seconds between our own points broadcasts
 local PING_THROTTLE = 15         -- seconds between "who is out there" pings
 local DETAIL_THROTTLE = 15       -- seconds between detail requests for one player
+local RELAY_THROTTLE = 30        -- seconds between roster relays to one player
+local RELAY_LIMIT = 40           -- players per relay, highest ranked first
 local LOGIN_DELAY = 10           -- let the guild roster arrive before the first broadcast
 local EARN_DELAY = 5             -- coalesce a burst of achievements into one broadcast
 
@@ -68,10 +70,10 @@ end
 sync.Encode, sync.Decode = encodeIDs, decodeIDs
 
 local lastPoints, lastPing = 0, 0
-local lastDetail = {}
+local lastDetail, lastRelay = {}, {}
 
 -- Counted only so /mvlb can tell "nobody answered" from "we dropped the answer".
-local seen = { sent = 0, points = 0, pings = 0, detail = 0, dropped = 0, last = nil }
+local seen = { sent = 0, points = 0, pings = 0, detail = 0, roster = 0, learned = 0, dropped = 0, last = nil }
 sync.seen = seen
 
 local function canSend()
@@ -117,6 +119,8 @@ end
 -- Pulls one player's completed achievements, but only when ours are out of date.
 function sync.RequestDetail(record)
     if not record or record.isPlayer then return end
+    -- Whispering someone offline only earns us a "no player" error in the chat frame.
+    if not record.online then return end
 
     local now = GetTime()
     if now - (lastDetail[record.name] or 0) < DETAIL_THROTTLE then return end
@@ -136,12 +140,59 @@ local function sendDetail(target)
     send(table.concat(body, '|'), 'WHISPER', target, 'BULK')
 end
 
+-- Everyone else we know of, so a guildmate learns the players who are offline right now.
+local function sendRoster(target)
+    local now = GetTime()
+    if now - (lastRelay[target] or 0) < RELAY_THROTTLE then return end
+    lastRelay[target] = now
+
+    local parts = { 'R' }
+    for _, record in ipairs(ns.Roster.Shareable(ns.Roster.PlainName(target), RELAY_LIMIT)) do
+        parts[#parts + 1] = table.concat({
+            record.name, record.class or '', record.className or '', record.level or 0,
+            record.annPoints or 0, record.midiPoints or 0,
+            record.annDone or 0, record.midiDone or 0, to36(record.lastSeen or 0),
+        }, '~')
+    end
+
+    if #parts == 1 then return end
+    send(table.concat(parts, '|'), 'WHISPER', target, 'BULK')
+end
+
+-- Relayed records are always older news than the player's own broadcast, so they yield to it.
+local function receiveRoster(fields)
+    local learned = 0
+    for i = 2, #fields do
+        local parts = {}
+        for part in (fields[i] .. '~'):gmatch('([^~]*)~') do parts[#parts + 1] = part end
+
+        if parts[1] and parts[1] ~= '' then
+            local record = ns.Roster.Relay(parts[1], {
+                class = parts[2] ~= '' and parts[2] or nil,
+                className = parts[3] ~= '' and parts[3] or nil,
+                level = tonumber(parts[4]),
+                annPoints = tonumber(parts[5]) or 0,
+                midiPoints = tonumber(parts[6]) or 0,
+                annDone = tonumber(parts[7]) or 0,
+                midiDone = tonumber(parts[8]) or 0,
+                lastSeen = from36(parts[9] or '0'),
+            })
+            if record then learned = learned + 1 end
+        end
+    end
+
+    seen.learned = seen.learned + learned
+    if learned > 0 and sync.onUpdate then sync.onUpdate() end
+end
+
 local function receivePoints(sender, fields)
     local record = ns.Roster.Put(sender, {
         annPoints = tonumber(fields[2]) or 0,
         midiPoints = tonumber(fields[3]) or 0,
         annDone = tonumber(fields[4]) or 0,
         midiDone = tonumber(fields[5]) or 0,
+        -- Hearing from someone is the most reliable proof they are online.
+        online = true,
     })
     -- Put only fails before the guild name is known, which would lose the player.
     if not record then
@@ -166,6 +217,7 @@ local function receiveDetail(sender, fields)
         midiDone = tonumber(fields[5]) or 0,
         ids = ids,
         days = days,
+        online = true,
     })
     if record then
         record.idsVer = record.ver
@@ -191,11 +243,16 @@ function sync:OnCommReceived(prefix, message, distribution, sender)
         seen.pings = seen.pings + 1
         -- Stagger the replies so a big guild does not answer all at once.
         C_Timer.After(math.random() * 3, function() sync.BroadcastPoints(true) end)
+        -- Only the player who asked needs our copy of the roster.
+        C_Timer.After(3 + math.random() * 3, function() sendRoster(sender) end)
     elseif kind == 'Q' and distribution == 'WHISPER' then
         sendDetail(sender)
     elseif kind == 'D' and distribution == 'WHISPER' then
         seen.detail = seen.detail + 1
         receiveDetail(sender, fields)
+    elseif kind == 'R' and distribution == 'WHISPER' then
+        seen.roster = seen.roster + 1
+        receiveRoster(fields)
     end
 end
 
@@ -247,7 +304,7 @@ SlashCmdList.MIDVENTURESLEADERBOARD = function(argument)
     local function say(text) DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures:|r ' .. text) end
 
     if argument == 'ping' then
-        lastPing, lastPoints = 0, 0
+        lastPing, lastPoints, lastRelay = 0, 0, {}
         sync.RequestGuildRoster()
         sync.Ping()
         sync.BroadcastPoints(true)
@@ -256,14 +313,16 @@ SlashCmdList.MIDVENTURESLEADERBOARD = function(argument)
     end
 
     say(('guild: %s, comms: %s'):format(GetGuildInfo('player') or 'none', AceComm and 'up' or 'missing'))
-    say(('sent %d, received %d points / %d pings / %d detail, dropped %d, last: %s'):format(
-        seen.sent, seen.points, seen.pings, seen.detail, seen.dropped, seen.last or 'nothing'))
+    say(('sent %d, received %d points / %d pings / %d detail / %d roster (%d learned), dropped %d, last: %s'):format(
+        seen.sent, seen.points, seen.pings, seen.detail, seen.roster, seen.learned,
+        seen.dropped, seen.last or 'nothing'))
 
     local records = ns.Roster.Get()
     say(('%d player(s) known:'):format(#records))
     for _, record in ipairs(records) do
-        say(('  %s - %d + %d points, %s'):format(
-            record.name, record.annPoints or 0, record.midiPoints or 0,
+        say(('  %s (%s) - %d + %d points, %s'):format(
+            record.name, (record.online or record.isPlayer) and 'online' or 'offline',
+            record.annPoints or 0, record.midiPoints or 0,
             record.ids and 'achievements cached' or 'points only'))
     end
 

@@ -100,12 +100,39 @@ detail.annButton:SetPoint('TOPLEFT', 16, -60)
 detail.midiButton = createSectionButton(ns.TAB_LABEL, ns.SECTION_MIDVENTURES)
 detail.midiButton:SetPoint('LEFT', detail.annButton, 'RIGHT', 10, 0)
 
+-- Why the list is empty: a player is ranked from their points, which arrive long before their list.
+local note = AchievementFrameAchievementsContainer:CreateFontString(nil, 'ARTWORK', 'GameFontHighlight')
+note:SetPoint('TOP', 0, -40)
+note:SetWidth(400)
+note:Hide()
+leaderboard.listMessage = note
+
+local function refreshNote(record)
+    if #leaderboard.List() > 0 then
+        note:Hide()
+        return
+    end
+
+    local done = leaderboard.section == ns.SECTION_ANNIVERSARY and (record.annDone or 0) or (record.midiDone or 0)
+    if done == 0 then
+        note:SetText('Nothing earned in this section yet.')
+    elseif record.online or record.isPlayer then
+        note:SetText('Fetching this player\'s achievements...')
+    else
+        note:SetText(('%s is offline, so their %d achievements here cannot be fetched yet.')
+            :format(record.name, done) .. '\nThe list fills in the next time you are both online.')
+    end
+    note:Show()
+end
+
 function detail.Refresh()
     local record = leaderboard.record
     if not record then
+        note:Hide()
         detail:Hide()
         return
     end
+    refreshNote(record)
 
     local color = record.class and RAID_CLASS_COLORS[record.class]
     detail.name:SetText(record.name)
