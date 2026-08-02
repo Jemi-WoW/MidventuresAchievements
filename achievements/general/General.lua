@@ -32,17 +32,6 @@ A.FIRST_STEPS = ns.Achievement(levelling, {
     },
 })
 
-A.SETTLING_IN = ns.Achievement(levelling, {
-    name   = 'Settling In',
-    desc   = 'Reach level 20.',
-    points = 15,
-    icon   = '-Ability_Mount_RidingHorse',
-    meta   = { ns.Anniversary('AN_LVL', 10) },
-    criteria = {
-        { TYPE.REACH_LEVEL, {20} },
-    },
-})
-
 A.BLOODED = ns.Achievement(combat, {
     name   = 'Blooded',
     desc   = 'Kill 10 monsters.',
@@ -50,16 +39,6 @@ A.BLOODED = ns.Achievement(combat, {
     icon   = '-Inv_Misc_Bone_DwarfSkull_01',
     criteria = {
         { TYPE.KILL_ANY_NPC, nil, 10, 'Monsters killed' },
-    },
-})
-
-A.SCRAPPER = ns.Achievement(combat, {
-    name   = 'Scrapper',
-    desc   = 'Win a duel.',
-    points = 10,
-    icon   = '-Ability_Warrior_DecisiveStrike',
-    criteria = {
-        { TYPE.DUELS },
     },
 })
 

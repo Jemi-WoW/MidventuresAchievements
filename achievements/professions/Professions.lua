@@ -43,22 +43,6 @@ A.JOURNEYMAN = anyProfession(crafting, 'Journeyman',
     'Reach 150 skill in a crafting profession.', 15, '-Inv_Enchant_DustIllusion', 150,
     CRAFTING, A.MAKING_THINGS)
 
-A.CAMP_COOK = ns.Achievement(secondary, {
-    name   = 'Camp Cook',
-    desc   = 'Reach 75 skill in Cooking.',
-    points = 10,
-    icon   = '-Inv_Misc_Food_63',
-    criteria = {
-        { TYPE.REACH_PROFESSION_LEVEL, {PROF.COOKING[1], 75} },
-    },
-})
-
-A.FIELD_MEDIC = ns.Achievement(secondary, {
-    name   = 'Field Medic',
-    desc   = 'Reach 75 skill in First Aid.',
-    points = 10,
-    icon   = '-Inv_Misc_Bandage_12',
-    criteria = {
-        { TYPE.REACH_PROFESSION_LEVEL, {PROF.FIRST_AID[1], 75} },
-    },
-})
+-- Anniversary already tiers each secondary profession at 75, 150, 225 and 300, so a plain
+-- skill level there duplicates it. Anniversary has no per-profession tiers for the main
+-- professions though, which is what the gathering and crafting splits above rely on.

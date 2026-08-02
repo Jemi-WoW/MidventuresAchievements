@@ -21,18 +21,6 @@ local function zone(category, name, desc, points, icon, areaIDs)
     })
 end
 
-A.WOODS_OF_ELWYNN = zone(easternKingdoms, 'Woods of Elwynn', 'Explore Elwynn Forest.', 10,
-    '-Inv_Mushroom_11',
-    {87, 9, 1519, 57, 797, 60, 62, 91, 798, 88, 86, 18})
-
-A.FRESH_OFF_THE_SLAB = zone(easternKingdoms, 'Fresh Off the Slab', 'Explore Tirisfal Glades.', 10,
-    '-Spell_Shadow_DeathScream',
-    {156, 154, 810, 157, 166, 811, 164, 159, 165, 162, 459, 167, 812, 160, 1497, 152})
-
-A.RED_SANDS = zone(kalimdor, 'Red Sands', 'Explore Durotar.', 10,
-    '-Spell_Fire_Lavaspawn',
-    {367, 366, 368, 372, 362, 816, 369, 370, 817, 1637, 363})
-
-A.AMONG_THE_BRANCHES = zone(kalimdor, 'Among the Branches', 'Explore Teldrassil.', 10,
-    '-Ability_Racial_Shadowmeld',
-    {736, 186, 261, 259, 478, 260, 264, 266, 1657, 702, 188})
+-- Anniversary already has an Explore achievement for every single zone, with the same
+-- subzone lists, so a plain one duplicates it. Combine zones or gate on theirs instead:
+--   meta = { ns.Anniversary('AN_EXPLORE', AreaTableLocale[12]) }
