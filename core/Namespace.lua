@@ -21,9 +21,17 @@ ns.SECTION_ANNIVERSARY = 'A'
 ns.SECTION_MIDVENTURES = 'M'
 ns.COMM_PREFIX = 'MVACH'
 
--- The community guild, and our own criteria type for being in it.
+-- The community guild, and our own criteria types for the things Anniversary cannot see.
+-- Each is registered by the core file named beside it, which also fires it.
 ns.GUILD_NAME = 'Dentventures'
-ns.CRITERIA_GUILD = 5001
+ns.CRITERIA_GUILD = 5001          -- Guild.lua, member of GUILD_NAME
+ns.CRITERIA_GUILD_DUEL = 5002     -- GuildDuels.lua, duel won against a guildmate
+ns.CRITERIA_GUILD_CHAT = 5003     -- GuildChat.lua, message sent in guild chat
+ns.CRITERIA_GUILD_RUN = 5004      -- GuildDungeons.lua, dungeon completed with a guild party
+ns.CRITERIA_GUILD_CLEAR = 5005    -- GuildDungeons.lua, dungeon cleared with a guild party
+ns.CRITERIA_POSITION = 5006       -- Position.lua, standing on a spot
+ns.CRITERIA_ZONE_BELOW_LEVEL = 5007 -- ZoneLevel.lua, in an area under a level
+ns.CRITERIA_TIER_SET = 5008       -- TierSet.lua, wearing a full dungeon set in an area
 
 ns.active = false           -- true while the Midventures view is on screen
 ns.leaderboard = false      -- true while the leaderboard view is on screen

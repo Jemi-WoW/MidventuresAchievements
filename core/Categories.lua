@@ -38,6 +38,10 @@ categories.pvpArenas        = ns.Category('Arenas', categories.pvp)
 categories.reputationAzeroth = ns.Category('Azeroth', categories.reputation)
 categories.reputationOutland = ns.Category('Outland', categories.reputation)
 
+-- Appended after the first pass, because creation order is what hands out id blocks.
+categories.generalGuild = ns.Category('Guild', categories.general)
+categories.pvpDuels     = ns.Category('Duels', categories.pvp)
+
 ns.categories = categories
 
 -- The summary's Progress Overview grid is derived in achievements/Register.lua.
