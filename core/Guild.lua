@@ -5,9 +5,40 @@ if ns.disabled then return end
 CA_Criterias.dataLengths[ns.CRITERIA_GUILD] = 0
 CA_Criterias.criterias[ns.CRITERIA_GUILD] = {}
 
+-- Every other guild criteria asks this first, so none of them count in another guild.
+function ns.InOurGuild()
+    return GetGuildInfo('player') == ns.GUILD_NAME
+end
+
+-- True while the party is exactly five, all of them guildmates.
+function ns.InGuildParty()
+    if not ns.InOurGuild() then return false end
+    for i = 1, 4 do
+        local unit = 'party' .. i
+        if not UnitExists(unit) or not UnitIsInMyGuild(unit) then return false end
+    end
+    return not UnitExists('party5')
+end
+
+-- Realm suffixes only show up on some clients, and never mean another realm here.
+local function plainName(name)
+    return name and (name:match('^([^-]+)') or name) or nil
+end
+
+-- Guildmate names without their realm suffix, for matching a name out of a chat line.
+function ns.GuildMemberNames()
+    local names = {}
+    if not ns.InOurGuild() then return names end
+    for i = 1, (GetNumGuildMembers() or 0) do
+        local name = plainName(GetGuildRosterInfo(i))
+        if name then names[name] = true end
+    end
+    return names
+end
+
 -- Reads membership rather than listening for a join, so installing later still counts.
 local function check()
-    if GetGuildInfo('player') == ns.GUILD_NAME then
+    if ns.InOurGuild() then
         CA_Criterias:Trigger(ns.CRITERIA_GUILD)
     end
 end
