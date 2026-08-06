@@ -106,6 +106,33 @@ function ns.ShowLeaderboard()
     updateView()
 end
 
+-- Where a guild chat link lands: the window open, on that player, on the right side of it.
+-- An unknown player leaves the default selection alone rather than emptying the pane.
+function ns.ShowLeaderboardFor(name, achievementID)
+    if not frame:IsShown() then
+        if InCombatLockdown() then
+            DEFAULT_CHAT_FRAME:AddMessage('|cffffff00' .. ns.LEADERBOARD_LABEL
+                .. ' cannot be opened during combat!|r')
+            return
+        end
+        AchievementFrame_ToggleAchievementFrame()
+    end
+
+    ns.ShowLeaderboard()
+    if achievementID then
+        ns.SetLeaderboardSection(ns.Owns(achievementID)
+            and ns.SECTION_MIDVENTURES or ns.SECTION_ANNIVERSARY)
+    end
+
+    local record = name and ns.Roster.Find(name)
+    if not record then return end
+
+    leaderboardFunctions.selectedCategory = leaderboard.CategoryID(record.name)
+    AchievementFrameCategories_Update()
+    AchievementFrameAchievements_ForceUpdate()
+    updateView()
+end
+
 -- Leaves leaderboard state behind without picking the next view; callers do that.
 function ns.HideLeaderboard()
     if not ns.leaderboard then return end
