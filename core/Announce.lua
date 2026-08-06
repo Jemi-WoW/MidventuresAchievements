@@ -2,15 +2,18 @@ local _, ns = ...
 if ns.disabled then return end
 
 -- The one place the guild message is written and read, so the sender and the chat filter
--- in ui/ChatLink.lua can never drift apart.
-local FORMAT = '[Achievements] %s has just completed [%s]!!'
-local PATTERN = '^%[Achievements%] (.-) has just completed %[(.+)%]!!$'
+-- in ui/ChatLink.lua can never drift apart. Guild chat already prints who is talking, so
+-- the line does not name the player again.
+local FORMAT = 'Has just completed %s!'
+local PATTERN = '^Has just completed %[(.+)%]!$'
 
-function ns.Announcement(player, achievementName)
-    return FORMAT:format(player, achievementName)
+-- The achievement arrives already wrapped: in brackets from here, or in a link from the
+-- chat filter, which is how the link can cover the brackets rather than sit inside them.
+function ns.Announcement(achievement)
+    return FORMAT:format(achievement)
 end
 
--- Returns the player and the achievement name, or nothing if this is an ordinary line.
+-- Returns the achievement name, or nothing if this is an ordinary line.
 function ns.ParseAnnouncement(message)
     return message:match(PATTERN)
 end
@@ -44,7 +47,7 @@ local function announce(achievementID)
     if not achievement then return end
     if #queue >= MAX_QUEUED then return end
 
-    queue[#queue + 1] = ns.Announcement(UnitName('player'), achievement.name)
+    queue[#queue + 1] = ns.Announcement('[' .. achievement.name .. ']')
     if draining then return end
     draining = true
     drain()
