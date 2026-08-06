@@ -5,6 +5,11 @@ local loc = SexyLib:Localization('Anniversary Achievements')
 
 local byName
 
+-- Their localisation, so our criteria can reuse strings Anniversary already translates.
+function ns.Localized(key, ...)
+    return loc:Get(key, ...)
+end
+
 -- Resolves one of Anniversary's own achievements so it can gate one of ours.
 -- Its ids come from a shared counter and shift when it adds content, so we match on name.
 function ns.Anniversary(key, ...)

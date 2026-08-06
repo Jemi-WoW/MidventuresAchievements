@@ -22,6 +22,7 @@ core/GuildDungeons.lua
 core/Position.lua
 core/ZoneLevel.lua
 core/TierSet.lua
+core/CritStrike.lua
 core/Points.lua
 core/Progress.lua
 

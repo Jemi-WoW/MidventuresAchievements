@@ -32,6 +32,7 @@ ns.CRITERIA_GUILD_CLEAR = 5005    -- GuildDungeons.lua, dungeon cleared with a g
 ns.CRITERIA_POSITION = 5006       -- Position.lua, standing on a spot
 ns.CRITERIA_ZONE_BELOW_LEVEL = 5007 -- ZoneLevel.lua, in an area under a level
 ns.CRITERIA_TIER_SET = 5008       -- TierSet.lua, wearing a full dungeon set in an area
+ns.CRITERIA_CRIT_ABOVE = 5009     -- CritStrike.lua, a critical strike of at least so much
 
 ns.active = false           -- true while the Midventures view is on screen
 ns.leaderboard = false      -- true while the leaderboard view is on screen

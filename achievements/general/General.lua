@@ -97,3 +97,46 @@ A.GUILD_CHAT_200 = chatter('Write in Guild chat 200 times',
 
 A.GUILD_CHAT_1000 = chatter('Write in Guild chat 1000 Times',
     chatDesc(1000), 1000, 30, '-Spell_Holy_Silence', A.GUILD_CHAT_200)
+
+-- Read off the combat log by core/CritStrike.lua, and only the player's own hits count.
+A.A_REAL_CRITTER = ns.Achievement(combat, {
+    name   = 'A real critter!',
+    desc   = 'Land a critical strike of 300 damage or more.',
+    points = 10,
+    icon   = '-Ability_Rogue_Eviscerate',
+    criteria = {
+        { ns.CRITERIA_CRIT_ABOVE, {300}, nil, 'Critical strike of 300' },
+    },
+})
+
+-- Rings and trinkets are dropped from Anniversary's slot list, which already leaves out
+-- shirt, tabard, off hand and the ranged slot. So this is armour, cloak, neck and weapon.
+local SKIPPED_SLOTS = {
+    FIRST_RING = true,
+    SECOND_RING = true,
+    FIRST_TRINKET = true,
+    SECOND_TRINKET = true,
+}
+
+-- Anniversary fires GEAR_QUALITY for every quality up to the one worn, so these ask for
+-- the quality or better, and blue gear fills the green achievement on the way past.
+local function fullGear(name, desc, quality, points, icon, previous)
+    local criteria = {}
+    for idx, slot in ipairs(CA_Criterias.GEAR_SLOT) do
+        if not SKIPPED_SLOTS[slot] then
+            criteria[#criteria + 1] = { TYPE.GEAR_QUALITY, {idx, quality}, nil,
+                ns.Localized('GEAR_SLOT_' .. slot) }
+        end
+    end
+    return ns.Achievement(wealth, {
+        name = name, desc = desc, points = points, icon = icon,
+        previous = previous, criteria = criteria,
+    })
+end
+
+A.I_AM_GREEN = fullGear('I am GREEN!',
+    'Equip uncommon or better gear in every slot below.', 2, 20, '-inv_bijou_green')
+
+A.BLUE_IS_THE_COLOR = fullGear('Blue is the color',
+    'Equip rare or better gear in every slot below.', 3, 30, '-Spell_Frost_WizardMark',
+    A.I_AM_GREEN)
