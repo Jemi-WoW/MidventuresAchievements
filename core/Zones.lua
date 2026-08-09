@@ -6,17 +6,13 @@ if ns.disabled then return end
 CA_Criterias.dataLengths[ns.CRITERIA_ZONE_VISIT] = 1
 CA_Criterias.criterias[ns.CRITERIA_ZONE_VISIT] = {}
 
--- Subzone first, the same order core/ZoneLevel.lua reads it in.
-local function here()
-    local subZone = GetSubZoneText()
-    if subZone and subZone ~= '' then return subZone end
-    return GetZoneText()
-end
-
+-- Either name counts, the same way core/ZoneLevel.lua reads it: a spot like Booty Bay is a
+-- subzone, a whole city like Stormwind is the zone, and an achievement may ask for either.
 local function check()
-    local name = here()
+    local subZone, zone = GetSubZoneText(), GetZoneText()
     for areaID in pairs(CA_Criterias.criterias[ns.CRITERIA_ZONE_VISIT]) do
-        if AreaTableLocale[areaID] == name then
+        local wanted = AreaTableLocale[areaID]
+        if wanted == subZone or wanted == zone then
             CA_Criterias:Trigger(ns.CRITERIA_ZONE_VISIT, {areaID})
         end
     end

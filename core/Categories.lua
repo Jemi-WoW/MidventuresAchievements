@@ -49,6 +49,11 @@ categories.generalMoney    = ns.Category('Money', categories.general)
 categories.generalOddities = ns.Category('Oddities', categories.general)
 categories.generalMilestones = ns.Category('Milestones', categories.general)
 
+categories.questsGuildErrands = ns.Category('Guild Errands', categories.quests)
+categories.questsBadHabits    = ns.Category('Bad Habits', categories.quests)
+categories.explorationTrespassing = ns.Category('Trespassing', categories.exploration)
+categories.explorationLandmarks   = ns.Category('Landmarks', categories.exploration)
+
 ns.categories = categories
 
 -- The summary's Progress Overview grid is derived in achievements/Register.lua.

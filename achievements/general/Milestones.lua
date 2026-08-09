@@ -126,14 +126,17 @@ A.REGULAR_AT_THE_BAR = ns.Achievement(milestones, {
 })
 
 -- Every holiday Anniversary tracks, in one place. Takes a year to earn on purpose.
+-- The seven holidays alone are Anniversary's own meta, so ours asks that you were drinking
+-- and eating cake through them as well.
 A.PARTY_ANIMAL = ns.Achievement(milestones, {
     name   = 'Party Animal',
-    desc   = 'Turn up to every holiday in the calendar.',
+    desc   = 'Turn up to every holiday in the calendar, and make a night of it.',
     points = 100,
     icon   = 'achievement_worldevent_merrymaker',
     meta   = {
         AN('AN_HALLOWSEND'), AN('AN_WINTERVEIL'), AN('AN_VALENTINES'),
         AN('AN_LUNAR'), AN('AN_CHILDREN'), AN('AN_MIDSUMMER'), AN('AN_BREWFEST'),
+        A.BREWFEST_REGULAR, A.CAKE_DAY,
     },
 })
 

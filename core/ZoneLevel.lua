@@ -5,19 +5,15 @@ if ns.disabled then return end
 CA_Criterias.dataLengths[ns.CRITERIA_ZONE_BELOW_LEVEL] = 2
 CA_Criterias.criterias[ns.CRITERIA_ZONE_BELOW_LEVEL] = {}
 
--- Subzone first, the way Anniversary reads exploration, so Booty Bay is not all of STV.
-local function here()
-    local subZone = GetSubZoneText()
-    if subZone and subZone ~= '' then return subZone end
-    return GetZoneText()
-end
-
 -- The registered criteria are the whole list of places worth checking, so walk those
--- rather than keeping a second copy of the same thing.
+-- rather than keeping a second copy of the same thing. Either name counts: Booty Bay is a
+-- subzone of Stranglethorn, Winterspring is a zone with no subzone worth naming.
 local function check()
-    local name, level = here(), UnitLevel('player')
+    local subZone, zone = GetSubZoneText(), GetZoneText()
+    local level = UnitLevel('player')
     for areaID, byLevel in pairs(CA_Criterias.criterias[ns.CRITERIA_ZONE_BELOW_LEVEL]) do
-        if AreaTableLocale[areaID] == name then
+        local wanted = AreaTableLocale[areaID]
+        if wanted == subZone or wanted == zone then
             for maxLevel in pairs(byLevel) do
                 if level < maxLevel then
                     CA_Criterias:Trigger(ns.CRITERIA_ZONE_BELOW_LEVEL, {areaID, maxLevel})

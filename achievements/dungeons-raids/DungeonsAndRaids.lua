@@ -77,3 +77,40 @@ A.TBC_GUILD_DUNGEON_MASTER = everyDungeon(tbc, 'TBC Guild Dungeon Master',
     ('Complete every Burning Crusade dungeon with a full group of %s guildmates.')
         :format(ns.GUILD_NAME),
     100, 'achievement_dungeon_outland_dungeon_hero', tbcRuns)
+
+-- How the runs went rather than which dungeon they were in, counted by core/GuildDungeons.lua
+-- on the same kills the achievements above are built from. These sit in the parent category
+-- because a run of either expansion counts towards them.
+local anyDungeon = ns.categories.dungeons
+
+A.DUNGEON_CRAWLER = ns.Chain(anyDungeon, {
+    name = function(n) return ('Complete %d Guild Dungeon Runs'):format(n) end,
+    desc = function(n)
+        return ('Finish %d dungeons with a full group of %s guildmates.')
+            :format(n, ns.GUILD_NAME)
+    end,
+    criteria = ns.CRITERIA_GUILD_RUNS,
+    label = 'Guild runs finished',
+    icons = {'-Inv_Misc_Key_03', 'achievement_dungeon_classicdungeonmaster',
+        '-Inv_Misc_Map_01'},
+})
+
+A.FLAWLESS = ns.Achievement(anyDungeon, {
+    name   = 'Flawless',
+    desc   = 'Finish a guild dungeon run without a single one of you dying.',
+    points = 25,
+    icon   = '-Spell_Holy_SealOfProtection',
+    criteria = {
+        { ns.CRITERIA_RUN_FLAWLESS, nil, nil, 'A run nobody died on' },
+    },
+})
+
+A.FULL_HOUSE = ns.Achievement(anyDungeon, {
+    name   = 'Full House',
+    desc   = 'Finish a guild dungeon run with five different classes in the group.',
+    points = 25,
+    icon   = '-Achievement_General',
+    criteria = {
+        { ns.CRITERIA_RUN_CLASSES, nil, nil, 'Five guildmates, five classes' },
+    },
+})

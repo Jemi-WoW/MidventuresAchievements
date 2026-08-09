@@ -142,7 +142,7 @@ A.MANKRIKS_WIFE = ns.Achievement(odd, {
     points = 15,
     icon   = '-Inv_Misc_Bone_DwarfSkull_01',
     criteria = {
-        { TYPE.COMPLETE_QUEST, {899}, nil, 'Lost in Battle' },
+        { TYPE.COMPLETE_QUEST, {4921}, nil, 'Lost in Battle' },
     },
 })
 
