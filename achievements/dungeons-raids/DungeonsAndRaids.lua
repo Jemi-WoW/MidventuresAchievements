@@ -3,8 +3,7 @@ if ns.disabled then return end
 
 local TYPE = CA_Criterias.TYPE
 local A = ns.achievements
-local classic, tbc, raids =
-    ns.categories.dungeonsClassic, ns.categories.dungeonsTBC, ns.categories.dungeonsRaids
+local classic, tbc = ns.categories.dungeonsClassic, ns.categories.dungeonsTBC
 
 -- How to write these: .AchievementGuide/DungeonsAndRaids.md
 -- Append new achievements at the bottom, ids are handed out in load order.
@@ -25,35 +24,56 @@ A.WHAT_ARE_YOU_DOING_HERE = ns.Achievement(classic, {
     },
 })
 
--- One criteria per dungeon, both fed by core/GuildDungeons.lua, which only credits a boss
--- while the party is five guildmates. Running counts the last boss, clearing counts them all.
-local function guildRun(category, criteriaType, name, desc, points, icon, list, previous)
-    local criteria = {}
-    for i, dungeon in ipairs(list) do
-        criteria[i] = { criteriaType, {dungeon.key}, nil, dungeon.name }
-    end
+-- Guild Runner, Guild Dungeon Master and their TBC pair used to sit here, one achievement
+-- covering every dungeon at once. Anniversary remembers progress by id, so the ids they
+-- were given are stepped past rather than handed out again to the ones below.
+classic.mvAchievementID = classic.mvAchievementID + 100
+classic.mvCriteriaID = classic.mvCriteriaID + 1000
+tbc.mvAchievementID = tbc.mvAchievementID + 100
+tbc.mvCriteriaID = tbc.mvCriteriaID + 1000
+
+local POINTS = 10
+
+-- One achievement per dungeon, fed by core/GuildDungeons.lua, which only credits the final
+-- boss while every member of the group is a guildmate.
+local function guildRun(category, dungeon)
     return ns.Achievement(category, {
-        name = name, desc = desc, points = points, icon = icon,
-        previous = previous, criteria = criteria,
+        name   = dungeon.title,
+        desc   = ('Defeat %s in %s with a full group of %s guildmates.')
+            :format(dungeon.boss, dungeon.name, ns.GUILD_NAME),
+        points = POINTS,
+        icon   = dungeon.icon,
+        criteria = {
+            { ns.CRITERIA_GUILD_RUN, {dungeon.key}, nil, dungeon.boss },
+        },
     })
 end
 
-A.GUILD_RUNNER = guildRun(classic, ns.CRITERIA_GUILD_RUN, 'Guild Runner',
-    ('Complete every WoW Classic dungeon in a party of five %s guildmates.')
-        :format(ns.GUILD_NAME),
-    50, 'achievement_dungeon_classicraider', ns.Dungeons.classic)
+-- Every dungeon of an expansion, as one achievement asking for all the others.
+local function everyDungeon(category, name, desc, points, icon, runs)
+    return ns.Achievement(category, {
+        name = name, desc = desc, points = points, icon = icon, meta = runs,
+    })
+end
 
-A.GUILD_DUNGEON_MASTER = guildRun(classic, ns.CRITERIA_GUILD_CLEAR, 'Guild Dungeon Master',
-    ('Clear every boss of every WoW Classic dungeon in a party of five %s guildmates.')
-        :format(ns.GUILD_NAME),
-    75, 'achievement_dungeon_classicdungeonmaster', ns.Dungeons.classic)
+local classicRuns = {}
+for i, dungeon in ipairs(ns.Dungeons.classic) do
+    classicRuns[i] = guildRun(classic, dungeon)
+    A['GUILD_RUN_' .. dungeon.key] = classicRuns[i]
+end
 
-A.TBC_GUILD_RUNNER = guildRun(tbc, ns.CRITERIA_GUILD_RUN, 'TBC Guild Runner',
-    ('Complete every Burning Crusade dungeon in a party of five %s guildmates.')
-        :format(ns.GUILD_NAME),
-    50, 'achievement_dungeon_outland_dungeon_hero', ns.Dungeons.tbc)
+local tbcRuns = {}
+for i, dungeon in ipairs(ns.Dungeons.tbc) do
+    tbcRuns[i] = guildRun(tbc, dungeon)
+    A['GUILD_RUN_' .. dungeon.key] = tbcRuns[i]
+end
 
-A.TBC_GUILD_DUNGEON_MASTER = guildRun(tbc, ns.CRITERIA_GUILD_CLEAR, 'TBC Guild Dungeon Master',
-    ('Clear every boss of every Burning Crusade dungeon in a party of five %s guildmates.')
+A.GUILD_DUNGEON_MASTER = everyDungeon(classic, 'Guild Dungeon Master',
+    ('Complete every WoW Classic dungeon with a full group of %s guildmates.')
         :format(ns.GUILD_NAME),
-    75, 'achievement_boss_illidan', ns.Dungeons.tbc)
+    100, 'achievement_dungeon_classicdungeonmaster', classicRuns)
+
+A.TBC_GUILD_DUNGEON_MASTER = everyDungeon(tbc, 'TBC Guild Dungeon Master',
+    ('Complete every Burning Crusade dungeon with a full group of %s guildmates.')
+        :format(ns.GUILD_NAME),
+    100, 'achievement_dungeon_outland_dungeon_hero', tbcRuns)

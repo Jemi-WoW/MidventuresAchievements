@@ -140,3 +140,86 @@ A.I_AM_GREEN = fullGear('I am GREEN!',
 A.BLUE_IS_THE_COLOR = fullGear('Blue is the color',
     'Equip rare or better gear in every slot below.', 3, 30, '-Spell_Frost_WizardMark',
     A.I_AM_GREEN)
+
+-- The chat chain carries on in thousands. Same criteria as the tiers above it, so these
+-- were already part filled the day they were added.
+A.GUILD_CHAT_2000 = chatter('Write in Guild chat 2000 times',
+    chatDesc(2000), 2000, 35, '-inv_misc_book_11', A.GUILD_CHAT_1000)
+
+A.GUILD_CHAT_3000 = chatter('Write in Guild chat 3000 times',
+    chatDesc(3000), 3000, 40, '-inv_scroll_10', A.GUILD_CHAT_2000)
+
+A.GUILD_CHAT_4000 = chatter('Write in Guild chat 4000 times',
+    chatDesc(4000), 4000, 45, '-Inv_Misc_Note_02', A.GUILD_CHAT_3000)
+
+A.GUILD_CHAT_5000 = chatter('Write in Guild chat 5000 times',
+    chatDesc(5000), 5000, 50, '-spell_Shadow_ConeOfSilence', A.GUILD_CHAT_4000)
+
+-- What is worn where, read by core/Equipment.lua. Anniversary's own gear criteria start at
+-- uncommon and have no tabard slot, so a first white ring would never fire one.
+A.SHOULDERS_OF_GIANTS = ns.Achievement(wealth, {
+    name   = 'Shoulders Of Giants',
+    desc   = 'Equip your first set of shoulders.',
+    points = 5,
+    icon   = '-Inv_Misc_ArmorKit_14',
+    criteria = {
+        { ns.CRITERIA_EQUIPMENT, {'SHOULDERS'}, nil, 'Shoulders equipped' },
+    },
+})
+
+A.BLING = ns.Achievement(wealth, {
+    name   = 'Bling',
+    desc   = 'Equip your first ring.',
+    points = 5,
+    icon   = '-Inv_Jewelry_Ring_03',
+    criteria = {
+        { ns.CRITERIA_EQUIPMENT, {'RING_ANY'}, nil, 'Ring equipped' },
+    },
+})
+
+A.BLING_BLING = ns.Achievement(wealth, {
+    name     = 'Bling Bling!',
+    desc     = 'Wear a ring in both ring slots.',
+    points   = 10,
+    icon     = '-inv_jewelry_ring_34',
+    previous = A.BLING,
+    criteria = {
+        { ns.CRITERIA_EQUIPMENT, {'RING_BOTH'}, nil, 'Both rings equipped' },
+    },
+})
+
+A.A_TRUE_DENTER = ns.Achievement(guild, {
+    name   = 'A True Denter',
+    desc   = ('Wear the %s guild tabard.'):format(ns.GUILD_NAME),
+    points = 15,
+    icon   = '-inv_shirt_guildtabard_01',
+    criteria = {
+        { ns.CRITERIA_EQUIPMENT, {'GUILD_TABARD'}, nil, 'Guild tabard worn' },
+    },
+})
+
+-- Helpful spells landed on other players, counted by core/Buffs.lua. One criteria type
+-- feeds the whole chain, so every tier fills at once and `previous` shows them one at a time.
+local function helper(name, count, points, icon, previous)
+    return ns.Achievement(general, {
+        name = name, points = points, icon = icon, previous = previous,
+        desc = ('Land %d helpful spells on other players.'):format(count),
+        criteria = {
+            { ns.CRITERIA_BUFF_PLAYERS, nil, count, 'Players buffed' },
+        },
+    })
+end
+
+A.HELPFUL_10 = helper('Buff 10 Players', 10, 5, '-Spell_Holy_Divinespirit')
+A.HELPFUL_20 = helper('Buff 20 Players', 20, 10, '-Spell_Magic_GreaterBlessingOfKings', A.HELPFUL_10)
+A.HELPFUL_50 = helper('Buff 50 Players', 50, 10, '-Spell_Holy_Prayerofspirit', A.HELPFUL_20)
+A.HELPFUL_100 = helper('Buff 100 Players', 100, 15, '-spell_holy_symbolofhope', A.HELPFUL_50)
+A.HELPFUL_200 = helper('Buff 200 Players', 200, 20, '-spell_holy_surgeoflight', A.HELPFUL_100)
+A.HELPFUL_300 = helper('Buff 300 Players', 300, 20, '-Spell_Nature_Reincarnation', A.HELPFUL_200)
+A.HELPFUL_400 = helper('Buff 400 Players', 400, 25, '-spell_holy_sealofsacrifice', A.HELPFUL_300)
+A.HELPFUL_500 = helper('Buff 500 Players', 500, 25, '-Spell_Holy_Mindsooth', A.HELPFUL_400)
+A.HELPFUL_1000 = helper('Buff 1000 Players', 1000, 30, '-inv_misc_cauldron_arcane', A.HELPFUL_500)
+A.HELPFUL_2000 = helper('Buff 2000 Players', 2000, 35, '-inv_misc_cauldron_nature', A.HELPFUL_1000)
+A.HELPFUL_3000 = helper('Buff 3000 Players', 3000, 40, '-spell_holy_revivechampion', A.HELPFUL_2000)
+A.HELPFUL_4000 = helper('Buff 4000 Players', 4000, 45, '-spell_holy_summonchampion', A.HELPFUL_3000)
+A.HELPFUL_5000 = helper('Buff 5000 Players', 5000, 50, 'spell_holy_aspiration', A.HELPFUL_4000)

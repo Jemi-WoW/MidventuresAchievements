@@ -36,3 +36,14 @@ A.MAKGORA_VETERAN = ns.Achievement(duels, {
         { ns.CRITERIA_GUILD_DUEL, nil, 10, 'Guildmates defeated' },
     },
 })
+
+A.MAKGORA_LEGEND = ns.Achievement(duels, {
+    name     = "Mak'gora Legend",
+    desc     = ('Win 50 duels against %s guildmates.'):format(ns.GUILD_NAME),
+    points   = 40,
+    icon     = '-Inv_Sword_39',
+    previous = A.MAKGORA_VETERAN,
+    criteria = {
+        { ns.CRITERIA_GUILD_DUEL, nil, 50, 'Guildmates defeated' },
+    },
+})

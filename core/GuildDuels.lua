@@ -21,11 +21,12 @@ local function duelResult(msg)
     return winner, loser
 end
 
--- The loser is rarely still targetable by the time this fires, so match against the roster.
+-- The loser is often still the target when this fires, so that is checked first and the
+-- cached roster is the fallback.
 local function check(msg)
     local winner, loser = duelResult(msg)
     if not winner or winner ~= UnitName('player') then return end
-    if ns.GuildMemberNames()[loser] then
+    if ns.IsGuildmate(loser, 'target') then
         CA_Criterias:Trigger(ns.CRITERIA_GUILD_DUEL)
     end
 end

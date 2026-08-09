@@ -68,3 +68,24 @@ watcher:RegisterEvent('PLAYER_ENTERING_WORLD')
 watcher:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 watcher:RegisterEvent('ZONE_CHANGED')
 watcher:SetScript('OnEvent', function() C_Timer.After(1, rearm) end)
+
+-- Every spot in the addon was read off the map with this, and it is how to correct one.
+SLASH_MIDVENTURESWHERE1 = '/mv'
+SlashCmdList['MIDVENTURESWHERE'] = function(args)
+    if args and args:lower():match('^%s*where') == nil then
+        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures:|r try /mv where')
+        return
+    end
+
+    local mapID = C_Map.GetBestMapForUnit('player')
+    local spot = mapID and C_Map.GetPlayerMapPosition(mapID, 'player')
+    local x, y = spot and spot:GetXY()
+    if not x then
+        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures:|r no position here.')
+        return
+    end
+
+    DEFAULT_CHAT_FRAME:AddMessage(('|cff00ff00Midventures:|r %s / %s - x %.2f, y %.2f')
+        :format(GetZoneText(), GetSubZoneText() ~= '' and GetSubZoneText() or '-',
+            x * 100, y * 100))
+end

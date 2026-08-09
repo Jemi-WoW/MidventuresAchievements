@@ -42,6 +42,13 @@ categories.reputationOutland = ns.Category('Outland', categories.reputation)
 categories.generalGuild = ns.Category('Guild', categories.general)
 categories.pvpDuels     = ns.Category('Duels', categories.pvp)
 
+categories.generalDeath    = ns.Category('Death', categories.general)
+categories.generalTravel   = ns.Category('Travel', categories.general)
+categories.generalFood     = ns.Category('Food & Drink', categories.general)
+categories.generalMoney    = ns.Category('Money', categories.general)
+categories.generalOddities = ns.Category('Oddities', categories.general)
+categories.generalMilestones = ns.Category('Milestones', categories.general)
+
 ns.categories = categories
 
 -- The summary's Progress Overview grid is derived in achievements/Register.lua.

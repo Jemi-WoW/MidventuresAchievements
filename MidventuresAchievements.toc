@@ -1,7 +1,7 @@
 ## Interface: 20506
-## Title: <|cff00ff00Midventures Achievements|r> v0.6.5
+## Title: <|cff00ff00Midventures Achievements|r> v1.0
 ## Author: Jamie/Jemi
-## Version: 0.6.5
+## Version: 1.0
 ## IconTexture: Interface/AddOns/AnniversaryAchievements/logo.tga
 ## Notes: Custom Midventures achievements and Midi Points, built on Anniversary Achievements.
 ## Category: Achievements
@@ -24,17 +24,35 @@ core/Position.lua
 core/ZoneLevel.lua
 core/TierSet.lua
 core/CritStrike.lua
+core/Equipment.lua
+core/Buffs.lua
+core/Emotes.lua
+core/Deaths.lua
+core/CombatExtras.lua
+core/Consumables.lua
+core/Travel.lua
+core/Money.lua
+core/GuildPresence.lua
+core/Zones.lua
 core/Announce.lua
 core/Points.lua
 core/Progress.lua
 
+achievements/general/Tiers.lua
 achievements/general/General.lua
+achievements/general/Social.lua
+achievements/general/Deaths.lua
+achievements/general/Travel.lua
+achievements/general/Consumables.lua
+achievements/general/Money.lua
+achievements/general/Oddities.lua
 achievements/quests/Quests.lua
 achievements/exploration/Exploration.lua
 achievements/dungeons-raids/DungeonsAndRaids.lua
 achievements/professions/Professions.lua
 achievements/pvp/PvP.lua
 achievements/reputation/Reputation.lua
+achievements/general/Milestones.lua
 achievements/Register.lua
 
 core/Snapshot.lua
@@ -48,6 +66,7 @@ ui/Live.lua
 ui/leaderboard/Remote.lua
 ui/leaderboard/Players.lua
 ui/leaderboard/Detail.lua
+ui/leaderboard/Mine.lua
 ui/leaderboard/Tab.lua
 ui/leaderboard/View.lua
 ui/ChatLink.lua
