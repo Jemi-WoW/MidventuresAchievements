@@ -63,7 +63,7 @@ raids.tbc = {
 
     { key = 'HYJAL', name = 'Hyjal Summit', title = 'Summit Meeting',
         boss = 'Archimonde', id = 17968, need = raids.BIG_RAID, points = 40,
-        icon = 'achievement_boss_archimonde' },
+        icon = '-spell_shadow_summoninfernal' },
 
     { key = 'BLACK_TEMPLE', name = 'Black Temple', title = 'Not Prepared',
         boss = 'Illidan Stormrage', id = 22917, need = raids.BIG_RAID, points = 50,
@@ -75,7 +75,7 @@ raids.tbc = {
 
     { key = 'SUNWELL', name = 'Sunwell Plateau', title = 'Well, Well, Well',
         boss = "Kil'jaeden", id = 25315, need = raids.BIG_RAID, points = 60,
-        icon = 'achievement_boss_kiljaeden' },
+        icon = 'achievement_boss_kiljaedan' },
 }
 
 -- One lookup for the killing tracker, the same shape core/Dungeons.lua builds.

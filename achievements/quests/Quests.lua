@@ -109,7 +109,7 @@ A.OUTLAND_ODD_JOBS = ns.Achievement(outland, {
     name   = 'Outland Odd Jobs',
     desc   = 'Complete at least one quest in every Outland zone.',
     points = 25,
-    icon   = 'achievement_zone_outland',
+    icon   = 'outland',
     criteria = outlandZones(),
 })
 

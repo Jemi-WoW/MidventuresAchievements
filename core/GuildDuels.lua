@@ -20,20 +20,48 @@ local function progress()
     return MidventuresProgressDB.duels
 end
 
--- The same trick util/Triggers.lua uses: the client's own strings are the patterns.
+local MARK = '\1'
+
 local function toPattern(text)
-    return '^' .. text:gsub('([%^%$%(%)%.%[%]%*%+%-%?%%])', '%%%1'):gsub('%%%%s', '(.+)') .. '$'
+    if not text then return nil, {} end
+
+    local order, plain = {}, 0
+    local marked = text:gsub('%%(%d)%$s', function(index)
+        order[#order + 1] = tonumber(index)
+        return MARK
+    end)
+    marked = marked:gsub('%%s', function()
+        plain = plain + 1
+        order[#order + 1] = plain
+        return MARK
+    end)
+
+    local escaped = marked:gsub('([%^%$%(%)%.%[%]%*%+%-%?%%])', '%%%1')
+    return '^' .. escaped:gsub(MARK, '(.+)') .. '$', order
 end
 
-local KNOCKOUT = toPattern(DUEL_WINNER_KNOCKOUT)  -- winner, then loser
-local RETREAT = toPattern(DUEL_WINNER_RETREAT)    -- loser, then winner
+local KNOCKOUT, KNOCKOUT_ORDER = toPattern(DUEL_WINNER_KNOCKOUT)  -- winner, then loser
+local RETREAT, RETREAT_ORDER = toPattern(DUEL_WINNER_RETREAT)     -- loser, then winner
 
--- Returns the pair the way the line orders them, or nothing when it is not a duel result.
+local function argument(order, wanted, captures)
+    for i, number in ipairs(order) do
+        if number == wanted then return captures[i] end
+    end
+end
+
 local function duelResult(msg)
-    local winner, loser = msg:match(KNOCKOUT)
-    if winner then return winner, loser end
-    loser, winner = msg:match(RETREAT)
-    return winner, loser
+    if KNOCKOUT then
+        local captures = { msg:match(KNOCKOUT) }
+        if captures[1] then
+            return argument(KNOCKOUT_ORDER, 1, captures), argument(KNOCKOUT_ORDER, 2, captures)
+        end
+    end
+    if RETREAT then
+        local captures = { msg:match(RETREAT) }
+        if captures[1] then
+            return argument(RETREAT_ORDER, 2, captures), argument(RETREAT_ORDER, 1, captures)
+        end
+    end
 end
 
 -- Everyone you have ever duelled, kept by name so the same rival all evening is one face.
@@ -44,22 +72,26 @@ local function remember(name)
     CA_Criterias:Trigger(ns.CRITERIA_DUEL_PARTNERS, nil, total, true)
 end
 
--- The other one is often still the target when this fires, so that is checked first and
--- the cached roster is the fallback.
+local function isOurs(name)
+    local unit = UnitName('target') == name and 'target' or nil
+    return ns.IsGuildmate(name, unit)
+end
+
+-- Only duels between us count, whichever way they went.
 local function check(msg)
     local winner, loser = duelResult(msg)
-    if not winner then return end
+    if not (winner and loser) then return end
 
     local me = UnitName('player')
     if winner == me then
-        if not ns.IsGuildmate(loser, 'target') then return end
+        if not isOurs(loser) then return end
         CA_Criterias:Trigger(ns.CRITERIA_GUILD_DUEL)
         remember(loser)
         if loser == ns.GuildMasterName() then
             CA_Criterias:Trigger(ns.CRITERIA_DUEL_MASTER)
         end
     elseif loser == me then
-        if not ns.IsGuildmate(winner, 'target') then return end
+        if not isOurs(winner) then return end
         remember(winner)
         local record = progress()
         record.losses = record.losses + 1

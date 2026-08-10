@@ -126,7 +126,7 @@ A.UNINVITED_GUEST = ns.Achievement(trespassing, {
     name   = 'Uninvited Guest',
     desc   = 'Walk into all four of the enemy\'s cities.',
     points = 50,
-    icon   = 'achievement_zone_easternkingdoms',
+    icon   = 'eastern_kingdoms',
     meta   = ENEMY_CAPITALS,
 })
 
@@ -148,13 +148,13 @@ A.PLAGUE_BEARER = tooEarly('Plague Bearer',
 A.SANDSTORM_TOURIST = tooEarly('Sandstorm Tourist',
     'Reach Silithus before level 50.', 15, 'silithus', 1377, 50)
 A.NOT_READY_FOR_THIS = tooEarly('Not Ready For This',
-    'Reach Shattrath City before level 58.', 25, 'terokkar_forest', 3703, 58)
+    'Reach Shattrath City before level 58.', 25, 'terrokar', 3703, 58)
 
 A.YOU_SHOULDNT_BE_HERE = ns.Achievement(trespassing, {
     name   = 'You Shouldn\'t Be Here',
     desc   = 'Turn up everywhere long before anyone expected you.',
     points = 40,
-    icon   = 'inv_misc_map_01',
+    icon   = 'inv_misc_map02',
     meta = {
         A.BOOTY_BAY_TOURIST,
         A.CHILLED_OUT,
@@ -180,7 +180,7 @@ A.SCARAB_WALL = landmark('Scarab Wall',
 A.INTO_THE_MOUNTAIN = landmark('Into the Mountain',
     'Walk into Blackrock Mountain, chain bridge and all.', 15, 'burning_steppes', 25)
 A.VOLCANO_DIVER = landmark('Volcano Diver',
-    'Climb Fire Plume Ridge in Un\'Goro Crater.', 15, 'ungoro_crater', 537)
+    'Climb Fire Plume Ridge in Un\'Goro Crater.', 15, 'ungoro', 537)
 A.DARK_PORTAL_SELFIE = landmark('Dark Portal Selfie',
     'Stand under the Dark Portal on the Azeroth side.', 10, 'blasted_lands', 72)
 A.TIMELESS = landmark('Timeless',
@@ -190,7 +190,7 @@ A.SIGHTSEER = ns.Achievement(landmarks, {
     name   = 'Sightseer',
     desc   = 'Visit every landmark worth the walk.',
     points = 30,
-    icon   = 'achievement_zone_kalimdor',
+    icon   = 'kalimdor',
     meta = {
         A.SCARAB_WALL,
         A.INTO_THE_MOUNTAIN,

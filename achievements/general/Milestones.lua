@@ -228,7 +228,7 @@ A.BOOM_AND_BUST = ns.Achievement(milestones, {
     name   = 'Boom and Bust',
     desc   = 'Make it, spend it, and do it all again.',
     points = 60,
-    icon   = '-Inv_Misc_Coin_0',
+    icon   = '-inv_misc_coin_02',
     meta   = { A.GNOME_PIGGY_BANK, A.BROKE, A.VENDOR_TRASH_TYCOON, A.AUCTION_ADDICT,
                A.BAG_SPACE_PROBLEMS },
 })

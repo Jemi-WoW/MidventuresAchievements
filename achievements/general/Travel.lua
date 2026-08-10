@@ -26,7 +26,7 @@ A.SEASICK = ns.Achievement(travel, {
     name   = 'Seasick',
     desc   = 'Ride a boat or a zeppelin 25 times.',
     points = 15,
-    icon   = '-inv_misc_map02',
+    icon   = 'inv_misc_map02',
     criteria = {
         { ns.CRITERIA_TRANSPORT, nil, 25, 'Crossings made' },
     },

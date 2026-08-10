@@ -172,7 +172,7 @@ A.GUILD_GLADIATOR = ns.Achievement(duels, {
     name   = 'Guild Gladiator',
     desc   = 'Take on the whole guild, one at a time, and come out on top.',
     points = 50,
-    icon   = '-Achievement_PVP_A_09',
+    icon   = 'achievement_featsofstrength_gladiator_01',
     meta = {
         A.MAKGORA_LEGEND,
         A.DUEL_CLUB,

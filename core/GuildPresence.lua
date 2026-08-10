@@ -71,7 +71,6 @@ local watcher = CreateFrame('Frame')
 watcher:RegisterEvent('PLAYER_ENTERING_WORLD')
 watcher:RegisterEvent('GUILD_ROSTER_UPDATE')
 watcher:RegisterEvent('GROUP_ROSTER_UPDATE')
-watcher:RegisterEvent('PARTY_MEMBERS_CHANGED')
 watcher:RegisterEvent('RAID_ROSTER_UPDATE')
 watcher:SetScript('OnEvent', function(_, event)
     if event == 'PLAYER_ENTERING_WORLD' then

@@ -131,7 +131,7 @@ A.EVERY_WAY_TO_GO = ns.Achievement(death, {
     name   = 'Every Way To Go',
     desc   = 'Find every way the world has of killing you.',
     points = 50,
-    icon   = '-spell_shadow_psychichorrors',
+    icon   = 'spell_shadow_psychichorrors',
     meta   = { A.DROWNED_RAT, A.WELL_DONE, A.BURNT_OUT, A.SLIME_TIME,
                A.TOO_FAR_FROM_SHORE, A.SPLAT },
 })

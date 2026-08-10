@@ -11,7 +11,7 @@ A.VENDOR_TRASH_TYCOON = ns.Achievement(money, {
     name   = 'Vendor Trash Tycoon',
     desc   = 'Sell 10,000 items to vendors.',
     points = 40,
-    icon   = '-Inv_Misc_Coin_0',
+    icon   = '-inv_misc_coin_02',
     criteria = {
         { ns.CRITERIA_VENDOR_SALES, nil, 10000, 'Items sold' },
     },
@@ -51,7 +51,7 @@ A.BROKE = ns.Achievement(money, {
     name   = 'Broke',
     desc   = 'Own 100 gold, then drop below one silver.',
     points = 20,
-    icon   = '-inv_misc_coin_0',
+    icon   = '-inv_misc_coin_02',
     criteria = {
         { ns.CRITERIA_BROKE, nil, nil, 'Rich once, skint now' },
     },

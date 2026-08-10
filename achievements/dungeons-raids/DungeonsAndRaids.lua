@@ -92,7 +92,7 @@ A.DUNGEON_CRAWLER = ns.Chain(anyDungeon, {
     criteria = ns.CRITERIA_GUILD_RUNS,
     label = 'Guild runs finished',
     icons = {'-Inv_Misc_Key_03', 'achievement_dungeon_classicdungeonmaster',
-        '-Inv_Misc_Map_01'},
+        'inv_misc_map02'},
 })
 
 A.FLAWLESS = ns.Achievement(anyDungeon, {
@@ -109,7 +109,7 @@ A.FULL_HOUSE = ns.Achievement(anyDungeon, {
     name   = 'Full House',
     desc   = 'Finish a guild dungeon run with five different classes in the group.',
     points = 25,
-    icon   = '-Achievement_General',
+    icon   = '-spell_holy_prayerofhealing',
     criteria = {
         { ns.CRITERIA_RUN_CLASSES, nil, nil, 'Five guildmates, five classes' },
     },

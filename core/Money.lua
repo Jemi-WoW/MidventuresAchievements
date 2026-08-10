@@ -46,23 +46,27 @@ if PostAuction then
     hooksecurefunc('PostAuction', function() bump('auctions', ns.CRITERIA_AUCTIONS) end)
 end
 
-local function freeSlots()
-    local free = 0
+local numSlots = C_Container and C_Container.GetContainerNumSlots or GetContainerNumSlots
+local itemID = C_Container and C_Container.GetContainerItemID or GetContainerItemID
+
+local function bagSlots()
+    if not (numSlots and itemID) then return 0, 0 end
+
+    local free, total = 0, 0
     for bag = 0, NUM_BAG_SLOTS do
-        local slots = C_Container and C_Container.GetContainerNumSlots(bag)
-            or GetContainerNumSlots(bag) or 0
+        local slots = numSlots(bag) or 0
+        total = total + slots
         for slot = 1, slots do
-            local id = C_Container and C_Container.GetContainerItemID(bag, slot)
-                or GetContainerItemID(bag, slot)
-            if not id then free = free + 1 end
+            if not itemID(bag, slot) then free = free + 1 end
         end
     end
-    return free
+    return free, total
 end
 
 local function checkBags()
     -- A character with no bags at all has no achievement to earn here.
-    if freeSlots() == 0 and (GetContainerNumSlots and GetContainerNumSlots(0) or 0) > 0 then
+    local free, total = bagSlots()
+    if free == 0 and total > 0 then
         CA_Criterias:Trigger(ns.CRITERIA_BAGS_FULL)
     end
 end

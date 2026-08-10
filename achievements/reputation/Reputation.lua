@@ -144,7 +144,7 @@ A.SHATARI_SIGHTSEER = ns.Achievement(outland, {
     name   = 'Sha\'tari Sightseer',
     desc   = 'Reach Honored with five of Outland\'s factions.',
     points = 20,
-    icon   = 'achievement_zone_outland',
+    icon   = 'outland',
     criteria = {
         { TYPE.REACH_REPUTATION, {GARRISON[1], HONORED}, nil, GARRISON[2] },
         { TYPE.REACH_REPUTATION, {942, HONORED}, nil, 'Cenarion Expedition' },
