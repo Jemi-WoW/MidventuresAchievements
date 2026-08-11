@@ -111,6 +111,22 @@ local function playerTooltip(self)
     GameTooltip:Show()
 end
 
+local CATEGORY_COLOR = { 1, 0.82, 0 }
+
+function leaderboard.PaintCategoryRow(button)
+    if button and button.label then
+        button.label:SetTextColor(unpack(CATEGORY_COLOR))
+    end
+end
+
+-- Every row put back at once, for leaving the leaderboard without waiting for a redraw.
+function leaderboard.PaintCategoryRows()
+    local container = AchievementFrameCategoriesContainer
+    for _, button in next, (container and container.buttons) or {} do
+        leaderboard.PaintCategoryRow(button)
+    end
+end
+
 -- Player rows get a status dot, a class icon and a class-coloured name; everything else is untouched.
 local baseDisplayButton = AchievementFrameCategories_DisplayButton
 
@@ -128,11 +144,7 @@ AchievementFrameCategories_DisplayButton = function(button, element)
         end
         button.label:SetPoint('BOTTOMLEFT', LABEL_INSET, 4)
         button.label:SetPoint('TOPRIGHT', LABEL_RIGHT, -4)
-        -- Categories take their colour from their font object, so hand it back.
-        if button.mvColoured then
-            button.label:SetTextColor(button.label:GetFontObject():GetTextColor())
-            button.mvColoured = nil
-        end
+        leaderboard.PaintCategoryRow(button)
         return
     end
 
@@ -162,7 +174,6 @@ AchievementFrameCategories_DisplayButton = function(button, element)
 
     local color = record.class and RAID_CLASS_COLORS[record.class]
     button.label:SetTextColor(color and color.r or 1, color and color.g or 0.82, color and color.b or 0)
-    button.mvColoured = true
     icon:SetDesaturated(not online)
 
     button.name = record.name

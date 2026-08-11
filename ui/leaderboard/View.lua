@@ -253,6 +253,8 @@ function ns.HideLeaderboard()
     ns.leaderboard = false
     ACHIEVEMENT_FUNCTIONS = ns.anniversaryFunctions
     leaderboard.SetRecord(nil)
+    -- Class colours belong to player rows, and there are none outside this view.
+    leaderboard.PaintCategoryRows()
 
     detail:Hide()
     leaderboard.sidebarMessage:Hide()
