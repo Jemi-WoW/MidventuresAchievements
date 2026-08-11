@@ -75,6 +75,7 @@ core/Sync.lua
 
 ui/Tab.lua
 ui/View.lua
+ui/Summary.lua
 ui/Live.lua
 
 ui/leaderboard/Remote.lua
