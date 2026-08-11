@@ -1,14 +1,11 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- The one place the guild message is written and read, so the sender and the chat filter
--- in ui/ChatLink.lua can never drift apart. Guild chat already prints who is talking, so
--- the line does not name the player again.
+-- Written and read in one place, so this and ui/ChatLink.lua cannot drift apart.
 local FORMAT = 'Has just completed %s!'
 local PATTERN = '^Has just completed %[(.+)%]!$'
 
--- The achievement arrives already wrapped: in brackets from here, or in a link from the
--- chat filter, which is how the link can cover the brackets rather than sit inside them.
+-- Arrives wrapped already: brackets from here, a link from the chat filter.
 function ns.Announcement(achievement)
     return FORMAT:format(achievement)
 end
@@ -18,13 +15,11 @@ function ns.ParseAnnouncement(message)
     return message:match(PATTERN)
 end
 
--- Anniversary re-checks everything a couple of seconds after login, and a fresh install
--- earns a pile of old achievements at once. Nothing is said until that has passed.
+-- A fresh install earns a pile at once, so nothing is said until login has settled.
 local SETTLE = 15
 local ready = false
 
--- A meta and its parts can land together, so they go out one at a time rather than in a
--- burst the server would throttle.
+-- One at a time: a meta and its parts land together and the server throttles bursts.
 local SPACING = 2
 local MAX_QUEUED = 8
 
@@ -53,8 +48,7 @@ local function announce(achievementID)
     drain()
 end
 
--- Anniversary calls this once for every achievement as it is earned, theirs and ours
--- alike, so it is the one place both kinds pass through.
+-- Called once per achievement earned, theirs and ours alike.
 local baseShare = CA_ShareAchievement
 function CA_ShareAchievement(achievementID)
     baseShare(achievementID)

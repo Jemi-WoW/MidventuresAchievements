@@ -6,11 +6,9 @@ local A = ns.achievements
 local easternKingdoms = ns.categories.explorationEasternKingdoms
 local kalimdor, outland = ns.categories.explorationKalimdor, ns.categories.explorationOutland
 
--- How to write these: .AchievementGuide/Exploration.md
--- Append new achievements at the bottom, ids are handed out in load order.
+-- Guide: .AchievementGuide/Exploration.md. Append at the bottom, ids follow load order.
 
 -- Expands a subzone id list into one criteria each, named from AreaTableLocale.
--- Args: category, name, desc, points, icon, areaIDs.
 local function zone(category, name, desc, points, icon, areaIDs)
     local criteria = {}
     for i, areaID in ipairs(areaIDs) do
@@ -21,14 +19,11 @@ local function zone(category, name, desc, points, icon, areaIDs)
     })
 end
 
--- Anniversary already has an Explore achievement for every single zone, with the same
--- subzone lists, so a plain one duplicates it. Combine zones or gate on theirs instead:
---   meta = { ns.Anniversary('AN_EXPLORE', AreaTableLocale[12]) }
+-- Anniversary explores every zone already, so combine zones or gate on theirs.
 
 local exploration = ns.categories.exploration
 
--- The eight valleys every character wakes up in. Anniversary only ever asks for whole
--- zones, so the starting subzones are ours to use.
+-- The eight valleys every character wakes up in.
 local STARTING_ZONES = {
     9,    -- Northshire Valley
     132,  -- Coldridge Valley
@@ -43,8 +38,7 @@ local STARTING_ZONES = {
 A.ONE_SMALL_STEP = zone(exploration, 'One Small Step',
     'Set foot in every starting zone in the game.', 20, 'inv_misc_map02', STARTING_ZONES)
 
--- Booty Bay is the far end of a long boat ride, and 35 is well past the level the zone
--- around it is built for, so getting there early is the whole point.
+-- Booty Bay at 35 is well past the level the zone around it is built for.
 A.BOOTY_BAY_TOURIST = ns.Achievement(easternKingdoms, {
     name   = 'Booty Bay Tourist',
     desc   = 'Visit Booty Bay before level 35.',
@@ -56,8 +50,7 @@ A.BOOTY_BAY_TOURIST = ns.Achievement(easternKingdoms, {
     },
 })
 
--- Coordinates read off the summit itself, so they are the thing to correct if the criteria
--- never lands. Ironforge's own map is accepted too, in case the peak reads as the city.
+-- Coordinates read off the summit; correct these first if it never lands.
 A.MOUNTAIN_GOAT = ns.Achievement(easternKingdoms, {
     name   = 'Mountain Goat',
     desc   = 'Reach the summit of Ironforge Mountain.',
@@ -70,8 +63,7 @@ A.MOUNTAIN_GOAT = ns.Achievement(easternKingdoms, {
     },
 })
 
--- Tier 0.5 was the best gear in the game right up until the portal opened, at which point
--- quest greens beat it. Wearing the full set through it is the joke.
+-- Tier 0.5 was the best in the game until the portal opened. That is the joke.
 A.YOU_WERE_PREPARED = ns.Achievement(outland, {
     name   = 'YOU WERE PREPARED',
     desc   = 'Step through the Dark Portal in Tier 0.5 head, shoulders, chest, legs '
@@ -86,8 +78,7 @@ A.YOU_WERE_PREPARED = ns.Achievement(outland, {
 local trespassing, landmarks =
     ns.categories.explorationTrespassing, ns.categories.explorationLandmarks
 
--- Walking into the other side's front room. The guards disagree, which is the point, so
--- each of these only exists for the faction with no business being there.
+-- Each only exists for the faction with no business being there.
 local function capital(name, desc, areaID, faction)
     return ns.Achievement(trespassing, {
         name = name, desc = desc, points = 25, icon = 'inv_misc_map02', faction = faction,
@@ -115,8 +106,7 @@ A.DOWN_AMONG_THE_DEAD = capital('Down Among the Dead',
 A.SUNSTRIDER_SIGHTSEEING = capital('Sunstrider Sightseeing',
     'Set foot in Silvermoon City and live to tell it.', 3487, 'Alliance')
 
--- All eight cities are built so the ids never move, but only one set is ever reachable, so
--- the meta asks for whichever four are the enemy's.
+-- All eight are built so ids never move; the meta takes whichever four are the enemy's.
 local ENEMY_CAPITALS = UnitFactionGroup('player') == 'Horde'
     and { A.CATHEDRAL_CRASHER, A.UNDER_THE_MOUNTAIN, A.TREE_HUGGER, A.EXODAR_EXCURSION }
     or { A.HOLD_THE_HOLD, A.HIGH_PLAINS_DRIFTER, A.DOWN_AMONG_THE_DEAD,
@@ -164,8 +154,7 @@ A.YOU_SHOULDNT_BE_HERE = ns.Achievement(trespassing, {
     },
 })
 
--- Places worth standing in for their own sake. Anniversary asks for whole zones uncovered,
--- never for one spot, so these are ours.
+-- Places worth standing in for their own sake, which Anniversary never asks for.
 local function landmark(name, desc, points, icon, areaID)
     return ns.Achievement(landmarks, {
         name = name, desc = desc, points = points, icon = icon,

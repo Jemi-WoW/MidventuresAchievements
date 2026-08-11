@@ -1,8 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- Battlegrounds and arenas, told apart by how many of the guild came along. Anniversary
--- counts wins, objectives and scores already, so none of that is repeated here.
+-- Battlegrounds and arenas, told apart by how many of the guild came along.
 CA_Criterias.dataLengths[ns.CRITERIA_BG_WIN_GUILD] = 1
 CA_Criterias.criterias[ns.CRITERIA_BG_WIN_GUILD] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_BG_LOSSES] = 0

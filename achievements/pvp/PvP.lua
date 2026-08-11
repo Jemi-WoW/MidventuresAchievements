@@ -5,13 +5,11 @@ local TYPE = CA_Criterias.TYPE
 local A = ns.achievements
 local battlegrounds, arenas = ns.categories.pvpBattlegrounds, ns.categories.pvpArenas
 
--- How to write these: .AchievementGuide/PvP.md
--- Append new achievements at the bottom, ids are handed out in load order.
+-- Guide: .AchievementGuide/PvP.md. Append at the bottom, ids follow load order.
 
 local WARSONG_GULCH = 1460
 
--- Anniversary already has win counts of 1, 5, 10, 25 and 50 for every battleground, so
--- those duplicate it. Use the score and stat types instead, or gate on theirs.
+-- Anniversary counts wins per battleground already; use the score and stat types.
 
 local duels = ns.categories.pvpDuels
 
@@ -48,8 +46,7 @@ A.MAKGORA_LEGEND = ns.Achievement(duels, {
     },
 })
 
--- Anniversary counts battleground wins, objectives and scores for everyone. What it never
--- asks is who you turned up with, which is what core/Battlegrounds.lua watches.
+-- What Anniversary never asks is who you turned up with, which core/Battlegrounds.lua does.
 local PREMADE, WALL = 5, 10
 
 A.PREMADE = ns.Achievement(battlegrounds, {

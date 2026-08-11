@@ -1,8 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- The house tier ladder. Every counting achievement climbs these, so a new chain is one
--- call rather than eleven copies of the same five lines.
+-- The house tier ladder, so a new chain is one call rather than eleven copies.
 ns.TIERS = {10, 20, 30, 40, 50, 100, 200, 300, 400, 500, 1000}
 
 -- Points grow with the tier without getting silly at the top.
@@ -28,9 +27,7 @@ local function rung(category, def, index, count, points, previous)
     })
 end
 
--- `name(count)` and `desc(count)` write the wording, `icons` is one per tier and repeats
--- from the start if it is shorter. Every tier shares one criteria, so they all fill at once
--- and `previous` is what shows them one at a time.
+-- `name(count)` and `desc(count)` write the wording, `previous` shows one tier at a time.
 function ns.Chain(category, def)
     local previous, made = nil, {}
     for i, count in ipairs(ns.TIERS) do

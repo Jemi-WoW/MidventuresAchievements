@@ -1,8 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- An emote aimed at something. Data is the emote token and who it was aimed at: a
--- guildmate, the guild master, or a creature name like 'Chicken'.
+-- Data is the emote token and the target: a guildmate, the guild master, or a creature.
 CA_Criterias.dataLengths[ns.CRITERIA_EMOTE_AT] = 2
 CA_Criterias.criterias[ns.CRITERIA_EMOTE_AT] = {}
 
@@ -13,8 +12,7 @@ CA_Criterias.criterias[ns.CRITERIA_DANCE_PARTY] = {}
 ns.GUILDMATE = 'GUILDMATE'
 ns.GUILD_MASTER = 'GUILD_MASTER'
 
--- Does this target answer to the kind an achievement asked about? A kind starting with a
--- star is a pattern rather than a name, for creatures that come in a dozen varieties.
+-- Does the target answer to the kind asked for? A leading star means a pattern.
 local function matches(kind, target)
     if not target or target == '' then return false end
     if kind == ns.GUILDMATE then
@@ -29,8 +27,7 @@ local function matches(kind, target)
     return target == kind
 end
 
--- Tokens arrive from the client as they are written in its emote table, which is upper
--- case, but nothing guarantees that for an emote added later.
+-- Client tokens are upper case, but nothing guarantees it for one added later.
 local function record(token, target)
     if not token then return end
     token = token:upper()
@@ -72,8 +69,7 @@ if not clientKnowsFart() then
     end
 end
 
--- Dancing together. Party and raid units are walked rather than everyone nearby, because
--- there is no way to ask the client who else is on screen.
+-- Dancing together. Only party and raid units: nobody can ask who else is on screen.
 local dancing = {}
 local WINDOW = 10
 

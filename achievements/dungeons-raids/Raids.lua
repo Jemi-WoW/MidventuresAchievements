@@ -4,11 +4,9 @@ if ns.disabled then return end
 local A = ns.achievements
 local raids = ns.categories.dungeonsRaids
 
--- How to write these: .AchievementGuide/DungeonsAndRaids.md
--- Append new achievements at the bottom, ids are handed out in load order.
+-- Guide: .AchievementGuide/DungeonsAndRaids.md. Append at the bottom, ids follow load order.
 
--- Anniversary already has the kill. Ours asks who you brought, and core/GuildRaids.lua only
--- credits it when enough of the guild was standing there.
+-- Anniversary has the kill; ours asks who you brought.
 local function guildRaid(raid)
     return ns.Achievement(raids, {
         name   = raid.title,

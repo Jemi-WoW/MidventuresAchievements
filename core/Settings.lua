@@ -2,8 +2,6 @@ local _, ns = ...
 if ns.disabled then return end
 
 -- Our own settings, in our own saved variable rather than Anniversary's CA_Settings.
--- Saved variables are loaded before this file runs, so the table is already whatever
--- the player left it as.
 local DEFAULTS = {
     guildAnnounce = true,
     leaderboardLayout = 'list',
@@ -20,8 +18,7 @@ function ns.SetSetting(key, value)
     MidventuresSettingsDB[key] = value
 end
 
--- Anniversary registers its options with Ace, so ours can be appended to the same table.
--- One checkbox does not deserve a second panel in the addon list.
+-- Appended to Anniversary's Ace options rather than given a panel of our own.
 local APP = 'Anniversary Achievements'
 
 local registry = LibStub('AceConfigRegistry-3.0', true)

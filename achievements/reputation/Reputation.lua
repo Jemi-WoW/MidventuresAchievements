@@ -5,8 +5,7 @@ local TYPE = CA_Criterias.TYPE
 local A = ns.achievements
 local azeroth, outland = ns.categories.reputationAzeroth, ns.categories.reputationOutland
 
--- How to write these: .AchievementGuide/Reputation.md
--- Append new achievements at the bottom, ids are handed out in load order.
+-- Guide: .AchievementGuide/Reputation.md. Append at the bottom, ids follow load order.
 
 local HONORED = 6
 
@@ -55,8 +54,7 @@ A.REVERED_DENTER = ns.Achievement(azeroth, {
     },
 })
 
--- The cities you were born owing nothing to. Anniversary's Ambassador wants all of them at
--- Exalted, which is a different afternoon entirely.
+-- The cities you were born owing nothing to; Ambassador wants them all at Exalted.
 local HOME_FACTIONS = UnitFactionGroup('player') == 'Horde'
     and { {76, 'Orgrimmar'}, {530, 'Darkspear Trolls'}, {68, 'Undercity'},
           {81, 'Thunder Bluff'}, {911, 'Silvermoon City'} }
@@ -134,9 +132,7 @@ A.PICKING_SIDES = ns.Achievement(outland, {
     },
 })
 
--- Five named factions rather than any five, because an achievement completes when all of
--- its criteria do, and Anniversary's count-any-faction criteria cannot be told to stop at
--- the Dark Portal. The first one is whichever garrison your side sent to Hellfire.
+-- Five named factions, since an achievement completes only when every criteria does.
 local GARRISON = UnitFactionGroup('player') == 'Horde'
     and {947, 'Thrallmar'} or {946, 'Honor Hold'}
 

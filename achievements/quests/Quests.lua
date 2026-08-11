@@ -6,8 +6,7 @@ local A = ns.achievements
 local azeroth, outland, dailies =
     ns.categories.questsAzeroth, ns.categories.questsOutland, ns.categories.questsDailies
 
--- How to write these: .AchievementGuide/Quests.md
--- Append new achievements at the bottom, ids are handed out in load order.
+-- Guide: .AchievementGuide/Quests.md. Append at the bottom, ids follow load order.
 
 A.ODD_JOBS = ns.Achievement(azeroth, {
     name   = 'Odd Jobs',
@@ -113,8 +112,7 @@ A.OUTLAND_ODD_JOBS = ns.Achievement(outland, {
     criteria = outlandZones(),
 })
 
--- Anniversary's daily counter starts at five, so the first one and the twenty-fifth are
--- both ours.
+-- Anniversary's daily counter starts at five, so the first and the twenty-fifth are ours.
 A.JUST_THIS_ONCE = ns.Achievement(dailies, {
     name   = 'Just This Once',
     desc   = 'Complete a daily quest.',

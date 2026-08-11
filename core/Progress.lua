@@ -6,7 +6,6 @@ local dirty, earned = false, false
 local infoCache = {}
 
 -- GetAchievementInfo sorts the whole category on every row, so memoise ours.
--- The wrappers below drop the memo whenever progress moves.
 local function pack(...) return { n = select('#', ...), ... } end
 
 local baseGetAchievementInfo = GetAchievementInfo

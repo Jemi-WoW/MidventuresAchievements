@@ -7,8 +7,7 @@ CA_Criterias.criterias[ns.CRITERIA_POSITION] = {}
 
 local spots = {}
 
--- Registers a spot next to the achievement that wants it. Coordinates are map percentages
--- as the game shows them, radius is how close counts, zones are AreaTableLocale ids.
+-- Map percentages, a radius in the same units, and AreaTableLocale zone ids.
 function ns.Spot(key, def)
     spots[key] = def
     return key
@@ -43,8 +42,7 @@ local function check()
     end
 end
 
--- The player has to be moving to reach a summit, so this is the one thing that needs a
--- ticker rather than an event. It only runs while a registered zone is on screen.
+-- No event fires for walking, so this ticks, and only inside a registered zone.
 local ticker
 local function rearm()
     local wanted = false

@@ -4,8 +4,7 @@ if ns.disabled then return end
 local A = ns.achievements
 local guild = ns.categories.generalGuild
 
--- Being in the guild rather than merely joining it. Trackers: core/GuildChat.lua,
--- core/Emotes.lua and core/GuildPresence.lua.
+-- Being in the guild rather than merely joining it.
 
 A.SAY_MY_NAME = ns.Chain(guild, {
     name = function(n) return ('Say My Name %d Times'):format(n) end,

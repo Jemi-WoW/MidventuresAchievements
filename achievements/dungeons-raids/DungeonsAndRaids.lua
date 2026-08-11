@@ -5,12 +5,9 @@ local TYPE = CA_Criterias.TYPE
 local A = ns.achievements
 local classic, tbc = ns.categories.dungeonsClassic, ns.categories.dungeonsTBC
 
--- How to write these: .AchievementGuide/DungeonsAndRaids.md
--- Append new achievements at the bottom, ids are handed out in load order.
+-- Guide: .AchievementGuide/DungeonsAndRaids.md. Append at the bottom, ids follow load order.
 
--- Anniversary already has a kill-the-last-boss achievement for every dungeon, so those
--- duplicate it. Ask for more than the kill, or gate on theirs:
---   meta = { ns.Anniversary('AN_RAGEFIRE_CHASM') }
+-- Anniversary has the last-boss kill already, so ask for more or gate on theirs.
 
 -- Theirs is for everyone. Ours is for the faction that has no business being down there.
 A.WHAT_ARE_YOU_DOING_HERE = ns.Achievement(classic, {
@@ -24,9 +21,7 @@ A.WHAT_ARE_YOU_DOING_HERE = ns.Achievement(classic, {
     },
 })
 
--- Guild Runner, Guild Dungeon Master and their TBC pair used to sit here, one achievement
--- covering every dungeon at once. Anniversary remembers progress by id, so the ids they
--- were given are stepped past rather than handed out again to the ones below.
+-- The ids the retired guild-run achievements used are stepped past, never reused.
 classic.mvAchievementID = classic.mvAchievementID + 100
 classic.mvCriteriaID = classic.mvCriteriaID + 1000
 tbc.mvAchievementID = tbc.mvAchievementID + 100
@@ -34,8 +29,7 @@ tbc.mvCriteriaID = tbc.mvCriteriaID + 1000
 
 local POINTS = 10
 
--- One achievement per dungeon, fed by core/GuildDungeons.lua, which only credits the final
--- boss while every member of the group is a guildmate.
+-- One per dungeon, credited by core/GuildDungeons.lua when the whole group is ours.
 local function guildRun(category, dungeon)
     return ns.Achievement(category, {
         name   = dungeon.title,
@@ -78,9 +72,7 @@ A.TBC_GUILD_DUNGEON_MASTER = everyDungeon(tbc, 'TBC Guild Dungeon Master',
         :format(ns.GUILD_NAME),
     100, 'achievement_dungeon_outland_dungeon_hero', tbcRuns)
 
--- How the runs went rather than which dungeon they were in, counted by core/GuildDungeons.lua
--- on the same kills the achievements above are built from. These sit in the parent category
--- because a run of either expansion counts towards them.
+-- How the runs went rather than where; parent category, since either expansion counts.
 local anyDungeon = ns.categories.dungeons
 
 A.DUNGEON_CRAWLER = ns.Chain(anyDungeon, {

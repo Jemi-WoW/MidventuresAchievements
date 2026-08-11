@@ -4,8 +4,7 @@ if ns.disabled then return end
 local A = ns.achievements
 local gathering = ns.categories.professionsGathering
 
--- Anniversary owns the skill levels, so these count the work instead. Fed by
--- core/Gathering.lua, which only hears about a node that was actually finished.
+-- Anniversary owns the skill levels, so these count the work. Fed by core/Gathering.lua.
 
 A.MINING = ns.Chain(gathering, {
     name = function(n) return ('Mine %d Nodes'):format(n) end,

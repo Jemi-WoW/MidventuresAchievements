@@ -9,8 +9,7 @@ ns.GATHER_MINING = 'MINING'
 ns.GATHER_HERBS = 'HERBS'
 ns.GATHER_SKINNING = 'SKINNING'
 
--- The gathering spells are named the same at every rank, and the client translates them,
--- so the name of one known rank is what a cast is matched against.
+-- Every rank shares a name, so a cast is matched against the name of one known rank.
 local SPELLS = {
     [ns.GATHER_MINING] = 2575,
     [ns.GATHER_HERBS] = 2366,

@@ -4,8 +4,7 @@ if ns.disabled then return end
 local A = ns.achievements
 local food = ns.categories.generalFood
 
--- Fed by core/Consumables.lua, which watches the Food and Drink auras rather than the bag,
--- so only what actually went down counts.
+-- Fed by core/Consumables.lua, which watches the auras rather than the bag.
 
 A.SECOND_BREAKFAST = ns.Chain(food, {
     name = function(n) return ('Second Breakfast %d Times'):format(n) end,

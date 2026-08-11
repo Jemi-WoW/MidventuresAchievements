@@ -1,8 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- What the lake gives back that nobody wanted. Anniversary counts the fish, so this counts
--- everything else.
+-- What the lake gives back that nobody wanted; Anniversary counts the fish.
 CA_Criterias.dataLengths[ns.CRITERIA_JUNK_FISH] = 0
 CA_Criterias.criterias[ns.CRITERIA_JUNK_FISH] = {}
 
@@ -14,13 +13,11 @@ local function progress()
     return MidventuresProgressDB.fishing
 end
 
--- The client says outright when a loot window came off a fishing line, so there is nothing
--- to guess at here.
+-- The client says outright when a loot window came off a fishing line.
 local function onLoot()
     if not (IsFishingLoot and IsFishingLoot()) then return end
 
-    -- The quality has to be read on its own line: `link and GetItemInfo(link)` would keep
-    -- only the first of the values it returns.
+    -- On its own line: `link and GetItemInfo(link)` would keep only the first return.
     local junk = 0
     for slot = 1, GetNumLootItems() do
         local link = LootSlotHasItem(slot) and GetLootSlotLink(slot) or nil

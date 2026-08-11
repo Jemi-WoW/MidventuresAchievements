@@ -127,7 +127,7 @@ function leaderboard.PaintCategoryRows()
     end
 end
 
--- Player rows get a status dot, a class icon and a class-coloured name; everything else is untouched.
+-- Player rows get a status dot, a class icon and a class-coloured name.
 local baseDisplayButton = AchievementFrameCategories_DisplayButton
 
 AchievementFrameCategories_DisplayButton = function(button, element)

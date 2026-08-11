@@ -5,8 +5,7 @@ if ns.disabled then return end
 CA_Criterias.dataLengths[ns.CRITERIA_GUILD_DUEL] = 0
 CA_Criterias.criterias[ns.CRITERIA_GUILD_DUEL] = {}
 
--- The rest of what a duel says about you: who you have faced, whether the boss was one of
--- them, and how often it went the other way.
+-- Who you have faced, whether one of them was the boss, and how often you lost.
 CA_Criterias.dataLengths[ns.CRITERIA_DUEL_PARTNERS] = 0
 CA_Criterias.criterias[ns.CRITERIA_DUEL_PARTNERS] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_DUEL_MASTER] = 0

@@ -10,8 +10,7 @@ function ns.InOurGuild()
     return GetGuildInfo('player') == ns.GUILD_NAME
 end
 
--- A full group of guildmates and nobody else. Five is the usual case, but Blackrock Spire
--- is run as a raid, so the size is whatever the group is: every member has to be one of ours.
+-- Every member has to be one of ours, whatever size the group is.
 local MIN_GROUP = 5
 
 function ns.InGuildParty()
@@ -37,10 +36,7 @@ local function plainName(name)
     return name and (name:match('^([^-]+)') or name) or nil
 end
 
--- The client only fills the roster after a GuildRoster() call and throttles those, so
--- GetNumGuildMembers() is 0 for most of a session. Reading it live meant a duel won two
--- minutes after login matched nobody. Names are kept instead, and never thrown away: a
--- momentarily empty roster is the client not having answered yet, not an empty guild.
+-- Names are cached and never dropped: the roster reads empty for most of a session.
 local cachedNames, cachedMaster = {}, nil
 
 local function refresh()
@@ -102,8 +98,7 @@ watcher:SetScript('OnEvent', function()
     end)
 end)
 
--- Ask for the roster ourselves rather than waiting for something else to open the guild
--- frame, and again when a duel starts, so the loser's name is known by the time it matters.
+-- Ask for the roster ourselves, and again at a duel, so names are known when they matter.
 local asker = CreateFrame('Frame')
 asker:RegisterEvent('PLAYER_ENTERING_WORLD')
 asker:RegisterEvent('DUEL_REQUESTED')

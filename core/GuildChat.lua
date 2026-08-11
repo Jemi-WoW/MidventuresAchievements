@@ -48,8 +48,7 @@ local function countZone()
     end
 end
 
--- CHAT_MSG_GUILD only ever carries our own guild, so the sender is the whole test.
--- Some clients suffix the realm onto the sender and never onto UnitName, hence the strip.
+-- Some clients suffix the realm onto the sender and never onto UnitName.
 local function check(message, sender)
     if not ns.InOurGuild() then return end
     local name = sender and (sender:match('^([^-]+)') or sender)

@@ -21,8 +21,7 @@ ns.SECTION_ANNIVERSARY = 'A'
 ns.SECTION_MIDVENTURES = 'M'
 ns.COMM_PREFIX = 'MVACH'
 
--- The community guild, and our own criteria types for the things Anniversary cannot see.
--- Each is registered by the core file named beside it, which also fires it.
+-- Our own criteria types, each registered and fired by the core file named beside it.
 ns.GUILD_NAME = 'Dentventures'
 ns.CRITERIA_GUILD = 5001          -- Guild.lua, member of GUILD_NAME
 ns.CRITERIA_GUILD_DUEL = 5002     -- GuildDuels.lua, duel won against a guildmate

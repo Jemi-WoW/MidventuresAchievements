@@ -1,13 +1,11 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- Helpful spells landed on other players. Counting auras rather than casts means a group
--- buff credits everyone it reaches, and every class has something that counts.
+-- Helpful spells landed on other players, counted as auras so group buffs credit each.
 CA_Criterias.dataLengths[ns.CRITERIA_BUFF_PLAYERS] = 0
 CA_Criterias.criterias[ns.CRITERIA_BUFF_PLAYERS] = {}
 
--- Where the aura type sits, after the eleven fields every combat log line starts with and
--- the spell id, name and school the event carries first.
+-- Where the aura type sits in the event.
 local AURA_TYPE_AT = 15
 
 local playerGUID

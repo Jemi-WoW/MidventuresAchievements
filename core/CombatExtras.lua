@@ -1,8 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- The rest of what the combat log knows: raising people, stopping casts, and the two
--- achievements that ask what you were wearing or how few things you had killed.
+-- The rest of what the combat log knows: raising people, stopping casts, and the like.
 CA_Criterias.dataLengths[ns.CRITERIA_RESURRECTS] = 0
 CA_Criterias.criterias[ns.CRITERIA_RESURRECTS] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_INTERRUPTS] = 0
@@ -20,8 +19,7 @@ CA_Criterias.criterias[ns.CRITERIA_PACIFIST] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_UNARMED_HITS] = 0
 CA_Criterias.criterias[ns.CRITERIA_UNARMED_HITS] = {}
 
--- Overkill sits one past the amount, which is at 15 for every damage event that carries a
--- spell first and at 12 for a swing.
+-- Overkill sits one past the amount: 15 with a spell first, 12 for a swing.
 local AMOUNT_AT = {
     SWING_DAMAGE          = 12,
     SPELL_DAMAGE          = 15,

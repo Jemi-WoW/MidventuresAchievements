@@ -29,8 +29,7 @@ end
 -- Nothing announces a flight, so the taxi state is polled and the landing is the count.
 local onTaxi = false
 
--- The client answers 0,0 for map position while the player is standing on something that
--- moves, which is the only way to know a boat or zeppelin is under your feet.
+-- Map position reads 0,0 aboard anything that moves, which is how a boat is spotted.
 local onTransport = false
 
 local function position()

@@ -26,8 +26,7 @@ local function add(key, criteriaType, amount)
     CA_Criterias:Trigger(criteriaType, nil, record[key], true)
 end
 
--- "You create: %s" as the client writes it, turned into something Lua can match. The
--- format arguments are whatever the locale put them in, hence the numbered placeholders.
+-- "You create: %s" as the client writes it, numbered placeholders and all.
 local function toPattern(message)
     local pattern = message:gsub('%.', '%%.')
     for i = 1, 4 do
@@ -45,8 +44,7 @@ local function professionOpen()
     return false
 end
 
--- Every craft in the game announces itself in the loot channel, which is more honest than
--- watching the trade skill window and counting casts.
+-- Every craft announces itself in the loot channel.
 local function onLoot(message, initiator, _, _, playerName)
     local who = playerName or initiator
     if who and who ~= UnitName('player') then return end
@@ -61,8 +59,7 @@ local function onLoot(message, initiator, _, _, playerName)
     end
 end
 
--- Who is on the other side of the trade window, remembered while it is open because the
--- name is gone by the time the trade closes.
+-- The trade partner, kept while the window is open: the name is gone once it shuts.
 local partner = nil
 local accepted = false
 
@@ -75,8 +72,7 @@ local function onCast(unit, _, spellID)
         return
     end
 
-    -- An enchant on someone else's gear is cast straight into the open trade window, which
-    -- is the only cast that ever happens there.
+    -- The only cast that ever lands in an open trade window is an enchant on their gear.
     if partner and TradeFrame and TradeFrame:IsShown() then
         CA_Criterias:Trigger(ns.CRITERIA_ENCHANT_GUILD)
     end

@@ -10,8 +10,7 @@ function ns.Localized(key, ...)
     return loc:Get(key, ...)
 end
 
--- Resolves one of Anniversary's own achievements so it can gate one of ours.
--- Its ids come from a shared counter and shift when it adds content, so we match on name.
+-- Anniversary's ids shift when it adds content, so its achievements are matched by name.
 function ns.Anniversary(key, ...)
     if not byName then
         byName = {}

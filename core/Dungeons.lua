@@ -1,10 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- Every dungeon that has a guild run achievement in achievements/dungeons-raids/.
--- `ids` is the final boss: a list, because a TBC boss carries a second id for heroic and
--- Nazan & Vazruden count as one kill. Scarlet Monastery and Dire Maul are listed a wing at
--- a time, because each wing ends on its own boss and earns its own achievement.
+-- Every dungeon with a guild run achievement. `ids` is the final boss, wings listed apart.
 
 local dungeons = {}
 ns.Dungeons = dungeons

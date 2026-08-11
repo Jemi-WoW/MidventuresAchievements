@@ -4,8 +4,7 @@ if ns.disabled then return end
 local A = ns.achievements
 local crafting = ns.categories.professionsCrafting
 
--- Fed by core/Crafting.lua. Anniversary counts a handful of specific items made, never the
--- total, and never who you made them for.
+-- Fed by core/Crafting.lua; Anniversary counts specific items, never the total.
 
 A.MADE_IT_MYSELF = ns.Chain(crafting, {
     name = function(n) return ('Craft %d Items'):format(n) end,

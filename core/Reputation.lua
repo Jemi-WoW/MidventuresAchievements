@@ -1,9 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- Being disliked. Anniversary's reputation criteria only ever ask for a standing or better,
--- and everyone is already at Hated or better, so going the other way needs its own type.
--- Data is a faction id, or 0 for whoever will have you least.
+-- Being disliked, which Anniversary cannot ask for. Data is a faction id, or 0 for any.
 CA_Criterias.dataLengths[ns.CRITERIA_REP_HATED] = 1
 CA_Criterias.criterias[ns.CRITERIA_REP_HATED] = {}
 
@@ -25,8 +23,7 @@ local function check()
     end
 end
 
--- The faction list is only filled in once the world is up, and collapsed headers hide the
--- rows below them, so this is re-read rather than watched once.
+-- Collapsed headers hide the rows below them, so the list is re-read rather than watched.
 local watcher = CreateFrame('Frame')
 watcher:RegisterEvent('UPDATE_FACTION')
 watcher:RegisterEvent('PLAYER_ENTERING_WORLD')

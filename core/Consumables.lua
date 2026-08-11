@@ -1,8 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- Eating and drinking. The aura the client applies is the same one for every meal, so its
--- name is read from a spell id rather than hard-coded, and other locales still work.
+-- Eating and drinking. One aura per kind, read by spell id so other locales work.
 CA_Criterias.dataLengths[ns.CRITERIA_EAT] = 0
 CA_Criterias.criterias[ns.CRITERIA_EAT] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_DRINK] = 0
@@ -12,8 +11,7 @@ CA_Criterias.criterias[ns.CRITERIA_ALCOHOL] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_CONSUME_ITEM] = 1
 CA_Criterias.criterias[ns.CRITERIA_CONSUME_ITEM] = {}
 
--- Booze does not apply the ordinary Drink aura, so it is a list rather than a rule. Only
--- drinks that are definitely alcoholic are in it; add ids here to widen it.
+-- Booze applies no Drink aura, so it is a list; add ids here to widen it.
 local ALCOHOL = {
     [2593]  = true, -- Flask of Port
     [2594]  = true, -- Flagon of Dwarven Honeymead

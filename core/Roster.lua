@@ -118,8 +118,6 @@ function roster.RefreshSelf()
 end
 
 -- Class, level and online state come from the guild roster, not the wire.
--- Offline members are only listed while the guild frame's "show offline" box is ticked,
--- so absence means offline, never that the player left.
 function roster.MergeGuildRoster()
     local records = store()
     if not records then return end

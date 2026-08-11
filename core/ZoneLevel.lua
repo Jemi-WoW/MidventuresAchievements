@@ -5,9 +5,7 @@ if ns.disabled then return end
 CA_Criterias.dataLengths[ns.CRITERIA_ZONE_BELOW_LEVEL] = 2
 CA_Criterias.criterias[ns.CRITERIA_ZONE_BELOW_LEVEL] = {}
 
--- The registered criteria are the whole list of places worth checking, so walk those
--- rather than keeping a second copy of the same thing. Either name counts: Booty Bay is a
--- subzone of Stranglethorn, Winterspring is a zone with no subzone worth naming.
+-- Either name counts: Booty Bay is a subzone, Winterspring a zone with none worth naming.
 local function check()
     local subZone, zone = GetSubZoneText(), GetZoneText()
     local level = UnitLevel('player')

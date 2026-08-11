@@ -4,8 +4,7 @@ if ns.disabled then return end
 local A = ns.achievements
 local money = ns.categories.generalMoney
 
--- Fed by core/Money.lua. Anniversary counts gold made from quest rewards and nothing else
--- about money, so vendors, the auction house and what is in your pocket are all ours.
+-- Fed by core/Money.lua; Anniversary counts quest gold and nothing else about money.
 
 A.VENDOR_TRASH_TYCOON = ns.Achievement(money, {
     name   = 'Vendor Trash Tycoon',

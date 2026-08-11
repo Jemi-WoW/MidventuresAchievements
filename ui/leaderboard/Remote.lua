@@ -31,8 +31,7 @@ end
 
 local cache = { list = {}, has = {}, key = nil }
 
--- Rebuilt whenever the viewed player, their data or the section changes.
--- idsVer is part of the key because detail usually arrives with the points unmoved.
+-- Rebuilt when the viewed player, their data or the section changes.
 local function rebuild()
     local record = leaderboard.record
     local key = record and table.concat(

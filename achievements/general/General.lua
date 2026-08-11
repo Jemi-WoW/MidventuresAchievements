@@ -8,8 +8,7 @@ local levelling, combat, wealth =
     ns.categories.generalLevelling, ns.categories.generalCombat, ns.categories.generalWealth
 local guild = ns.categories.generalGuild
 
--- How to write these: .AchievementGuide/General.md
--- Append new achievements at the bottom, ids are handed out in load order.
+-- Guide: .AchievementGuide/General.md. Append at the bottom, ids follow load order.
 
 -- Sits in the parent category rather than a subcategory, because it is the welcome.
 A.MIDVENTURER = ns.Achievement(general, {
@@ -65,8 +64,7 @@ A.TRAVELLING_CLOTHES = ns.Achievement(wealth, {
     },
 })
 
--- Guild chat, counted by core/GuildChat.lua. One criteria type feeds the whole chain, so
--- every tier fills at once and `previous` is what shows them one at a time.
+-- Guild chat, counted by core/GuildChat.lua; one criteria feeds every tier at once.
 local function chatter(name, desc, count, points, icon, previous)
     return ns.Achievement(guild, {
         name = name, desc = desc, points = points, icon = icon, previous = previous,
@@ -109,8 +107,7 @@ A.A_REAL_CRITTER = ns.Achievement(combat, {
     },
 })
 
--- Rings and trinkets are dropped from Anniversary's slot list, which already leaves out
--- shirt, tabard, off hand and the ranged slot. So this is armour, cloak, neck and weapon.
+-- Armour, cloak, neck and weapon: rings and trinkets are dropped from the slot list.
 local SKIPPED_SLOTS = {
     FIRST_RING = true,
     SECOND_RING = true,
@@ -118,8 +115,7 @@ local SKIPPED_SLOTS = {
     SECOND_TRINKET = true,
 }
 
--- Anniversary fires GEAR_QUALITY for every quality up to the one worn, so these ask for
--- the quality or better, and blue gear fills the green achievement on the way past.
+-- GEAR_QUALITY fires for every quality up to the one worn, so these ask for it or better.
 local function fullGear(name, desc, quality, points, icon, previous)
     local criteria = {}
     for idx, slot in ipairs(CA_Criterias.GEAR_SLOT) do
@@ -141,8 +137,7 @@ A.BLUE_IS_THE_COLOR = fullGear('Blue is the color',
     'Equip rare or better gear in every slot below.', 3, 30, '-Spell_Frost_WizardMark',
     A.I_AM_GREEN)
 
--- The chat chain carries on in thousands. Same criteria as the tiers above it, so these
--- were already part filled the day they were added.
+-- The chat chain carries on in thousands, on the same criteria as the tiers above.
 A.GUILD_CHAT_2000 = chatter('Write in Guild chat 2000 times',
     chatDesc(2000), 2000, 35, '-inv_misc_book_11', A.GUILD_CHAT_1000)
 
@@ -155,8 +150,7 @@ A.GUILD_CHAT_4000 = chatter('Write in Guild chat 4000 times',
 A.GUILD_CHAT_5000 = chatter('Write in Guild chat 5000 times',
     chatDesc(5000), 5000, 50, '-spell_Shadow_ConeOfSilence', A.GUILD_CHAT_4000)
 
--- What is worn where, read by core/Equipment.lua. Anniversary's own gear criteria start at
--- uncommon and have no tabard slot, so a first white ring would never fire one.
+-- What is worn where, read by core/Equipment.lua; theirs starts at uncommon.
 A.SHOULDERS_OF_GIANTS = ns.Achievement(wealth, {
     name   = 'Shoulders Of Giants',
     desc   = 'Equip your first set of shoulders.',
@@ -198,8 +192,7 @@ A.A_TRUE_DENTER = ns.Achievement(guild, {
     },
 })
 
--- Helpful spells landed on other players, counted by core/Buffs.lua. One criteria type
--- feeds the whole chain, so every tier fills at once and `previous` shows them one at a time.
+-- Helpful spells landed on other players, counted by core/Buffs.lua.
 local function helper(name, count, points, icon, previous)
     return ns.Achievement(general, {
         name = name, points = points, icon = icon, previous = previous,

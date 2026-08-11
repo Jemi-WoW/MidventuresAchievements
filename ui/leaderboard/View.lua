@@ -50,9 +50,7 @@ local leaderboardFunctions = {
 }
 ns.leaderboardFunctions = leaderboardFunctions
 
--- Where a guild chat link lands. Both halves are held onto rather than used once:
--- a guildmate who has never spoken to us is not in the roster yet,
--- and their achievements follow their name by a second or two.
+-- Where a guild chat link lands; both halves may still be on the wire.
 local PENDING_TIMEOUT = 60
 local pending, chasing = nil, false
 
@@ -121,7 +119,7 @@ local function followPending()
     if jumpTo(pending.id) then pending = nil end
 end
 
--- Both halves can arrive over the wire, so this keeps trying until they have or the wait runs out.
+-- Keeps trying until both halves arrive or the wait runs out.
 local function chase()
     chasing = false
     if not (ns.leaderboard and frame:IsShown()) then
@@ -220,9 +218,7 @@ function ns.ShowLeaderboard()
     end
 end
 
--- Where a guild chat link lands: the window open, on that player, on the right side of it,
--- scrolled to the achievement and opened. A player or a list we do not have yet is waited
--- for rather than given up on, which is what the chase above is for.
+-- The window open, on that player, scrolled to the achievement and opened.
 function ns.ShowLeaderboardFor(name, achievementID)
     if not frame:IsShown() then
         if InCombatLockdown() then
@@ -241,8 +237,7 @@ function ns.ShowLeaderboardFor(name, achievementID)
 
     pending = name and { name = ns.Roster.PlainName(name), id = achievementID, at = GetTime() } or nil
     if pending and not ns.Roster.Find(pending.name) then
-        -- Never heard of them, so ask the guild now rather than wait for whatever they
-        -- earn next to introduce them.
+        -- Never heard of them, so ask the guild now.
         ns.Sync.RequestGuildRoster()
         ns.Sync.Ping(true)
     end

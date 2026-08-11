@@ -8,8 +8,7 @@ local gathering, crafting, secondary =
     ns.categories.professionsGathering, ns.categories.professionsCrafting,
     ns.categories.professionsSecondary
 
--- How to write these: .AchievementGuide/Professions.md
--- Append new achievements at the bottom, ids are handed out in load order.
+-- Guide: .AchievementGuide/Professions.md. Append at the bottom, ids follow load order.
 
 -- One criteria per profession, any of which earns it. PROF[x][3] is the localised name.
 local function anyProfession(category, name, desc, points, icon, skill, professions, previous)
@@ -43,6 +42,4 @@ A.JOURNEYMAN = anyProfession(crafting, 'Journeyman',
     'Reach 150 skill in a crafting profession.', 15, '-Inv_Enchant_DustIllusion', 150,
     CRAFTING, A.MAKING_THINGS)
 
--- Anniversary already tiers each secondary profession at 75, 150, 225 and 300, so a plain
--- skill level there duplicates it. Anniversary has no per-profession tiers for the main
--- professions though, which is what the gathering and crafting splits above rely on.
+-- A plain secondary skill level duplicates Anniversary; the main professions do not.

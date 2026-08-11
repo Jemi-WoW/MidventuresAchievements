@@ -5,8 +5,7 @@ local frame = AnniversaryAchievements_GetAchievementFrame()
 local frameName = frame:GetName()
 local tab1 = _G[frameName .. 'Tab1']
 
--- Second bottom tab, right of "Achievements".
--- Name must follow "<frame name>Tab<index>" so PanelTemplates handles selection.
+-- Second bottom tab; the name must follow "<frame name>Tab<index>" for PanelTemplates.
 local tab = CreateFrame('Button', frameName .. 'Tab2', frame, 'AchievementFrameTabButtonTemplate')
 tab:SetID(2)
 tab:SetText(ns.TAB_LABEL)
@@ -17,8 +16,7 @@ tab:SetScript('OnClick', function()
 end)
 PanelTemplates_TabResize(tab, 10)
 
--- PanelTemplates re-anchors tab text on select/deselect, defaulting too high.
--- Anniversary only corrects tab 1, so set the offsets on both.
+-- PanelTemplates defaults the text too high and Anniversary only corrects tab 1.
 local TEXT_Y_SELECTED, TEXT_Y_DESELECTED = -5, -3
 for _, t in ipairs({ tab1, tab }) do
     t.selectedTextY = TEXT_Y_SELECTED
@@ -26,7 +24,6 @@ for _, t in ipairs({ tab1, tab }) do
 end
 
 -- Fallback for clients whose PanelTemplates ignores those fields.
--- The leaderboard owns neither tab, so both sit deselected while it is up.
 function ns.UpdateTabText()
     local midventures = ns.active and not ns.leaderboard
     local anniversary = not ns.active and not ns.leaderboard

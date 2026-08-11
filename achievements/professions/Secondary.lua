@@ -4,8 +4,7 @@ if ns.disabled then return end
 local A = ns.achievements
 local secondary = ns.categories.professionsSecondary
 
--- Anniversary tiers each secondary skill at 75, 150, 225 and 300, so these ask what the
--- skill was used for instead. Fed by core/FirstAid.lua and core/Fishing.lua.
+-- Anniversary tiers the skills, so these ask what the skill was used for.
 
 A.BANDAGE_BRIGADE = ns.Chain(secondary, {
     name = function(n) return ('Bandage %d Guildmates'):format(n) end,

@@ -5,8 +5,7 @@ local TYPE = CA_Criterias.TYPE
 local A = ns.achievements
 local odd = ns.categories.generalOddities
 
--- Combat oddities and silly business. Fed by core/CombatExtras.lua, core/Emotes.lua,
--- core/Zones.lua, core/Equipment.lua and core/GuildChat.lua.
+-- Combat oddities and silly business, fed by half the core files.
 
 A.A_REALER_CRITTER = ns.Achievement(odd, {
     name     = 'A realer critter!',
@@ -177,8 +176,7 @@ A.MOO = ns.Achievement(odd, {
     },
 })
 
--- Cats come as Cat, Siamese Cat, Mountain Cat and so on, so this asks for the word rather
--- than one name. The frontier pattern keeps Bobcat and Wildcat out of it.
+-- Asks for the word rather than one name; the frontier keeps Bobcat and Wildcat out.
 A.HERE_KITTY = ns.Achievement(odd, {
     name   = 'Here Kitty',
     desc   = 'Use /beg on a cat. It will not help.',

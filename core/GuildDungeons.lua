@@ -15,8 +15,7 @@ CA_Criterias.criterias[ns.CRITERIA_RUN_FLAWLESS] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_RUN_CLASSES] = 0
 CA_Criterias.criterias[ns.CRITERIA_RUN_CLASSES] = {}
 
--- Kills are remembered per character rather than per session, so the criteria can be
--- refilled after a reload and a dungeon earned before the addon updated still counts.
+-- Kills are kept per character so the criteria can be refilled after a reload.
 local function killed()
     MidventuresProgressDB = MidventuresProgressDB or {}
     MidventuresProgressDB.guildBosses = MidventuresProgressDB.guildBosses or {}
@@ -29,8 +28,7 @@ local function progress()
     return MidventuresProgressDB.guildRuns
 end
 
--- Nobody has gone down since the instance loaded. A five man instance holds no players
--- but the group, so any player dying in one is one of ours.
+-- A five man instance holds nobody but the group, so any player death is one of ours.
 local clean = true
 
 -- Five guildmates who between them cover five classes, which takes some arranging.
@@ -79,8 +77,7 @@ local function evaluateAll()
     end
 end
 
--- Anniversary's tracker already decides whether a kill was ours, so credit matches its own
--- dungeon achievements exactly. It only calls us for the ids we ask about.
+-- Anniversary's tracker decides whether a kill was ours, so credit matches its own.
 local function onKill(creatureID)
     if not ns.InGuildParty() then return end
     local dungeon = dungeons.byCreature[creatureID]
@@ -98,8 +95,7 @@ local watched = {}
 for creatureID in pairs(dungeons.byCreature) do watched[#watched + 1] = creatureID end
 CA_CreatureKillingTracker:AddHandler(watched, onKill)
 
--- A player dying anywhere in the instance ends the flawless run, and walking in starts a
--- new one. Anything that is not a player death is left alone.
+-- A player death ends the flawless run, and walking in starts a new one.
 local function onCombatLog()
     if not clean then return end
     local _, event, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()

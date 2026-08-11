@@ -118,7 +118,6 @@ local function findRow(id)
 end
 
 -- Anniversary's SelectAchievement scroll-hunts for the row and can spin or throw.
--- Jump straight to it instead.
 local function jumpToOwn(id)
     ns.ShowMidventures()
 
@@ -175,7 +174,6 @@ AchievementFrame_SelectAchievement = function(id, forceSelect, isComparison)
 end
 
 -- The expanded row caches its objectives by id, so bust that to move its bar.
--- A full redraw is only needed when a row's body changed, ie something was earned.
 local function refreshList(fullRedraw)
     if not AchievementFrameAchievements:IsShown() then return end
     if fullRedraw then
@@ -201,7 +199,6 @@ function ns.RefreshOpenView(earnedSomething)
 end
 
 -- Remember the tab on close, but leave the view for real.
--- Otherwise Anniversary's file-local achievementFunctions stays bound to ours.
 local reopenOnMidventures = false
 
 frame:HookScript('OnHide', function()

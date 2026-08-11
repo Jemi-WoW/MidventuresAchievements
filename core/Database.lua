@@ -3,8 +3,7 @@ if ns.disabled then return end
 
 local db = CA_Database
 
--- Fourth tab in Anniversary's database.
--- Its factories are closures over `self`, so borrowing them registers our content globally.
+-- Fourth tab in Anniversary's database; its factories are closures over `self`.
 local template = db:GetTab(db.TAB_ID_PLAYER)
 
 local tab = {

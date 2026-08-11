@@ -13,8 +13,7 @@ local function killed()
     return MidventuresProgressDB.guildRaids
 end
 
--- Guild dungeons ask that everyone is one of ours. A raid only asks that enough of us are,
--- counting the player, because forty guildmates in one place is a different addon.
+-- A raid only asks that enough of us are there, counting the player.
 function ns.GuildsInRaid()
     if not ns.InOurGuild() then return 0 end
 
@@ -58,8 +57,7 @@ local watched = {}
 for creatureID in pairs(raids.byCreature) do watched[#watched + 1] = creatureID end
 CA_CreatureKillingTracker:AddHandler(watched, onKill)
 
--- The same replay core/GuildDungeons.lua does, for the same reason: a kill earned before
--- the addon knew about it still counts.
+-- The same replay core/GuildDungeons.lua does, for the same reason.
 local loader = CreateFrame('Frame')
 loader:RegisterEvent('PLAYER_ENTERING_WORLD')
 loader:SetScript('OnEvent', function() C_Timer.After(7, evaluateAll) end)

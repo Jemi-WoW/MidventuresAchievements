@@ -1,10 +1,10 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- How far through the list you are, next to the count the Progress Overview bar already carries.
+-- How far through the list you are, beside the count the bar already carries.
 local base
 
--- The bar's own numbers rather than a second count of our own, so the two can never disagree about which tab is on screen.
+-- The bar's own numbers, so the two can never disagree.
 local function percent(bar)
     local _, total = bar:GetMinMaxValues()
     local completed = bar:GetValue() or 0

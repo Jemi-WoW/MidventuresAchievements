@@ -6,7 +6,6 @@ CA_Criterias.dataLengths[ns.CRITERIA_TIER_SET] = 1
 CA_Criterias.criterias[ns.CRITERIA_TIER_SET] = {}
 
 -- Dungeon Set 2, one row per class, ids straight out of AtlasLoot's ItemSet data.
--- Head, shoulders, chest, bracers, gloves, belt, legs and boots, in no particular order.
 local SETS = {
     {21999, 22001, 21997, 21996, 21998, 21994, 22000, 21995}, -- Battlegear of Heroism
     {22005, 22008, 22009, 22004, 22006, 22002, 22007, 22003}, -- Darkmantle Armor
@@ -19,8 +18,7 @@ local SETS = {
     {22097, 22101, 22102, 22095, 22099, 22098, 22100, 22096}, -- The Five Thunders
 }
 
--- The slots that have to be tier, rather than a count of any five pieces. Bracers, belt
--- and boots are barely visible, so these are the ones that read as wearing the set.
+-- The slots that read as wearing the set, rather than any five pieces.
 local REQUIRED_SLOTS = {
     1,  -- Head
     3,  -- Shoulders

@@ -4,8 +4,7 @@ if ns.disabled then return end
 local A = ns.achievements
 local death = ns.categories.generalDeath
 
--- Everything here is fed by core/Deaths.lua. Anniversary counts what you kill and never
--- once asks what killed you, so the whole category is ours.
+-- Fed by core/Deaths.lua. Anniversary never asks what killed you.
 
 A.SKILL_ISSUE = ns.Chain(death, {
     name = function(n) return ('Skill Issue %d Times'):format(n) end,
@@ -85,8 +84,7 @@ A.WIPE_COMMANDER = ns.Achievement(death, {
     },
 })
 
--- The rest of what the world can do to you. Environmental damage names its own type, so
--- these cost nothing beyond a row each.
+-- The rest of what the world can do to you; the damage names its own type.
 A.BURNT_OUT = ns.Achievement(death, {
     name   = 'Burnt Out',
     desc   = 'Burn to death.',

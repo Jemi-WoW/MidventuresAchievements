@@ -28,8 +28,7 @@ for i = 1, math.min(#achievementIDs, ACHIEVEMENTUI_MAX_SUMMARY_ACHIEVEMENTS) do
     ns.defaultSummaryAchievements[i] = achievementIDs[i]
 end
 
--- Anniversary's initial check only revisits achievements it already has a record for.
--- Ours resting on an already-earned prerequisite have none, so sweep them just after it.
+-- Anniversary only revisits achievements it has a record for, so sweep ours after it.
 C_Timer.After(6, function()
     local completion = CA_CompletionManager:GetLocal()
     for _, category in pairs(ns.tab:GetCategories()) do

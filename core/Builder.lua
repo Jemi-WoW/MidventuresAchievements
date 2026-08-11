@@ -3,8 +3,7 @@ if ns.disabled then return end
 
 local criterias = CA_Criterias
 
--- ns.Achievement / ns.Category. Field reference: .AchievementGuide/README.md
--- CA_Loader drops forced ids, so we allocate our own: one block per category.
+-- ns.Achievement / ns.Category. Fields: .AchievementGuide/README.md.
 local ACHIEVEMENTS_PER_CATEGORY = 1000
 local CRITERIA_PER_CATEGORY = 10000
 

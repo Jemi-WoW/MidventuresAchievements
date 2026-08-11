@@ -1,8 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- Bandages. Every one of them leaves the same mark, so one aura covers the whole range
--- from linen to netherweave.
+-- Bandages. One aura covers the lot, from linen to netherweave.
 CA_Criterias.dataLengths[ns.CRITERIA_BANDAGE_GUILD] = 0
 CA_Criterias.criterias[ns.CRITERIA_BANDAGE_GUILD] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_BANDAGE_LOW] = 0

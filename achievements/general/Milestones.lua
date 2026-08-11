@@ -4,13 +4,7 @@ if ns.disabled then return end
 local A = ns.achievements
 local milestones = ns.categories.generalMilestones
 
--- Roll-ups that reach across into Anniversary's own achievements. `meta` compiles to a
--- COMPLETE_ACHIEVEMENT criteria, which they resolve by reading the other achievement's
--- state rather than waiting for an event, so all of these work retroactively.
---
--- ns.Anniversary(key) matches on the localised name, never an id: see core/Anniversary.lua.
--- Mixing one of theirs with one of ours is the point - a roll-up over only theirs would
--- just be their achievement again.
+-- Roll-ups reaching into Anniversary's own achievements, which work retroactively.
 local AN = ns.Anniversary
 
 -- The guild career, one rung at a time. Each asks for a level and something of ours.
@@ -40,8 +34,7 @@ A.DENTER_OF_THE_REALM = ns.Achievement(milestones, {
     meta     = { AN('AN_LVL', 70), A.GUILD_CHAT_1000 },
 })
 
--- Cross-domain, which is the one shape Anniversary never builds: they roll up within a
--- category and never across them.
+-- Cross-domain, the one shape Anniversary never builds.
 A.WELL_ROUNDED = ns.Achievement(milestones, {
     name   = 'Well Rounded',
     desc   = 'Be good at a bit of everything.',
@@ -125,9 +118,7 @@ A.REGULAR_AT_THE_BAR = ns.Achievement(milestones, {
     meta   = { AN('AN_BREWFEST_BEER_CLUB'), A.BREWFEST_REGULAR },
 })
 
--- Every holiday Anniversary tracks, in one place. Takes a year to earn on purpose.
--- The seven holidays alone are Anniversary's own meta, so ours asks that you were drinking
--- and eating cake through them as well.
+-- Every holiday, plus drinking and cake so this is not Anniversary's own meta again.
 A.PARTY_ANIMAL = ns.Achievement(milestones, {
     name   = 'Party Animal',
     desc   = 'Turn up to every holiday in the calendar, and make a night of it.',
@@ -151,8 +142,7 @@ A.DENTVENTURES_VETERAN = ns.Achievement(milestones, {
     },
 })
 
--- Roll-ups over our own, which is the rest of this file. Tier chains are indexed off
--- ns.TIERS: 1 is 10, 6 is 100, 10 is 500, 11 is 1000.
+-- Roll-ups over our own. Tier chains index ns.TIERS: 1 is 10, 6 is 100, 11 is 1000.
 local T = { [10] = 1, [50] = 5, [100] = 6, [200] = 7, [500] = 10, [1000] = 11 }
 
 A.DRESSED_FOR_SUCCESS = ns.Achievement(milestones, {

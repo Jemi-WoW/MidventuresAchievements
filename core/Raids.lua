@@ -1,9 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- The last boss of every raid, and how many of us have to be standing there for it to
--- count. Ten-man raids ask for five, everything else for ten: a forty man raid full of
--- nobody but guildmates is not a thing that happens.
+-- The last boss of every raid, and how many of us have to be there for it to count.
 local raids = {}
 ns.Raids = raids
 

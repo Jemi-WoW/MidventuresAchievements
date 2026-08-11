@@ -5,9 +5,7 @@ if ns.disabled then return end
 CA_Criterias.dataLengths[ns.CRITERIA_CRIT_ABOVE] = 1
 CA_Criterias.criterias[ns.CRITERIA_CRIT_ABOVE] = {}
 
--- Where the amount sits in each event, after the eleven fields every combat log line starts
--- with. Swing has no prefix payload, the rest carry a spell id, name and school first.
--- From the amount onwards the shape is the same, so critical is always six further along.
+-- Where the amount sits per event; critical is always six fields further along.
 local AMOUNT_AT = {
     SWING_DAMAGE          = 12,
     SPELL_DAMAGE          = 15,

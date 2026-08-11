@@ -3,8 +3,7 @@ if ns.disabled then return end
 
 local leaderboard = ns.Leaderboard
 
--- Whether you have it too, on someone else's row. Only on an expanded one: collapsed rows
--- are a list to skim, and a mark on every line would be noise.
+-- Whether you have it too, on someone else's row, and only on an expanded one.
 local TICK = 'Interface\\RaidFrame\\ReadyCheck-Ready'
 local CROSS = 'Interface\\RaidFrame\\ReadyCheck-NotReady'
 
@@ -29,8 +28,7 @@ local function marker(button)
     return frame
 end
 
--- Our own completion, read straight from Anniversary rather than through the achievement
--- api, because ui/leaderboard/Remote.lua has that answering for the player on screen.
+-- Read straight from Anniversary: the api answers for the player on screen.
 local function earnedByMe(id)
     local completion = CA_CompletionManager and CA_CompletionManager:GetLocal()
     return completion and completion:IsAchievementCompleted(id) or false
@@ -63,8 +61,7 @@ end
 
 ns.RefreshMineMarker = refresh
 
--- Every redraw of a row goes through the first, and expanding or collapsing one goes
--- through the other two without a redraw, so all three are hooked.
+-- Redraws go through the first, expanding and collapsing through the other two.
 hooksecurefunc('AchievementButton_DisplayAchievement', function(button) refresh(button) end)
 hooksecurefunc('AchievementButton_Expand', function(button) refresh(button) end)
 hooksecurefunc('AchievementButton_Collapse', function(button)

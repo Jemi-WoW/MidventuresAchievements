@@ -1,13 +1,10 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- Guild chat carries the achievement as plain text, because the server strips hyperlinks
--- and textures it does not recognise. Each client with the addon turns that text back into
--- a link, and anyone without it still reads a sensible sentence.
+-- The server strips hyperlinks from guild chat, so each client rebuilds the link itself.
 local LINK = '|cffffff00|Hgarrmission:mvach:%d#%s|h[%s]|h|r'
 
--- The points shield, the same one the leaderboard puts beside a score. The image holds it
--- in its top left corner, hence the coordinates.
+-- The points shield, held in the image's top left corner.
 local ICON = '|TInterface\\AddOns\\AnniversaryAchievements\\textures\\'
     .. 'UI-Achievement-TinyShield:14:14:0:0:64:64:0:40:0:40|t '
 
@@ -23,8 +20,7 @@ local function achievementByName(name)
     return byName[name]
 end
 
--- Rebuilt from the same formatter that sent it, so the link sits exactly where the name was.
--- The line never names the player, so who to open the leaderboard on comes off the author.
+-- Rebuilt by the formatter that sent it; the author says whose leaderboard to open.
 local function relink(_, _, message, author, ...)
     local name = ns.ParseAnnouncement(message)
     if not name then return false end

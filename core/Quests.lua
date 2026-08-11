@@ -40,8 +40,7 @@ local function count(list)
     return total
 end
 
--- Guildmates standing beside you when the quest is handed in, remembered by name so the
--- same friend all afternoon is one buddy rather than fifty.
+-- Guildmates you handed a quest in beside, by name, so the same friend counts once.
 local function creditGroup()
     if not ns.InOurGuild() then return end
 

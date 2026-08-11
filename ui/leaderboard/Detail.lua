@@ -100,7 +100,7 @@ detail.annButton:SetPoint('TOPLEFT', 16, -60)
 detail.midiButton = createSectionButton(ns.TAB_LABEL, ns.SECTION_MIDVENTURES)
 detail.midiButton:SetPoint('LEFT', detail.annButton, 'RIGHT', 10, 0)
 
--- Why the list is empty: a player is ranked from their points, which arrive long before their list.
+-- Why the list is empty: points arrive long before the list does.
 local note = AchievementFrameAchievementsContainer:CreateFontString(nil, 'ARTWORK', 'GameFontHighlight')
 note:SetPoint('TOP', 0, -40)
 note:SetWidth(400)

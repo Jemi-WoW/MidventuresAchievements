@@ -1,8 +1,7 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- What is worn where. Anniversary's GEAR_QUALITY only fires from uncommon upwards and has
--- no tabard slot at all, so a white pair of shoulders or the guild tabard needs its own type.
+-- What is worn where, since GEAR_QUALITY skips whites and has no tabard slot.
 CA_Criterias.dataLengths[ns.CRITERIA_EQUIPMENT] = 1
 CA_Criterias.criterias[ns.CRITERIA_EQUIPMENT] = {}
 
@@ -73,8 +72,7 @@ local function checkDurability()
     end
 end
 
--- Stormwind then Ironforge, with nothing on for the whole trip. Putting anything back on
--- clears it, which is what makes the run a run.
+-- Stormwind then Ironforge with nothing on; putting anything back on clears it.
 local NAKED_RUN_ZONES = { 'Stormwind City', 'Ironforge' }
 local startedAt = nil
 

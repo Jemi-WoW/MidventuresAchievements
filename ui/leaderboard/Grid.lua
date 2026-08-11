@@ -5,9 +5,7 @@ local leaderboard = ns.Leaderboard
 local pane = AchievementFrameAchievements
 local detail = leaderboard.detail
 
--- The list is one achievement per row, which is a long scroll for someone with hundreds.
--- The grid is the same list as icons, and the two buttons in the detail strip pick between
--- them. Whichever was last used is remembered.
+-- The same list as icons, with two buttons in the detail strip to pick between them.
 leaderboard.LAYOUT_LIST, leaderboard.LAYOUT_GRID = 'list', 'grid'
 leaderboard.layout = ns.Setting('leaderboardLayout')
 
@@ -31,9 +29,7 @@ local content = CreateFrame('Frame', nil, grid)
 content:SetSize(1, 1)
 grid:SetScrollChild(content)
 
--- The list's bar is the hybrid one, so ours is built from the same template and comes out
--- the same widget with the same art. Its own scripts are replaced rather than used: those
--- drive a hybrid list of recycled rows, and this is a plain scrolling frame.
+-- Built from the list's own template, so it is the same widget with the same art.
 local function makeScrollBar()
     for _, template in ipairs({ 'HybridScrollBarTemplate', 'UIPanelScrollBarTrimTemplate',
         'UIPanelScrollBarTemplate' }) do
@@ -52,9 +48,7 @@ local function scrollTo(value)
 end
 
 if scrollBar then
-    -- The template's own handlers go first, before anything can make one of them run: they
-    -- reach into a hybrid list of recycled rows, and moving this bar a pixel with them still
-    -- attached throws on the buttons that list would have had.
+    -- Replaced before anything can move the bar: the template's drive a hybrid list.
     scrollBar:SetScript('OnValueChanged', function(_, value) grid:SetVerticalScroll(value) end)
 
     local up = scrollBar.ScrollUpButton or _G['MidventuresLeaderboardGridScrollBarScrollUpButton']
@@ -142,8 +136,7 @@ function leaderboard.RefreshGrid()
     if width < CELL then width = pane:GetWidth() - 42 end
 
     local columns = math.max(1, math.floor((width + SPACING) / STEP))
-    -- Whatever is left over after the last column is shared out between all of them rather
-    -- than left as a gap on the right, so the tiles sit evenly across the pane.
+    -- Leftover width is shared out as equal gaps rather than left on the right.
     local gap = math.max(SPACING, (width - columns * CELL) / (columns + 1))
     local mine = leaderboard.record and leaderboard.record.isPlayer
 
@@ -199,8 +192,7 @@ local function paintButtons()
     end
 end
 
--- Which of the two is on screen. An empty list stays a list, since the note explaining why
--- it is empty lives there.
+-- Which of the two is on screen. An empty list stays a list, where the note lives.
 function leaderboard.ApplyLayout()
     local showGrid = ns.leaderboard and leaderboard.layout == leaderboard.LAYOUT_GRID
         and leaderboard.record ~= nil and #leaderboard.List() > 0
@@ -209,8 +201,7 @@ function leaderboard.ApplyLayout()
         AchievementFrameAchievementsContainer:Hide()
         leaderboard.RefreshGrid()
         grid:Show()
-        -- A frame that has never been on screen has no width to lay tiles out across, so
-        -- the columns are worked out again now that it has one.
+        -- A frame never shown has no width, so the columns are worked out again now.
         leaderboard.RefreshGrid()
 
         -- A different player, or their other section, starts at the top of their tiles.
@@ -237,8 +228,7 @@ function leaderboard.SetLayout(layout)
     leaderboard.ApplyLayout()
 end
 
--- Three bars and four squares, drawn from a flat texture rather than artwork this client
--- may not carry. The background hangs 7px below the button, so the glyph drops with it.
+-- Three bars and four squares, drawn flat; the glyph drops with the background.
 local GLYPH_DROP = -3
 
 local function mark(button, width, height, x, y)
