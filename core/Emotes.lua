@@ -16,8 +16,12 @@ ns.GUILD_MASTER = 'GUILD_MASTER'
 -- Does this target answer to the kind an achievement asked about? A kind starting with a
 -- star is a pattern rather than a name, for creatures that come in a dozen varieties.
 local function matches(kind, target)
-    if not target then return false end
-    if kind == ns.GUILDMATE then return ns.IsGuildmate(target, 'target') end
+    if not target or target == '' then return false end
+    if kind == ns.GUILDMATE then
+        if target == UnitName('player') then return false end
+        local unit = UnitName('target') == target and 'target' or nil
+        return ns.IsGuildmate(target, unit)
+    end
     if kind == ns.GUILD_MASTER then return target == ns.GuildMasterName() end
     if kind:sub(1, 1) == '*' then
         return target:lower():find(kind:sub(2)) ~= nil
@@ -40,10 +44,33 @@ local function record(token, target)
     end
 end
 
+local function emoteTarget(text)
+    if text and text ~= '' then return text end
+    return UnitName('target')
+end
+
 -- Every slash emote goes through DoEmote, so one hook covers all of them.
 hooksecurefunc('DoEmote', function(token, target)
-    record(token, target or UnitName('target'))
+    record(token, emoteTarget(target))
 end)
+
+local function clientKnowsFart()
+    if type(hash_EmoteTokenList) ~= 'table' then return false end
+    for _, token in pairs(hash_EmoteTokenList) do
+        if token == 'FART' then return true end
+    end
+    return false
+end
+
+if not clientKnowsFart() then
+    SLASH_MIDVENTURESFART1 = '/fart'
+    SlashCmdList.MIDVENTURESFART = function()
+        local target = UnitName('target')
+        SendChatMessage(target and ('farts in %s\'s general direction.'):format(target)
+            or 'farts. Nobody owns up to it.', 'EMOTE')
+        record('FART', target)
+    end
+end
 
 -- Dancing together. Party and raid units are walked rather than everyone nearby, because
 -- there is no way to ask the client who else is on screen.

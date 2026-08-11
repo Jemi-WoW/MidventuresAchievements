@@ -39,12 +39,19 @@ end
 local CREATED = toPattern(LOOT_ITEM_CREATED_SELF or 'You create: %s.')
 local CREATED_MULTIPLE = toPattern(LOOT_ITEM_CREATED_SELF_MULTIPLE or 'You create: %sx%d.')
 
+local function professionOpen()
+    if TradeSkillFrame and TradeSkillFrame:IsShown() then return true end
+    if CraftFrame and CraftFrame:IsShown() then return true end
+    return false
+end
+
 -- Every craft in the game announces itself in the loot channel, which is more honest than
 -- watching the trade skill window and counting casts.
 local function onLoot(message, initiator, _, _, playerName)
     local who = playerName or initiator
     if who and who ~= UnitName('player') then return end
     if not message then return end
+    if not professionOpen() then return end
 
     local _, quantity = message:match(CREATED_MULTIPLE)
     if quantity then
