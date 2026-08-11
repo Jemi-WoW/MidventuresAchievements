@@ -187,6 +187,9 @@ local function receiveRoster(fields)
 end
 
 local function receivePoints(sender, fields)
+    -- Somebody we have never heard from before, which is how a new guild member arrives.
+    local first = ns.Roster.Find(sender) == nil
+
     local record = ns.Roster.Put(sender, {
         annPoints = tonumber(fields[2]) or 0,
         midiPoints = tonumber(fields[3]) or 0,
@@ -200,6 +203,12 @@ local function receivePoints(sender, fields)
         seen.dropped = seen.dropped + 1
         return
     end
+
+    if first then
+        sync.RequestGuildRoster()
+        C_Timer.After(1 + math.random() * 2, function() sync.BroadcastPoints(true) end)
+    end
+
     if sync.onUpdate then sync.onUpdate(record) end
 end
 
@@ -273,6 +282,23 @@ ns.InvalidateProgress = function(achievementEarned)
     end)
 end
 
+local knownInGuild = {}
+
+local function guildGainedSomeone()
+    local total = GetNumGuildMembers() or 0
+    if total == 0 then return false end
+
+    local gained = false
+    for i = 1, total do
+        local name = ns.Roster.PlainName(GetGuildRosterInfo(i))
+        if name and not knownInGuild[name] then
+            knownInGuild[name] = true
+            gained = true
+        end
+    end
+    return gained
+end
+
 local events = CreateFrame('Frame')
 events:RegisterEvent('PLAYER_ENTERING_WORLD')
 events:RegisterEvent('GUILD_ROSTER_UPDATE')
@@ -295,6 +321,7 @@ events:SetScript('OnEvent', function(_, event)
         end)
     else
         ns.Roster.MergeGuildRoster()
+        if guildGainedSomeone() then sync.Ping() end
         if sync.onUpdate then sync.onUpdate() end
     end
 end)

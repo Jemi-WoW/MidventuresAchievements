@@ -3,6 +3,8 @@ if ns.disabled then return end
 
 local PRUNE_AFTER = 30 * 24 * 60 * 60
 
+local ONLINE_GRACE = 2 * 60
+
 -- Everyone in the guild running this addon, ranked.
 local roster = {}
 ns.Roster = roster
@@ -53,6 +55,7 @@ function roster.Put(name, fields)
     for key, value in pairs(fields) do record[key] = value end
     record.ver = ns.Snapshot.Version(record.annPoints, record.midiPoints, record.annDone, record.midiDone)
     record.lastSeen = time()
+    record.heardAt = record.lastSeen
     sortedDirty = true
     return record
 end
@@ -125,7 +128,8 @@ function roster.MergeGuildRoster()
     local total = GetNumGuildMembers() or 0
     if total == 0 then return end
 
-    for _, record in pairs(records) do record.online = false end
+    local fresh = time() - ONLINE_GRACE
+    for _, record in pairs(records) do record.online = (record.heardAt or 0) >= fresh end
 
     -- Index 5 is the localised class name, index 11 the file name colours and icons need.
     for i = 1, total do

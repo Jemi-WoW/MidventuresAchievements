@@ -55,6 +55,8 @@ local function check(message, sender)
     local name = sender and (sender:match('^([^-]+)') or sender)
     if name ~= UnitName('player') then return end
 
+    if message and ns.ParseAnnouncement(message) then return end
+
     CA_Criterias:Trigger(ns.CRITERIA_GUILD_CHAT)
     countZone()
 

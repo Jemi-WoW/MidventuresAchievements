@@ -48,6 +48,86 @@ local leaderboardFunctions = {
 }
 ns.leaderboardFunctions = leaderboardFunctions
 
+-- Where a guild chat link lands. Both halves are held onto rather than used once:
+-- a guildmate who has never spoken to us is not in the roster yet,
+-- and their achievements follow their name by a second or two.
+local PENDING_TIMEOUT = 60
+local pending, chasing = nil, false
+
+local function rowFor(achievementID)
+    for _, button in next, AchievementFrameAchievementsContainer.buttons do
+        if button.id == achievementID and button:IsShown() then return button end
+    end
+end
+
+local function indexOf(achievementID)
+    for index, achievement in ipairs(leaderboard.List()) do
+        if achievement.id == achievementID then return index end
+    end
+end
+
+-- Scrolls an achievement into view and opens it.
+local function jumpTo(achievementID)
+    local index = indexOf(achievementID)
+    if not index then return false end
+
+    local container = AchievementFrameAchievementsContainer
+    local scrollBar = AchievementFrameAchievementsContainerScrollBar
+
+    AchievementFrameAchievements_Update()
+    local _, furthest = scrollBar:GetMinMaxValues()
+    scrollBar:SetValue(math.min((index - 1) * ACHIEVEMENTBUTTON_COLLAPSEDHEIGHT, furthest))
+    AchievementFrameAchievements_Update()
+
+    local row = rowFor(achievementID)
+    if not row then return false end
+    -- The last argument is what keeps a shift-click from linking it instead of opening it.
+    if not row.selected then AchievementButton_OnClick(row, nil, nil, true) end
+
+    -- Opening it pushed everything below it down, so it goes back to the top afterwards.
+    row = rowFor(achievementID)
+    if row then
+        local _, highest = scrollBar:GetMinMaxValues()
+        local wanted = scrollBar:GetValue() + container:GetTop() - row:GetTop()
+        scrollBar:SetValue(math.max(0, math.min(wanted, highest)))
+    end
+    return true
+end
+
+local function followPending()
+    if not pending then return end
+    if GetTime() - pending.at > PENDING_TIMEOUT then pending = nil return end
+
+    local record = ns.Roster.Find(pending.name)
+    if not record then return end
+
+    local categoryID = leaderboard.CategoryID(record.name)
+    if leaderboardFunctions.selectedCategory ~= categoryID then
+        leaderboardFunctions.selectedCategory = categoryID
+        AchievementFrameCategories_Update()
+        AchievementFrameAchievements_ForceUpdate()
+        updateView()
+    end
+
+    if not pending.id then pending = nil return end
+    if jumpTo(pending.id) then pending = nil end
+end
+
+-- Both halves can arrive over the wire, so this keeps trying until they have or the wait runs out.
+local function chase()
+    chasing = false
+    if not (ns.leaderboard and frame:IsShown()) then
+        pending = nil
+        return
+    end
+
+    followPending()
+    if pending then
+        chasing = true
+        C_Timer.After(1, chase)
+    end
+end
+
 local function setListInset(inset)
     local container = AchievementFrameAchievementsContainer
     container:ClearAllPoints()
@@ -63,6 +143,26 @@ end
 local function selectFirstPlayer()
     local ids = leaderboard.CategoryIDs()
     leaderboardFunctions.selectedCategory = ids[1]
+end
+
+local REFRESH_EVERY = 10
+local PING_EVERY = 60
+local refreshing, lastPinged = false, 0
+
+local function refresh()
+    refreshing = false
+    if not (ns.leaderboard and frame:IsShown()) then return end
+
+    ns.Roster.MergeGuildRoster()
+    if GetTime() - lastPinged >= PING_EVERY then
+        lastPinged = GetTime()
+        ns.Sync.RequestGuildRoster()
+        ns.Sync.Ping(true)
+    end
+    updateView()
+
+    refreshing = true
+    C_Timer.After(REFRESH_EVERY, refresh)
 end
 
 function ns.ShowLeaderboard()
@@ -104,10 +204,17 @@ function ns.ShowLeaderboard()
     AchievementFrame_ShowSubFrame(AchievementFrameAchievements)
     AchievementFrameAchievements_ForceUpdate()
     updateView()
+
+    lastPinged = GetTime()
+    if not refreshing then
+        refreshing = true
+        C_Timer.After(REFRESH_EVERY, refresh)
+    end
 end
 
--- Where a guild chat link lands: the window open, on that player, on the right side of it.
--- An unknown player leaves the default selection alone rather than emptying the pane.
+-- Where a guild chat link lands: the window open, on that player, on the right side of it,
+-- scrolled to the achievement and opened. A player or a list we do not have yet is waited
+-- for rather than given up on, which is what the chase above is for.
 function ns.ShowLeaderboardFor(name, achievementID)
     if not frame:IsShown() then
         if InCombatLockdown() then
@@ -124,13 +231,19 @@ function ns.ShowLeaderboardFor(name, achievementID)
             and ns.SECTION_MIDVENTURES or ns.SECTION_ANNIVERSARY)
     end
 
-    local record = name and ns.Roster.Find(name)
-    if not record then return end
+    pending = name and { name = ns.Roster.PlainName(name), id = achievementID, at = GetTime() } or nil
+    if pending and not ns.Roster.Find(pending.name) then
+        -- Never heard of them, so ask the guild now rather than wait for whatever they
+        -- earn next to introduce them.
+        ns.Sync.RequestGuildRoster()
+        ns.Sync.Ping(true)
+    end
 
-    leaderboardFunctions.selectedCategory = leaderboard.CategoryID(record.name)
-    AchievementFrameCategories_Update()
-    AchievementFrameAchievements_ForceUpdate()
-    updateView()
+    followPending()
+    if pending and not chasing then
+        chasing = true
+        C_Timer.After(1, chase)
+    end
 end
 
 -- Leaves leaderboard state behind without picking the next view; callers do that.
