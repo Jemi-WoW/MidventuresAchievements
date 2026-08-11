@@ -37,6 +37,8 @@ local function updateView()
     AchievementFrameAchievementsContainer:Show()
     AchievementFrameAchievements_Update()
     detail.Refresh()
+    -- Last, since it decides which of the list and the grid is the one on screen.
+    leaderboard.ApplyLayout()
 end
 
 local leaderboardFunctions = {
@@ -92,6 +94,12 @@ local function jumpTo(achievementID)
         scrollBar:SetValue(math.max(0, math.min(wanted, highest)))
     end
     return true
+end
+
+-- Grid tiles open their achievement, and the list is the only place one opens.
+function ns.JumpToLeaderboardAchievement(achievementID)
+    leaderboard.SetLayout(leaderboard.LAYOUT_LIST)
+    jumpTo(achievementID)
 end
 
 local function followPending()
@@ -257,6 +265,7 @@ function ns.HideLeaderboard()
     leaderboard.PaintCategoryRows()
 
     detail:Hide()
+    leaderboard.ApplyLayout()
     leaderboard.sidebarMessage:Hide()
     leaderboard.listMessage:Hide()
     AchievementFrameAchievementsContainer:Show()

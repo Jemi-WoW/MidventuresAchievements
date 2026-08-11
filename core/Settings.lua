@@ -6,6 +6,7 @@ if ns.disabled then return end
 -- the player left it as.
 local DEFAULTS = {
     guildAnnounce = true,
+    leaderboardLayout = 'list',
 }
 
 function ns.Setting(key)
