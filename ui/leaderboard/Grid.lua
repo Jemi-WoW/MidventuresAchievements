@@ -229,7 +229,7 @@ function leaderboard.SetLayout(layout)
 end
 
 -- Three bars and four squares, drawn flat; the glyph drops with the background.
-local GLYPH_DROP = -3
+local GLYPH_DROP = -2
 
 local function mark(button, width, height, x, y)
     local texture = button:CreateTexture(nil, 'ARTWORK')
@@ -240,9 +240,15 @@ local function mark(button, width, height, x, y)
 end
 
 local function listMarks(button)
-    return { mark(button, 12, 2, 0, 4), mark(button, 12, 2, 0, 0), mark(button, 12, 2, 0, -4) }
+    local marks = {}
+    for _, y in ipairs({ 4, 0, -4 }) do
+        marks[#marks + 1] = mark(button, 2, 2, -5, y)
+        marks[#marks + 1] = mark(button, 8, 2, 2, y)
+    end
+    return marks
 end
 
+-- Four squares with a pixel between them.
 local function gridMarks(button)
     return {
         mark(button, 5, 5, -3, 3), mark(button, 5, 5, 3, 3),
