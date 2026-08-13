@@ -110,12 +110,10 @@ local function checkDeathless()
 end
 
 -- Falling and drowning arrive as environmental damage, which names what it was.
-local function onCombatLog()
-    local _, subEvent, _, sourceGUID, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
-    if destGUID ~= playerGUID then return end
+ns.OnCombatLog({'*'}, function(subEvent, sourceGUID, _, destGUID, _, kind, amount)
+    if not playerGUID or destGUID ~= playerGUID then return end
 
     if subEvent == 'ENVIRONMENTAL_DAMAGE' then
-        local kind, amount = select(12, CombatLogGetCurrentEventInfo())
         lastEnvironment = kind
         if kind == 'FALLING' and amount then
             for wanted in pairs(CA_Criterias.criterias[ns.CRITERIA_BIG_FALL]) do
@@ -130,7 +128,7 @@ local function onCombatLog()
         -- Anything else that hurt us means the last fall or lungful is no longer the story.
         lastEnvironment = nil
     end
-end
+end)
 
 local watcher = CreateFrame('Frame')
 watcher:RegisterEvent('PLAYER_LOGIN')
@@ -140,11 +138,8 @@ watcher:RegisterEvent('PLAYER_ALIVE')
 watcher:RegisterEvent('PLAYER_LEVEL_UP')
 watcher:RegisterEvent('PLAYER_REGEN_DISABLED')
 watcher:RegisterEvent('PLAYER_REGEN_ENABLED')
-watcher:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 watcher:SetScript('OnEvent', function(_, event)
-    if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-        if playerGUID then onCombatLog() end
-    elseif event == 'PLAYER_LOGIN' then
+    if event == 'PLAYER_LOGIN' then
         playerGUID = UnitGUID('player')
         C_Timer.After(5, checkDeathless)
     elseif event == 'PLAYER_DEAD' then

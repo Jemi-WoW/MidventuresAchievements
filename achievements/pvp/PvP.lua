@@ -7,8 +7,6 @@ local battlegrounds, arenas = ns.categories.pvpBattlegrounds, ns.categories.pvpA
 
 -- Guide: .AchievementGuide/PvP.md. Append at the bottom, ids follow load order.
 
-local WARSONG_GULCH = 1460
-
 -- Anniversary counts wins per battleground already; use the score and stat types.
 
 local duels = ns.categories.pvpDuels

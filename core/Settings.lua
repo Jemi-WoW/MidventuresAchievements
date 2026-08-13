@@ -49,4 +49,13 @@ options.args.mvGuildAnnounceNote = {
     order = 12,
 }
 
+options.args.mvRescanAreas = {
+    type = 'execute',
+    name = 'Rescan explored areas',
+    desc = 'Award exploration criteria Anniversary missed. Takes a few seconds.',
+    width = 2,
+    func = function() ns.RescanExploredAreas() end,
+    order = 13,
+}
+
 registry:NotifyChange(APP)

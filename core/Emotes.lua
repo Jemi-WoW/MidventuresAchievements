@@ -27,16 +27,49 @@ local function matches(kind, target)
     return target == kind
 end
 
+-- The client's token for a slash command is not always the name we asked for.
+local alias = {}
+
+-- /midv emote says what arrived and from where, for when one of these looks stuck.
+local debugging = false
+
+local function say(message)
+    DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures|r ' .. message)
+end
+
+SLASH_MIDVENTURES1 = '/midv'
+SlashCmdList.MIDVENTURES = function(argument)
+    if not argument:lower():find('emote') then
+        say('try /midv emote')
+        return
+    end
+    debugging = not debugging
+    say(('emote logging %s. Guild Master is %s.')
+        :format(debugging and 'on' or 'off', tostring(ns.GuildMasterName())))
+end
+
 -- Client tokens are upper case, but nothing guarantees it for one added later.
-local function record(token, target)
+local function record(token, target, route)
     if not token then return end
     token = token:upper()
+    token = alias[token] or token
+
+    if debugging then
+        say(('%s: %s at %s'):format(route or '?', token, tostring(target)))
+    end
 
     local byToken = CA_Criterias.criterias[ns.CRITERIA_EMOTE_AT][token]
-    if not byToken then return end
+    if not byToken then
+        if debugging then say('nothing wants ' .. token) end
+        return
+    end
+
     for kind in pairs(byToken) do
         if matches(kind, target) then
             CA_Criterias:Trigger(ns.CRITERIA_EMOTE_AT, {token, kind})
+            if debugging then say('counted ' .. token .. ' at ' .. kind) end
+        elseif debugging then
+            say(('%s wanted %s, target is %s'):format(token, kind, tostring(target)))
         end
     end
 end
@@ -46,28 +79,62 @@ local function emoteTarget(text)
     return UnitName('target')
 end
 
--- Every slash emote goes through DoEmote, so one hook covers all of them.
+-- Older clients route every slash emote through DoEmote.
 hooksecurefunc('DoEmote', function(token, target)
-    record(token, emoteTarget(target))
+    record(token, emoteTarget(target), 'DoEmote')
 end)
 
-local function clientKnowsFart()
-    if type(hash_EmoteTokenList) ~= 'table' then return false end
-    for _, token in pairs(hash_EmoteTokenList) do
-        if token == 'FART' then return true end
-    end
-    return false
+-- This one is where the Anniversary client actually sends them.
+if C_ChatInfo and C_ChatInfo.PerformEmote then
+    hooksecurefunc(C_ChatInfo, 'PerformEmote', function(token, target)
+        record(token, emoteTarget(target), 'PerformEmote')
+    end)
 end
 
-if not clientKnowsFart() then
-    SLASH_MIDVENTURESFART1 = '/fart'
-    SlashCmdList.MIDVENTURESFART = function()
-        local target = UnitName('target')
-        SendChatMessage(target and ('farts in %s\'s general direction.'):format(target)
-            or 'farts. Nobody owns up to it.', 'EMOTE')
-        record('FART', target)
+-- What the client calls the emote behind a slash command, which need not be our name.
+local function clientToken(command)
+    command = command:upper()
+    if type(hash_EmoteTokenList) == 'table' and hash_EmoteTokenList[command] then
+        return hash_EmoteTokenList[command]
+    end
+    for i = 1, (MAXEMOTEINDEX or 600) do
+        local token = _G['EMOTE' .. i .. '_TOKEN']
+        if token then
+            for j = 1, 9 do
+                local cmd = _G['EMOTE' .. i .. '_CMD' .. j]
+                if not cmd then break end
+                if cmd:upper() == command then return token end
+            end
+        end
     end
 end
+
+-- Stands in for an emote the client does not have, so the achievement is still reachable.
+local function addCommand(token)
+    local name = 'MIDVENTURES' .. token
+    _G['SLASH_' .. name .. '1'] = '/' .. token:lower()
+    SlashCmdList[name] = function()
+        local target = UnitName('target')
+        SendChatMessage(target and ('does a %s at %s.'):format(token:lower(), target)
+            or ('does a %s.'):format(token:lower()), 'EMOTE')
+        record(token, target, 'slash')
+    end
+end
+
+-- Tokens are only trustworthy once the client's own emote list is up.
+local resolver = CreateFrame('Frame')
+resolver:RegisterEvent('PLAYER_LOGIN')
+resolver:SetScript('OnEvent', function(self)
+    self:UnregisterAllEvents()
+    for token in pairs(CA_Criterias.criterias[ns.CRITERIA_EMOTE_AT]) do
+        local theirs = clientToken('/' .. token:lower())
+        if not theirs then
+            addCommand(token)
+        elseif theirs ~= token then
+            alias[theirs] = token
+        end
+    end
+end)
 
 -- Dancing together. Only party and raid units: nobody can ask who else is on screen.
 local dancing = {}
@@ -106,9 +173,6 @@ local function checkParty()
         end
     end
 end
-
--- Other people's emotes arrive as text, so the client's own dance line is the pattern.
-local DANCE = EMOTE10_CMD1 and _G['EMOTE10_CMD1'] or '/dance'
 
 local function onEmoteText(message, sender)
     if not sender then return end

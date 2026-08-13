@@ -151,6 +151,14 @@ function GetAchievementInfo(id, index)
     return remoteInfo(id)
 end
 
+-- Criteria count their own way: money as coins, everything else as a plain number.
+local function fullProgress(criteriaID, required)
+    local criteria = CA_Criterias:GetCriteriaByID(criteriaID)
+    local format = criteria and criteria.quantityFormat
+    if format then return format(required, required) end
+    return required .. ' / ' .. required
+end
+
 -- Everything we list was earned, so its criteria are all done regardless of ours.
 local function asCompleted(achievementID, values)
     if not (viewing() and cache.has[achievementID]) then return unpack(values, 1, values.n) end
@@ -158,7 +166,7 @@ local function asCompleted(achievementID, values)
     values[3] = true
     if values[5] then
         values[4] = values[5]
-        values[9] = values[5] .. ' / ' .. values[5]
+        values[9] = fullProgress(values[10], values[5])
     end
     return unpack(values, 1, values.n)
 end

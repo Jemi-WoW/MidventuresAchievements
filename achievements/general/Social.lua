@@ -32,7 +32,6 @@ A.SLAPPER = ns.Chain(guild, {
     icons = {'-Ability_Warrior_DecisiveStrike', '-Ability_Gouge', '-ability_warrior_warcry'},
 })
 
--- core/Emotes.lua adds /fart where the client has none, so this is earnable either way.
 A.SILENT_BUT_DEADLY = ns.Chain(guild, {
     name = function(n) return ('Silent but Deadly %d Times'):format(n) end,
     desc = function(n) return ('Fart on the Guild Master %d times.'):format(n) end,

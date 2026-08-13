@@ -96,23 +96,15 @@ for creatureID in pairs(dungeons.byCreature) do watched[#watched + 1] = creature
 CA_CreatureKillingTracker:AddHandler(watched, onKill)
 
 -- A player death ends the flawless run, and walking in starts a new one.
-local function onCombatLog()
+ns.OnCombatLog({'UNIT_DIED'}, function(_, _, _, destGUID)
     if not clean then return end
-    local _, event, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
-    if event ~= 'UNIT_DIED' then return end
     if destGUID and destGUID:sub(1, 6) == 'Player' then clean = false end
-end
+end)
 
 -- Saved kills outlive the criteria they feed, so replay them once the roster is up.
 local loader = CreateFrame('Frame')
 loader:RegisterEvent('PLAYER_ENTERING_WORLD')
-loader:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-loader:SetScript('OnEvent', function(_, event)
-    if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-        onCombatLog()
-        return
-    end
-
+loader:SetScript('OnEvent', function()
     clean = true
     C_Timer.After(7, function()
         evaluateAll()

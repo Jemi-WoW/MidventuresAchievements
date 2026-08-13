@@ -5,28 +5,37 @@ if ns.disabled then return end
 CA_Criterias.dataLengths[ns.CRITERIA_BUFF_PLAYERS] = 0
 CA_Criterias.criterias[ns.CRITERIA_BUFF_PLAYERS] = {}
 
--- Where the aura type sits in the event.
-local AURA_TYPE_AT = 15
+-- Heals over time are auras too, so they are named out. GetSpellInfo keeps this localised.
+local HEALS = {774, 8936, 139, 740, 33076, 974}
+
+local healNames = {}
+for _, spellID in ipairs(HEALS) do
+    local name = GetSpellInfo(spellID)
+    if name then healNames[name] = true end
+end
 
 local playerGUID
 
--- The combat log is a hot path, so this bails on the subevent before reading anything else.
-local function onCombatLog()
-    local _, subEvent, _, sourceGUID, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
-    if subEvent ~= 'SPELL_AURA_APPLIED' then return end
-    if sourceGUID ~= playerGUID or destGUID == playerGUID then return end
-    if not destGUID or destGUID:sub(1, 7) ~= 'Player-' then return end
+ns.OnCombatLog({'SPELL_PERIODIC_HEAL', 'SPELL_AURA_APPLIED'},
+    function(subEvent, sourceGUID, _, destGUID, _, _, spellName, _, auraType)
+        -- Anything that ticks a heal is one, whoever cast it.
+        if subEvent == 'SPELL_PERIODIC_HEAL' then
+            if spellName then healNames[spellName] = true end
+            return
+        end
 
-    if select(AURA_TYPE_AT, CombatLogGetCurrentEventInfo()) ~= 'BUFF' then return end
-    CA_Criterias:Trigger(ns.CRITERIA_BUFF_PLAYERS)
-end
+        if auraType ~= 'BUFF' or not playerGUID then return end
+        if sourceGUID ~= playerGUID or destGUID == playerGUID then return end
+        if not destGUID or destGUID:sub(1, 7) ~= 'Player-' then return end
+        if healNames[spellName] then return end
+
+        CA_Criterias:Trigger(ns.CRITERIA_BUFF_PLAYERS)
+    end)
 
 -- The guid is only readable once the player exists, and it never changes after that.
 local watcher = CreateFrame('Frame')
 watcher:RegisterEvent('PLAYER_LOGIN')
 watcher:SetScript('OnEvent', function(self)
     playerGUID = UnitGUID('player')
-    self:UnregisterEvent('PLAYER_LOGIN')
-    self:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
-    self:SetScript('OnEvent', onCombatLog)
+    self:UnregisterAllEvents()
 end)

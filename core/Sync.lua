@@ -117,14 +117,16 @@ function sync.Ping(force)
 end
 
 -- Pulls one player's completed achievements, but only when ours are out of date.
-function sync.RequestDetail(record)
+function sync.RequestDetail(record, force)
     if not record or record.isPlayer then return end
     -- Whispering someone offline only earns us a "no player" error in the chat frame.
     if not record.online then return end
 
     local now = GetTime()
-    if now - (lastDetail[record.name] or 0) < DETAIL_THROTTLE then return end
-    if record.ids and record.idsVer == record.ver then return end
+    if not force then
+        if now - (lastDetail[record.name] or 0) < DETAIL_THROTTLE then return end
+        if record.ids and record.idsVer == record.ver then return end
+    end
     lastDetail[record.name] = now
 
     send('Q', 'WHISPER', record.name)

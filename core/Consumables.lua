@@ -56,17 +56,15 @@ local function bump(key, criteriaType)
 end
 
 -- The aura is what proves it went down, rather than the item leaving the bag.
-local function onCombatLog()
-    local _, subEvent, _, _, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
-    if subEvent ~= 'SPELL_AURA_APPLIED' or destGUID ~= playerGUID then return end
+ns.OnCombatLog({'SPELL_AURA_APPLIED'}, function(_, _, _, destGUID, _, _, name)
+    if not playerGUID or destGUID ~= playerGUID then return end
 
-    local name = select(13, CombatLogGetCurrentEventInfo())
     if name == FOOD_AURA then
         bump('food', ns.CRITERIA_EAT)
     elseif name == DRINK_AURA then
         bump('drink', ns.CRITERIA_DRINK)
     end
-end
+end)
 
 -- Using an item casts a spell of the same name, which is how a specific one is spotted.
 local wanted = {}
@@ -97,12 +95,9 @@ end
 
 local watcher = CreateFrame('Frame')
 watcher:RegisterEvent('PLAYER_LOGIN')
-watcher:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 watcher:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
 watcher:SetScript('OnEvent', function(_, event, ...)
-    if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-        if playerGUID then onCombatLog() end
-    elseif event == 'PLAYER_LOGIN' then
+    if event == 'PLAYER_LOGIN' then
         playerGUID = UnitGUID('player')
         -- Spell 433 is the Food aura and 430 the Drink one, in whatever language.
         FOOD_AURA, DRINK_AURA = GetSpellInfo(433), GetSpellInfo(430)

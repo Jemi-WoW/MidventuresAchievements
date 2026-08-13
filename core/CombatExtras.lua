@@ -19,12 +19,12 @@ CA_Criterias.criterias[ns.CRITERIA_PACIFIST] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_UNARMED_HITS] = 0
 CA_Criterias.criterias[ns.CRITERIA_UNARMED_HITS] = {}
 
--- Overkill sits one past the amount: 15 with a spell first, 12 for a swing.
+-- Overkill sits one past the amount: fourth in the payload with a spell first, first for a swing.
 local AMOUNT_AT = {
-    SWING_DAMAGE          = 12,
-    SPELL_DAMAGE          = 15,
-    SPELL_PERIODIC_DAMAGE = 15,
-    RANGE_DAMAGE          = 15,
+    SWING_DAMAGE          = 1,
+    SPELL_DAMAGE          = 4,
+    SPELL_PERIODIC_DAMAGE = 4,
+    RANGE_DAMAGE          = 4,
 }
 
 -- Nothing in these slots is the whole point of Fashion Over Function.
@@ -68,11 +68,13 @@ local function checkPacifist()
     end
 end
 
-local function onCombatLog()
-    local _, subEvent, _, sourceGUID, _, _, _, destGUID = CombatLogGetCurrentEventInfo()
+local DAMAGE = {'SWING_DAMAGE', 'SPELL_DAMAGE', 'SPELL_PERIODIC_DAMAGE', 'RANGE_DAMAGE'}
+local OTHERS = {'SPELL_RESURRECT', 'SPELL_INTERRUPT', 'SPELL_DISPEL', 'SPELL_STOLEN', 'PARTY_KILL'}
+
+local function onCombatLog(subEvent, sourceGUID, _, destGUID, destName, ...)
+    if not playerGUID then return end
 
     if subEvent == 'SPELL_RESURRECT' and sourceGUID == playerGUID then
-        local destName = select(9, CombatLogGetCurrentEventInfo())
         if ns.IsGuildmate(destName) then bump('resurrects', ns.CRITERIA_RESURRECTS) end
         return
     end
@@ -97,9 +99,8 @@ local function onCombatLog()
             bump('unarmed', ns.CRITERIA_UNARMED_HITS)
         end
 
-        local at = AMOUNT_AT[subEvent]
-        if not at or destGUID == playerGUID then return end
-        local _, overkill = select(at, CombatLogGetCurrentEventInfo())
+        if destGUID == playerGUID then return end
+        local _, overkill = select(AMOUNT_AT[subEvent], ...)
         if not overkill or overkill <= 0 then return end
         for wanted in pairs(CA_Criterias.criterias[ns.CRITERIA_OVERKILL]) do
             if overkill >= wanted then
@@ -108,6 +109,9 @@ local function onCombatLog()
         end
     end
 end
+
+ns.OnCombatLog(DAMAGE, onCombatLog)
+ns.OnCombatLog(OTHERS, onCombatLog)
 
 -- Dropping low in a dungeon and still being there half a minute later.
 local LOW = 0.05
@@ -136,11 +140,8 @@ local watcher = CreateFrame('Frame')
 watcher:RegisterEvent('PLAYER_LOGIN')
 watcher:RegisterEvent('PLAYER_LEVEL_UP')
 watcher:RegisterEvent('UNIT_HEALTH')
-watcher:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 watcher:SetScript('OnEvent', function(_, event, unit)
-    if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-        if playerGUID then onCombatLog() end
-    elseif event == 'PLAYER_LOGIN' then
+    if event == 'PLAYER_LOGIN' then
         playerGUID = UnitGUID('player')
         C_Timer.After(5, checkPacifist)
     elseif event == 'PLAYER_LEVEL_UP' then

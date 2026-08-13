@@ -40,22 +40,14 @@ local function onAura(sourceName, destName, spellID)
     CA_Criterias:Trigger(ns.CRITERIA_BANDAGE_GUILD, nil, record.guild, true)
 end
 
-local function onCombatLog()
-    local _, event, _, _, sourceName, _, _, _, destName, _, _, spellID =
-        CombatLogGetCurrentEventInfo()
-    if event ~= 'SPELL_AURA_APPLIED' then return end
+ns.OnCombatLog({'SPELL_AURA_APPLIED'}, function(_, _, sourceName, _, destName, spellID)
     onAura(sourceName, destName, spellID)
-end
+end)
 
 local watcher = CreateFrame('Frame')
-watcher:RegisterEvent('COMBAT_LOG_EVENT_UNFILTERED')
 watcher:RegisterEvent('PLAYER_ENTERING_WORLD')
-watcher:SetScript('OnEvent', function(_, event)
-    if event == 'COMBAT_LOG_EVENT_UNFILTERED' then
-        onCombatLog()
-    else
-        C_Timer.After(8, function()
-            CA_Criterias:Trigger(ns.CRITERIA_BANDAGE_GUILD, nil, progress().guild, true)
-        end)
-    end
+watcher:SetScript('OnEvent', function()
+    C_Timer.After(8, function()
+        CA_Criterias:Trigger(ns.CRITERIA_BANDAGE_GUILD, nil, progress().guild, true)
+    end)
 end)
