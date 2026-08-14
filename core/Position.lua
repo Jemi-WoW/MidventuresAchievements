@@ -71,7 +71,7 @@ watcher:SetScript('OnEvent', function() C_Timer.After(1, rearm) end)
 SLASH_MIDVENTURESWHERE1 = '/mv'
 SlashCmdList['MIDVENTURESWHERE'] = function(args)
     if args and args:lower():match('^%s*where') == nil then
-        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures:|r try /mv where')
+        ns.Print('try /mv where')
         return
     end
 
@@ -79,11 +79,10 @@ SlashCmdList['MIDVENTURESWHERE'] = function(args)
     local spot = mapID and C_Map.GetPlayerMapPosition(mapID, 'player')
     local x, y = spot and spot:GetXY()
     if not x then
-        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures:|r no position here.')
+        ns.Print('no position here.')
         return
     end
 
-    DEFAULT_CHAT_FRAME:AddMessage(('|cff00ff00Midventures:|r %s / %s - x %.2f, y %.2f')
-        :format(GetZoneText(), GetSubZoneText() ~= '' and GetSubZoneText() or '-',
-            x * 100, y * 100))
+    ns.Print(('%s / %s - x %.2f, y %.2f'):format(
+        GetZoneText(), GetSubZoneText() ~= '' and GetSubZoneText() or '-', x * 100, y * 100))
 end

@@ -32,17 +32,9 @@ local alias = {}
 
 -- /midv emote says what arrived and from where, for when one of these looks stuck.
 local debugging = false
+local say = ns.Print
 
-local function say(message)
-    DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures|r ' .. message)
-end
-
-SLASH_MIDVENTURES1 = '/midv'
-SlashCmdList.MIDVENTURES = function(argument)
-    if not argument:lower():find('emote') then
-        say('try /midv emote')
-        return
-    end
+ns.commands.emote = function()
     debugging = not debugging
     say(('emote logging %s. Guild Master is %s.')
         :format(debugging and 'on' or 'off', tostring(ns.GuildMasterName())))

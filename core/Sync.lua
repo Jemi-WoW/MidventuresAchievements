@@ -6,6 +6,8 @@ local PING_THROTTLE = 15         -- seconds between "who is out there" pings
 local DETAIL_THROTTLE = 15       -- seconds between detail requests for one player
 local RELAY_THROTTLE = 300       -- seconds between roster relays to one player
 local RELAY_LIMIT = 40           -- players per relay, highest ranked first
+local SEED_LIMIT = 5             -- guildmates whose list we fetch unasked each login
+local SEED_SPACING = 12          -- seconds between those, to keep the wire quiet
 local LOGIN_DELAY = 10           -- let the guild roster arrive before the first broadcast
 local EARN_DELAY = 5             -- coalesce a burst of achievements into one broadcast
 
@@ -17,28 +19,13 @@ local AceComm = LibStub and LibStub:GetLibrary('AceComm-3.0', true)
 if not AceComm then
     sync.unavailable = true
     local function noop() end
-    sync.BroadcastPoints, sync.Ping, sync.RequestDetail, sync.RequestGuildRoster = noop, noop, noop, noop
+    sync.BroadcastPoints, sync.Ping, sync.RequestDetail = noop, noop, noop
+    sync.RequestGuildRoster, sync.AskGuildMemory, sync.SeedDetail = noop, noop, noop
     return
 end
 AceComm:Embed(sync)
 
-local DIGITS = '0123456789abcdefghijklmnopqrstuvwxyz'
-
-local function to36(n)
-    n = math.floor(n or 0)
-    if n <= 0 then return '0' end
-    local out = ''
-    while n > 0 do
-        local digit = n % 36
-        out = DIGITS:sub(digit + 1, digit + 1) .. out
-        n = math.floor(n / 36)
-    end
-    return out
-end
-
-local function from36(text)
-    return tonumber(text, 36) or 0
-end
+local to36, from36 = ns.To36, ns.From36
 
 -- Ids as base36 deltas, each with its earned day; the day is dropped while it repeats.
 local function encodeIDs(ids, days)
@@ -140,6 +127,44 @@ local function sendDetail(target)
         'M:' .. encodeIDs(mine.ids[ns.SECTION_MIDVENTURES], mine.days),
     }
     send(table.concat(body, '|'), 'WHISPER', target, 'BULK')
+end
+
+-- Asks the guild what they remember of our own list, saying how much of it we hold.
+function sync.AskGuildMemory()
+    local _, _, annDone, midiDone = ns.Snapshot.Totals()
+    send(table.concat({ 'B', annDone, midiDone }, '|'), 'GUILD')
+end
+
+-- What we hold for somebody else, handed back only when it beats what they still have.
+local function sendMemory(target, annDone, midiDone)
+    local record = ns.Roster.Find(target)
+    if not (record and record.ids) then return end
+
+    local ann = record.ids[ns.SECTION_ANNIVERSARY] or {}
+    local midi = record.ids[ns.SECTION_MIDVENTURES] or {}
+    if #ann + #midi <= annDone + midiDone then return end
+
+    local days = record.days or {}
+    send(table.concat({
+        'S',
+        'A:' .. encodeIDs(ann, days),
+        'M:' .. encodeIDs(midi, days),
+    }, '|'), 'WHISPER', target, 'BULK')
+end
+
+-- Everyone holding everyone's list is what makes a character recoverable at all.
+function sync.SeedDetail()
+    local wanted = {}
+    for _, record in ipairs(ns.Roster.Get()) do
+        if record.online and not record.isPlayer and record.idsVer ~= record.ver then
+            wanted[#wanted + 1] = record
+            if #wanted >= SEED_LIMIT then break end
+        end
+    end
+
+    for index, record in ipairs(wanted) do
+        C_Timer.After(index * SEED_SPACING, function() sync.RequestDetail(record) end)
+    end
 end
 
 -- Everyone else we know of, so a guildmate learns the players who are offline right now.
@@ -265,6 +290,12 @@ function sync:OnCommReceived(prefix, message, distribution, sender)
     elseif kind == 'R' and distribution == 'WHISPER' then
         seen.roster = seen.roster + 1
         receiveRoster(fields)
+    elseif kind == 'B' and distribution == 'GUILD' then
+        local annDone, midiDone = tonumber(fields[2]) or 0, tonumber(fields[3]) or 0
+        -- Short jitter: only guildmates holding more than they do answer at all.
+        C_Timer.After(math.random() * 2, function() sendMemory(sender, annDone, midiDone) end)
+    elseif kind == 'S' and distribution == 'WHISPER' then
+        if ns.Restore then ns.Restore.Receive(fields) end
     end
 end
 
@@ -313,6 +344,7 @@ events:SetScript('OnEvent', function(_, event)
             ns.Roster.MergeGuildRoster()
             sync.BroadcastPoints(true)
             sync.Ping()
+            C_Timer.After(LOGIN_DELAY, sync.SeedDetail)
         end)
     elseif event == 'PLAYER_GUILD_UPDATE' then
         -- Joining a guild is our cue to introduce ourselves and ask who is there.
@@ -331,7 +363,7 @@ end)
 -- /mvlb says what the leaderboard knows, for when a guildmate is missing from it.
 SLASH_MIDVENTURESLEADERBOARD1 = '/mvlb'
 SlashCmdList.MIDVENTURESLEADERBOARD = function(argument)
-    local function say(text) DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures:|r ' .. text) end
+    local say = ns.Print
 
     if argument == 'ping' then
         lastPing, lastPoints, lastRelay = 0, 0, {}

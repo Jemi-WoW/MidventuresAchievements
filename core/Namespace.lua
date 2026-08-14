@@ -105,6 +105,11 @@ ns.CRITERIA_RUN_CLASSES = 5078    -- GuildDungeons.lua, a run of five different 
 ns.active = false           -- true while the Midventures view is on screen
 ns.leaderboard = false      -- true while the leaderboard view is on screen
 ns.achievements = {}        -- short name -> achievement, for metas and the summary
+ns.commands = {}            -- /midv word -> handler, filled by the file that owns it
+
+function ns.Print(message)
+    DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00MidventuresAchievements:|r ' .. message)
+end
 
 -- All our ids sit above the offset.
 function ns.Owns(achievementID)

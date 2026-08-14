@@ -93,9 +93,7 @@ end
 
 function ns.RescanExploredAreas()
     creditHere()
-    scanAll(function()
-        DEFAULT_CHAT_FRAME:AddMessage('|cff00ff00Midventures|r: explored areas rescanned.')
-    end)
+    scanAll(function() ns.Print('explored areas rescanned.') end)
 end
 
 local function progress()

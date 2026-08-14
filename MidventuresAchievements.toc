@@ -1,17 +1,19 @@
 ## Interface: 20506
-## Title: <|cff00ff00Midventures Achievements|r> v1.6
+## Title: <|cff00ff00Midventures Achievements|r> v1.7
 ## Author: Jamie/Jemi
-## Version: 1.6
+## Version: 1.7
 ## IconTexture: Interface/AddOns/AnniversaryAchievements/logo.tga
 ## Notes: Custom Midventures achievements and Midi Points, built on Anniversary Achievements.
 ## Category: Achievements
 ## Dependencies: AnniversaryAchievements
-## SavedVariables: MidventuresLeaderboardDB, MidventuresSettingsDB
+## SavedVariables: MidventuresLeaderboardDB, MidventuresSettingsDB, MidventuresBackupDB
 ## SavedVariablesPerCharacter: MidventuresProgressDB
 
 core/Namespace.lua
+core/Commands.lua
 core/Settings.lua
 core/Database.lua
+core/Backup.lua
 core/Builder.lua
 core/Anniversary.lua
 core/Categories.lua
@@ -74,11 +76,13 @@ achievements/Register.lua
 core/Snapshot.lua
 core/Roster.lua
 core/Sync.lua
+core/Restore.lua
 
 ui/Tab.lua
 ui/View.lua
 ui/Summary.lua
 ui/Live.lua
+ui/Transfer.lua
 
 ui/leaderboard/Remote.lua
 ui/leaderboard/Players.lua
