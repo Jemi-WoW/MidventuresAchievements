@@ -39,7 +39,7 @@ local function wanted(button)
     if button.collapsed then return false end
 
     local record = leaderboard.record
-    return record ~= nil and not record.isPlayer
+    return record ~= nil and not ns.Roster.IsMe(record)
 end
 
 local function refresh(button)

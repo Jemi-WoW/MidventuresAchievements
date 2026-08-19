@@ -35,6 +35,11 @@ function roster.Records()
     return store() or {}
 end
 
+-- Records are saved, so a flag written by an alt would still claim to be us tomorrow.
+function roster.IsMe(record)
+    return record ~= nil and record.name == UnitName('player')
+end
+
 function roster.Find(name)
     local records = store()
     return records and records[plainName(name)]
@@ -111,6 +116,8 @@ function roster.RefreshSelf()
     if not records then return end
 
     local mine = ns.Snapshot.Record()
+    -- Older versions saved this on whoever was logged in at the time.
+    for _, record in pairs(records) do record.isPlayer = nil end
     records[mine.name] = mine
     mine.ver = ns.Snapshot.Version(mine.annPoints, mine.midiPoints, mine.annDone, mine.midiDone)
     mine.lastSeen = time()

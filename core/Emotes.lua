@@ -9,6 +9,10 @@ CA_Criterias.criterias[ns.CRITERIA_EMOTE_AT] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_DANCE_PARTY] = 1
 CA_Criterias.criterias[ns.CRITERIA_DANCE_PARTY] = {}
 
+-- An emote performed standing somewhere. Data is the token and a Position.lua spot key.
+CA_Criterias.dataLengths[ns.CRITERIA_EMOTE_AT_SPOT] = 2
+CA_Criterias.criterias[ns.CRITERIA_EMOTE_AT_SPOT] = {}
+
 ns.GUILDMATE = 'GUILDMATE'
 ns.GUILD_MASTER = 'GUILD_MASTER'
 
@@ -48,6 +52,15 @@ local function record(token, target, route)
 
     if debugging then
         say(('%s: %s at %s'):format(route or '?', token, tostring(target)))
+    end
+
+    for key in pairs(CA_Criterias.criterias[ns.CRITERIA_EMOTE_AT_SPOT][token] or {}) do
+        if ns.AtSpot(key) then
+            CA_Criterias:Trigger(ns.CRITERIA_EMOTE_AT_SPOT, {token, key})
+            if debugging then say('counted ' .. token .. ' at ' .. key) end
+        elseif debugging then
+            say(('%s wanted the spot %s, which is not here'):format(token, key))
+        end
     end
 
     local byToken = CA_Criterias.criterias[ns.CRITERIA_EMOTE_AT][token]

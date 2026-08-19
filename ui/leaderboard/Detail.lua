@@ -116,7 +116,7 @@ local function refreshNote(record)
     local done = leaderboard.section == ns.SECTION_ANNIVERSARY and (record.annDone or 0) or (record.midiDone or 0)
     if done == 0 then
         note:SetText('Nothing earned in this section yet.')
-    elseif record.online or record.isPlayer then
+    elseif record.online or ns.Roster.IsMe(record) then
         note:SetText('Fetching this player\'s achievements...')
     else
         note:SetText(('%s is offline, so their %d achievements here cannot be fetched yet.')

@@ -54,6 +54,9 @@ categories.questsBadHabits    = ns.Category('Bad Habits', categories.quests)
 categories.explorationTrespassing = ns.Category('Trespassing', categories.exploration)
 categories.explorationLandmarks   = ns.Category('Landmarks', categories.exploration)
 
+categories.explorationFarCorners = ns.Category('Far Corners', categories.exploration)
+categories.explorationMemorials  = ns.Category('Memorials', categories.exploration)
+
 ns.categories = categories
 
 -- The summary's Progress Overview grid is derived in achievements/Register.lua.

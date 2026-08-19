@@ -199,3 +199,87 @@ A.BENEATH_YOU = ns.Achievement(habits, {
         { ns.CRITERIA_QUEST_NO_XP, nil, 100, 'Quests done for nothing' },
     },
 })
+
+-- Quests worth doing for the story. Anniversary already owns Loremaster, Nesingwary,
+-- the Skeleton Key and every attunement, so none of those are here.
+
+A.LOST_IN_BATTLE = ns.Achievement(azeroth, {
+    name    = 'Lost in Battle',
+    desc    = 'Find Mankrik\'s wife, and tell him where she is.',
+    points  = 20,
+    icon    = 'barrens',
+    faction = 'Horde',
+    criteria = {
+        { TYPE.COMPLETE_QUEST, {4921}, nil, 'Lost in Battle' },
+    },
+})
+
+A.SECRET_TO_EVERYBODY = ns.Achievement(azeroth, {
+    name   = 'It\'s a Secret to Everybody',
+    desc   = 'Follow the wrecked raft in Un\'Goro Crater all the way to Winterspring.',
+    points = 25,
+    icon   = 'ungoro',
+    criteria = {
+        { TYPE.COMPLETE_QUEST, {3844}, nil, 'The wrecked raft' },
+        { TYPE.COMPLETE_QUEST, {3908}, nil, 'Linken\'s sword returned' },
+    },
+})
+
+A.DRAKEFIRE_AMULET = ns.Achievement(azeroth, {
+    name   = 'Drakefire Amulet',
+    desc   = 'See the whole Onyxia chain through to the amulet at the end of it.',
+    points = 30,
+    icon   = 'achievement_boss_onyxia',
+    criteria = {
+        { TYPE.COMPLETE_QUEST, {6502}, nil, 'Drakefire Amulet' },
+    },
+})
+
+A.RING_OF_BLOOD = ns.Achievement(outland, {
+    name   = 'The Ring of Blood',
+    desc   = 'Win every round in the Ring of Blood in Nagrand, Mogor included.',
+    points = 25,
+    icon   = 'nagrand',
+    criteria = {
+        { TYPE.COMPLETE_QUEST, {9977}, nil, 'The Final Challenge' },
+    },
+})
+
+A.CIPHER_OF_DAMNATION = ns.Achievement(outland, {
+    name   = 'The Cipher of Damnation',
+    desc   = 'Put Shadowmoon Valley\'s longest chain to rest at the Altar of Damnation.',
+    points = 30,
+    icon   = 'shadowmoon',
+    criteria = {
+        { TYPE.COMPLETE_QUEST, {10588}, nil, 'The Cipher of Damnation' },
+    },
+})
+
+A.NIGHT_SHIFT = ns.Achievement(habits, {
+    name   = 'Night Shift',
+    desc   = 'Hand in 50 quests between midnight and six in the morning.',
+    points = 20,
+    icon   = '-Spell_Nature_Sleep',
+    criteria = {
+        { ns.CRITERIA_QUEST_NIGHT, nil, 50, 'Quests handed in in the small hours' },
+    },
+})
+
+-- Both are built so ids never move, and each is only offered to the side that has them.
+local function homeDelivery(faction, capitals)
+    local criteria = {}
+    for i, areaID in ipairs(capitals) do
+        criteria[i] = { ns.CRITERIA_QUEST_IN_ZONE, {areaID}, 1, AreaTableLocale[areaID] }
+    end
+    return ns.Achievement(errands, {
+        name    = 'Home Delivery',
+        desc    = 'Hand in a quest in all four of your own capital cities.',
+        points  = 20,
+        icon    = '-Inv_Letter_03',
+        faction = faction,
+        criteria = criteria,
+    })
+end
+
+A.HOME_DELIVERY_HORDE = homeDelivery('Horde', {1637, 1638, 1497, 3487})
+A.HOME_DELIVERY_ALLIANCE = homeDelivery('Alliance', {1519, 1537, 1657, 3557})

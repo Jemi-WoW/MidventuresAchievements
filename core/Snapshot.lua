@@ -55,7 +55,6 @@ function snapshot.Record()
         midiDone = #midiIDs,
         ids = { [ns.SECTION_ANNIVERSARY] = annIDs, [ns.SECTION_MIDVENTURES] = midiIDs },
         days = days,
-        isPlayer = true,
     }
 end
 

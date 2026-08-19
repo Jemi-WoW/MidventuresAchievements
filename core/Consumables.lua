@@ -1,7 +1,8 @@
 local _, ns = ...
 if ns.disabled then return end
 
--- Eating and drinking. One aura per kind, read by spell id so other locales work.
+-- Eating and drinking. The buff sitting on the player is the proof, read by name so
+-- every rank and every locale counts.
 CA_Criterias.dataLengths[ns.CRITERIA_EAT] = 0
 CA_Criterias.criterias[ns.CRITERIA_EAT] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_DRINK] = 0
@@ -15,6 +16,8 @@ CA_Criterias.criterias[ns.CRITERIA_CONSUME_ITEM] = {}
 local ALCOHOL = {
     [2593]  = true, -- Flask of Port
     [2594]  = true, -- Flagon of Dwarven Honeymead
+    [2595]  = true, -- Jug of Bourbon
+    [2596]  = true, -- Skin of Dwarven Stout
     [2723]  = true, -- Bottle of Pinot Noir
     [4595]  = true, -- Junglevine Wine
     [18269] = true, -- Gordok Green Grog
@@ -39,8 +42,10 @@ local ALCOHOL = {
     [33055] = true, -- Rock Scorpion Brew
 }
 
-local playerGUID
-local FOOD_AURA, DRINK_AURA
+local FOOD_AURA, DRINK_AURA = 'Food', 'Drink'
+
+local eating, drinking = false, false
+local drankAt = 0
 
 local function progress()
     MidventuresProgressDB = MidventuresProgressDB or {}
@@ -55,39 +60,75 @@ local function bump(key, criteriaType)
     CA_Criterias:Trigger(criteriaType, nil, record[key], true)
 end
 
--- The aura is what proves it went down, rather than the item leaving the bag.
-ns.OnCombatLog({'SPELL_AURA_APPLIED'}, function(_, _, _, destGUID, _, _, name)
-    if not playerGUID or destGUID ~= playerGUID then return end
-
-    if name == FOOD_AURA then
-        bump('food', ns.CRITERIA_EAT)
-    elseif name == DRINK_AURA then
-        bump('drink', ns.CRITERIA_DRINK)
+local function auras()
+    local food, drink = false, false
+    for i = 1, 40 do
+        local name = UnitBuff('player', i)
+        if not name then break end
+        if name == FOOD_AURA then food = true end
+        if name == DRINK_AURA then drink = true end
     end
-end)
+    return food, drink
+end
 
--- Using an item casts a spell of the same name, which is how a specific one is spotted.
-local wanted = {}
+-- Quiet primes the state after a loading screen, where the aura is already there.
+local function checkAuras(quiet)
+    local food, drink = auras()
 
-local function rememberWantedItems()
-    for itemID in pairs(CA_Criterias.criterias[ns.CRITERIA_CONSUME_ITEM]) do
-        local name = GetItemInfo(itemID)
-        if name then wanted[name] = itemID end
+    if food and not eating and not quiet then bump('food', ns.CRITERIA_EAT) end
+    if drink and not drinking then
+        drankAt = GetTime()
+        if not quiet then bump('drink', ns.CRITERIA_DRINK) end
     end
-    for itemID in pairs(ALCOHOL) do
-        local name = GetItemInfo(itemID)
-        if name then wanted[name] = wanted[name] or itemID end
-    end
+
+    eating, drinking = food, drink
+end
+
+local function onAlcohol()
+    bump('alcohol', ns.CRITERIA_ALCOHOL)
+
+    -- Booze counts as a drink, but the few kinds that also buff must not count twice.
+    local at = GetTime()
+    C_Timer.After(1, function()
+        if drankAt < at then bump('drink', ns.CRITERIA_DRINK) end
+    end)
+end
+
+-- Using an item casts a spell, which is how a specific one is spotted.
+local bySpell, byName, pending = {}, {}, {}
+
+local function remember(itemID)
+    local spellName, spellID = GetItemSpell(itemID)
+    if spellID then bySpell[spellID] = itemID end
+    if spellName then byName[spellName] = byName[spellName] or itemID end
+
+    local itemName = GetItemInfo(itemID)
+    if itemName then byName[itemName] = byName[itemName] or itemID end
+
+    return spellID ~= nil or itemName ~= nil
+end
+
+-- An item the server has not sent yet answers nothing, so it is asked for again later.
+local function want(itemID)
+    if not remember(itemID) then pending[itemID] = true end
+end
+
+local function collect()
+    for itemID in pairs(CA_Criterias.criterias[ns.CRITERIA_CONSUME_ITEM]) do want(itemID) end
+    for itemID in pairs(ALCOHOL) do want(itemID) end
 end
 
 local function onCast(unit, _, spellID)
-    if unit ~= 'player' then return end
-    local name = spellID and GetSpellInfo(spellID)
-    if not name then return end
+    if unit ~= 'player' or not spellID then return end
 
-    local itemID = wanted[name]
+    local itemID = bySpell[spellID]
+    if not itemID then
+        local name = GetSpellInfo(spellID)
+        itemID = name and byName[name]
+    end
     if not itemID then return end
-    if ALCOHOL[itemID] then bump('alcohol', ns.CRITERIA_ALCOHOL) end
+
+    if ALCOHOL[itemID] then onAlcohol() end
     if CA_Criterias.criterias[ns.CRITERIA_CONSUME_ITEM][itemID] then
         CA_Criterias:Trigger(ns.CRITERIA_CONSUME_ITEM, {itemID})
     end
@@ -95,14 +136,25 @@ end
 
 local watcher = CreateFrame('Frame')
 watcher:RegisterEvent('PLAYER_LOGIN')
-watcher:RegisterEvent('UNIT_SPELLCAST_SUCCEEDED')
+watcher:RegisterEvent('PLAYER_ENTERING_WORLD')
+watcher:RegisterEvent('GET_ITEM_INFO_RECEIVED')
+watcher:RegisterUnitEvent('UNIT_AURA', 'player')
+watcher:RegisterUnitEvent('UNIT_SPELLCAST_SUCCEEDED', 'player')
 watcher:SetScript('OnEvent', function(_, event, ...)
     if event == 'PLAYER_LOGIN' then
-        playerGUID = UnitGUID('player')
         -- Spell 433 is the Food aura and 430 the Drink one, in whatever language.
-        FOOD_AURA, DRINK_AURA = GetSpellInfo(433), GetSpellInfo(430)
-        C_Timer.After(5, rememberWantedItems)
-        C_Timer.After(20, rememberWantedItems)
+        FOOD_AURA = GetSpellInfo(433) or FOOD_AURA
+        DRINK_AURA = GetSpellInfo(430) or DRINK_AURA
+        checkAuras(true)
+        C_Timer.After(5, collect)
+        C_Timer.After(20, collect)
+    elseif event == 'PLAYER_ENTERING_WORLD' then
+        checkAuras(true)
+    elseif event == 'GET_ITEM_INFO_RECEIVED' then
+        local itemID = ...
+        if pending[itemID] and remember(itemID) then pending[itemID] = nil end
+    elseif event == 'UNIT_AURA' then
+        if ... == 'player' then checkAuras(false) end
     else
         onCast(...)
     end

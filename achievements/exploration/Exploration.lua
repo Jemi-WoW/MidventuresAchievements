@@ -188,3 +188,98 @@ A.SIGHTSEER = ns.Achievement(landmarks, {
         A.TIMELESS,
     },
 })
+
+-- Corners of the map nothing sends you to, so getting there is the whole point.
+local farCorners = ns.categories.explorationFarCorners
+
+local function corner(name, desc, points, icon, areaID)
+    return ns.Achievement(farCorners, {
+        name = name, desc = desc, points = points, icon = icon,
+        criteria = {
+            { ns.CRITERIA_ZONE_VISIT, {areaID}, nil, AreaTableLocale[areaID] },
+        },
+    })
+end
+
+A.TWIN_COLOSSALS = corner('Twin Peaks',
+    'Find the path up the Twin Colossals in Feralas.', 15, 'feralas', 1119)
+A.MASTERS_GLAIVE = corner('The Master\'s Glaive',
+    'Stand among the fallen swords on the coast of Darkshore.', 10, 'darkshore', 449)
+A.ELDARATH = corner('Elven Ruins',
+    'Wade into the Ruins of Eldarath in Azshara.', 10, 'azshara', 1221)
+A.DARKWHISPER = corner('Darkwhisper Gorge',
+    'Walk into the demons\' gorge in southern Winterspring.', 20, 'winterspring', 2256)
+A.TIMBERMAW = corner('Through the Hold',
+    'Walk the tunnel through Timbermaw Hold.', 15, 'felwood', 1216)
+A.KODO_GRAVEYARD = corner('Where Kodos Go',
+    'Find the Kodo Graveyard in Desolace.', 10, 'desolace', 596)
+A.ULDUM_GATE = corner('Sealed Away',
+    'Find the sealed gate of Uldum in southern Tanaris.', 15, 'tanaris', 989)
+
+A.DALARAN_DOME = corner('Under the Dome',
+    'Walk up to the shield over Dalaran in the Alterac Mountains.', 15, 'alterac_mountains', 279)
+A.SERADANE = corner('Green Dragon Country',
+    'Find Seradane, the green dragon portal in the Hinterlands.', 15, 'hinterlands', 356)
+A.JINTHA_ALOR = corner('Top of the Ziggurat',
+    'Climb to the altar at the top of Jintha\'Alor in the Hinterlands.', 20,
+    'hinterlands', 354)
+A.TWILIGHT_GROVE = corner('The Twilight Grove',
+    'Find the sunken grove hidden in Duskwood.', 10, 'duskwood', 856)
+A.KARAZHAN_GATES = corner('The Tower in the Pass',
+    'Stand at the gates of Karazhan in Deadwind Pass.', 15, 'deadwind_pass', 2562)
+A.GRIM_BATOL = corner('The Shut Gate',
+    'Follow the pass to the gate of Grim Batol in the Wetlands.', 15, 'wetlands', 1037)
+
+A.BASHIR_LANDING = corner('Nothing Below',
+    'Land on Bash\'ir Landing, the floating platform in Blade\'s Edge Mountains.', 20,
+    'blades_edge_mtns', 3864)
+A.NETHERWING_LEDGE = corner('The Dragons\' Ledge',
+    'Reach Netherwing Ledge in Shadowmoon Valley.', 20, 'shadowmoon', 3759)
+A.OSHUGUN = corner('The Mountain That Fell',
+    'Stand at the foot of Oshu\'gun in Nagrand.', 15, 'nagrand', 3630)
+A.SKETTIS = corner('Above the Trees',
+    'Find Skettis in Terokkar Forest.', 15, 'terrokar', 3679)
+A.BLACK_TEMPLE_GATES = corner('At the Gates',
+    'Walk up to the Black Temple in Shadowmoon Valley.', 20, 'shadowmoon', 3840)
+A.THRONE_OF_KILJAEDEN = corner('Throne of Kil\'jaeden',
+    'Climb the Throne of Kil\'jaeden in Hellfire Peninsula.', 15, 'hellfire_peninsula', 3547)
+A.STORMSPIRE = corner('The Stormspire',
+    'Reach the Stormspire in Netherstorm.', 15, 'netherstorm', 3738)
+
+A.FAR_CORNERS_AZEROTH = ns.Achievement(farCorners, {
+    name   = 'Far Corners of Azeroth',
+    desc   = 'Reach every corner of the old world nothing ever sends you to.',
+    points = 50,
+    icon   = 'inv_misc_map02',
+    meta = {
+        A.TWIN_COLOSSALS,
+        A.MASTERS_GLAIVE,
+        A.ELDARATH,
+        A.DARKWHISPER,
+        A.TIMBERMAW,
+        A.KODO_GRAVEYARD,
+        A.ULDUM_GATE,
+        A.DALARAN_DOME,
+        A.SERADANE,
+        A.JINTHA_ALOR,
+        A.TWILIGHT_GROVE,
+        A.KARAZHAN_GATES,
+        A.GRIM_BATOL,
+    },
+})
+
+A.FAR_CORNERS_OUTLAND = ns.Achievement(farCorners, {
+    name   = 'Far Corners of Outland',
+    desc   = 'Reach every corner of the other side nothing ever sends you to.',
+    points = 40,
+    icon   = 'outland',
+    meta = {
+        A.BASHIR_LANDING,
+        A.NETHERWING_LEDGE,
+        A.OSHUGUN,
+        A.SKETTIS,
+        A.BLACK_TEMPLE_GATES,
+        A.THRONE_OF_KILJAEDEN,
+        A.STORMSPIRE,
+    },
+})

@@ -81,7 +81,7 @@ StaticPopupDialogs['MIDVENTURES_RESTORE'] = {
     preferredIndex = 3,
 }
 
-local quietly = false
+local quietly, asked = false, false
 
 -- Runs once the answers stop coming, or once it is clear none are.
 finish = function()
@@ -90,8 +90,9 @@ finish = function()
 
     local ids = missing()
     if #ids == 0 then
-        if not quietly then
-            ns.Print('nobody in the guild holds anything this character is missing.')
+        -- The login check finding nothing is the normal case, and worth no chat line.
+        if asked then
+            ns.Print('this character is already up to date - the guild has nothing extra for it.')
         end
         return
     end
@@ -102,20 +103,21 @@ finish = function()
 end
 
 -- Silent means nobody is watching: put it back without asking and say so afterwards.
-local function ask(silent)
+local function ask(silent, byHand)
     if not (ns.Sync and ns.Sync.AskGuildMemory) then return end
     if collecting then return end
     if not IsInGuild() then
-        if not silent then ns.Print('no guild to ask.') end
+        if byHand then ns.Print('no guild to ask.') end
         return
     end
 
-    collecting, pending, settling, quietly = true, nil, false, silent
+    collecting, pending, settling = true, nil, false
+    quietly, asked = silent, byHand
     ns.Sync.AskGuildMemory()
     C_Timer.After(WINDOW, finish)
 end
 
-ns.commands.restore = function() ask(false) end
+ns.commands.restore = function() ask(false, true) end
 
 -- The guild name is the last thing to turn up at login, and nothing can be sent before it.
 local function whenReady(waited, run)
@@ -131,5 +133,5 @@ watcher:SetScript('OnEvent', function(self)
 
     -- Guildmates only answer when they hold more than we do, so asking every login is free.
     local unknownHere = not ns.Backup.Knows()
-    whenReady(0, function() ask(unknownHere) end)
+    whenReady(0, function() ask(unknownHere, false) end)
 end)

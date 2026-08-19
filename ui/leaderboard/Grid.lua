@@ -138,7 +138,7 @@ function leaderboard.RefreshGrid()
     local columns = math.max(1, math.floor((width + SPACING) / STEP))
     -- Leftover width is shared out as equal gaps rather than left on the right.
     local gap = math.max(SPACING, (width - columns * CELL) / (columns + 1))
-    local mine = leaderboard.record and leaderboard.record.isPlayer
+    local mine = ns.Roster.IsMe(leaderboard.record)
 
     for index, achievement in ipairs(list) do
         local tile = tiles[index] or newTile()

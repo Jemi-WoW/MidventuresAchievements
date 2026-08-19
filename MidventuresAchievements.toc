@@ -1,7 +1,7 @@
 ## Interface: 20506
-## Title: <|cff00ff00Midventures Achievements|r> v1.7
+## Title: <|cff00ff00Midventures Achievements|r> v1.8
 ## Author: Jamie/Jemi
-## Version: 1.7
+## Version: 1.8
 ## IconTexture: Interface/AddOns/AnniversaryAchievements/logo.tga
 ## Notes: Custom Midventures achievements and Midi Points, built on Anniversary Achievements.
 ## Category: Achievements
@@ -61,6 +61,7 @@ achievements/general/Money.lua
 achievements/general/Oddities.lua
 achievements/quests/Quests.lua
 achievements/exploration/Exploration.lua
+achievements/exploration/Memorials.lua
 achievements/dungeons-raids/DungeonsAndRaids.lua
 achievements/dungeons-raids/Raids.lua
 achievements/professions/Professions.lua
@@ -82,6 +83,7 @@ ui/Tab.lua
 ui/View.lua
 ui/Summary.lua
 ui/Live.lua
+ui/Search.lua
 ui/Transfer.lua
 
 ui/leaderboard/Remote.lua

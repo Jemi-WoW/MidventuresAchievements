@@ -105,7 +105,7 @@ end
 
 -- Pulls one player's completed achievements, but only when ours are out of date.
 function sync.RequestDetail(record, force)
-    if not record or record.isPlayer then return end
+    if not record or ns.Roster.IsMe(record) then return end
     -- Whispering someone offline only earns us a "no player" error in the chat frame.
     if not record.online then return end
 
@@ -156,7 +156,7 @@ end
 function sync.SeedDetail()
     local wanted = {}
     for _, record in ipairs(ns.Roster.Get()) do
-        if record.online and not record.isPlayer and record.idsVer ~= record.ver then
+        if record.online and not ns.Roster.IsMe(record) and record.idsVer ~= record.ver then
             wanted[#wanted + 1] = record
             if #wanted >= SEED_LIMIT then break end
         end
@@ -383,7 +383,7 @@ SlashCmdList.MIDVENTURESLEADERBOARD = function(argument)
     say(('%d player(s) known:'):format(#records))
     for _, record in ipairs(records) do
         say(('  %s (%s) - %d + %d points, %s'):format(
-            record.name, (record.online or record.isPlayer) and 'online' or 'offline',
+            record.name, (record.online or ns.Roster.IsMe(record)) and 'online' or 'offline',
             record.annPoints or 0, record.midiPoints or 0,
             record.ids and 'achievements cached' or 'points only'))
     end

@@ -12,6 +12,8 @@ CA_Criterias.dataLengths[ns.CRITERIA_QUEST_LOG_FULL] = 0
 CA_Criterias.criterias[ns.CRITERIA_QUEST_LOG_FULL] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_QUEST_NO_XP] = 0
 CA_Criterias.criterias[ns.CRITERIA_QUEST_NO_XP] = {}
+CA_Criterias.dataLengths[ns.CRITERIA_QUEST_NIGHT] = 0
+CA_Criterias.criterias[ns.CRITERIA_QUEST_NIGHT] = {}
 
 -- A quest handed in somewhere. Data is an AreaTableLocale id.
 CA_Criterias.dataLengths[ns.CRITERIA_QUEST_IN_ZONE] = 1
@@ -97,6 +99,9 @@ local function onTurnIn(_, xpReward)
     creditGroup()
     creditZone()
     if (xpReward or 0) == 0 then bump('noXP', ns.CRITERIA_QUEST_NO_XP) end
+
+    -- Your own clock, not the server's: it is your night that counts.
+    if (tonumber(date('%H')) or 12) < 6 then bump('night', ns.CRITERIA_QUEST_NIGHT) end
 end
 
 -- The log holds the same number of quests for everyone, and the client tells us which.
@@ -121,6 +126,7 @@ local function refill()
     CA_Criterias:Trigger(ns.CRITERIA_QUEST_GUILD, nil, record.guild, true)
     CA_Criterias:Trigger(ns.CRITERIA_QUEST_ABANDON, nil, record.abandoned, true)
     CA_Criterias:Trigger(ns.CRITERIA_QUEST_NO_XP, nil, record.noXP, true)
+    CA_Criterias:Trigger(ns.CRITERIA_QUEST_NIGHT, nil, record.night or 0, true)
     CA_Criterias:Trigger(ns.CRITERIA_QUEST_BUDDIES, nil, count(record.buddies), true)
     for areaID, total in pairs(record.zones) do
         CA_Criterias:Trigger(ns.CRITERIA_QUEST_IN_ZONE, {areaID}, total, true)

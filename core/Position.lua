@@ -34,6 +34,12 @@ local function atSpot(def)
     return (x - def.x) ^ 2 + (y - def.y) ^ 2 <= def.radius ^ 2
 end
 
+-- Standing on a spot right now, for anything that needs more than arriving.
+function ns.AtSpot(key)
+    local def = spots[key]
+    return def ~= nil and inZone(def) and atSpot(def)
+end
+
 local function check()
     for key, def in pairs(spots) do
         if inZone(def) and atSpot(def) then

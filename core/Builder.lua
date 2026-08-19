@@ -18,12 +18,14 @@ function ns.Category(name, parent)
     return category
 end
 
-local function addCriteria(category, achievement, type, data, quantity, name)
+local function addCriteria(category, achievement, type, data, quantity, name, format)
     local criteria = criterias:Create(name, type, data, quantity, category.mvCriteriaID)
     if not criteria then
         error(('Midventures: bad criteria on "%s" (type %s)'):format(achievement.name, tostring(type)))
     end
     category.mvCriteriaID = category.mvCriteriaID + 1
+    -- Money reads as gold and silver rather than a copper count.
+    if format then criteria:SetQuantityFormatter(format) end
     achievement:AddCriteria(criteria)
 end
 
@@ -34,7 +36,7 @@ function ns.Achievement(category, def)
     category.mvAchievementID = category.mvAchievementID + 1
 
     for _, c in ipairs(def.criteria or {}) do
-        addCriteria(category, achievement, c[1], c[2], c[3], c[4])
+        addCriteria(category, achievement, c[1], c[2], c[3], c[4], c[5])
     end
     for _, sub in ipairs(def.meta or {}) do
         addCriteria(category, achievement, criterias.TYPE.COMPLETE_ACHIEVEMENT, {sub.id}, nil, sub.name)

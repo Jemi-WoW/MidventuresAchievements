@@ -12,6 +12,8 @@ CA_Criterias.dataLengths[ns.CRITERIA_MONEY] = 1
 CA_Criterias.criterias[ns.CRITERIA_MONEY] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_BROKE] = 0
 CA_Criterias.criterias[ns.CRITERIA_BROKE] = {}
+CA_Criterias.dataLengths[ns.CRITERIA_GOLD_HELD] = 0
+CA_Criterias.criterias[ns.CRITERIA_GOLD_HELD] = {}
 
 local RICH_ENOUGH = 100 * 10000  -- a hundred gold, in copper
 local SKINT = 100                -- one silver
@@ -73,6 +75,8 @@ end
 
 local function checkMoney()
     local money = GetMoney() or 0
+    CA_Criterias:Trigger(ns.CRITERIA_GOLD_HELD, nil, money, true)
+
     for wanted in pairs(CA_Criterias.criterias[ns.CRITERIA_MONEY]) do
         if money >= wanted then CA_Criterias:Trigger(ns.CRITERIA_MONEY, {wanted}) end
     end

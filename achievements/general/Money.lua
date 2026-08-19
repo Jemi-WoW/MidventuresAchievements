@@ -55,3 +55,20 @@ A.BROKE = ns.Achievement(money, {
         { ns.CRITERIA_BROKE, nil, nil, 'Rich once, skint now' },
     },
 })
+
+-- The bar counts copper, so it is shown as coins the way quest gold is.
+local function coins(current, required)
+    return GetCoinTextureString(current) .. ' / ' .. GetCoinTextureString(required)
+end
+
+local GOLD = 10000
+
+A.HOLDING_GOLD = ns.Chain(money, {
+    name = function(n) return ('Character Holds %d Gold'):format(n) end,
+    desc = function(n) return ('Carry %d gold at once.'):format(n) end,
+    criteria = ns.CRITERIA_GOLD_HELD,
+    label = 'Gold carried',
+    scale = GOLD,
+    format = coins,
+    icons = {'-inv_misc_coin_01', '-inv_misc_coin_17', '-inv_misc_coin_08'},
+})

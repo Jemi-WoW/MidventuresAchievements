@@ -22,7 +22,8 @@ local function rung(category, def, index, count, points, previous)
         icon     = def.icons[(index - 1) % #def.icons + 1],
         previous = previous,
         criteria = {
-            { def.criteria, def.data, count, def.label },
+            -- Scale turns a tier the name reads in, like gold, into what the game counts.
+            { def.criteria, def.data, count * (def.scale or 1), def.label, def.format },
         },
     })
 end

@@ -101,6 +101,9 @@ ns.CRITERIA_REP_HATED = 5075      -- Reputation.lua, Hated with {factionID}, 0 f
 ns.CRITERIA_GUILD_RUNS = 5076     -- GuildDungeons.lua, guild dungeon runs finished
 ns.CRITERIA_RUN_FLAWLESS = 5077   -- GuildDungeons.lua, a run where nobody went down
 ns.CRITERIA_RUN_CLASSES = 5078    -- GuildDungeons.lua, a run of five different classes
+ns.CRITERIA_GOLD_HELD = 5079      -- Money.lua, copper carried right now
+ns.CRITERIA_EMOTE_AT_SPOT = 5080  -- Emotes.lua, {emote token, spot key} performed on the spot
+ns.CRITERIA_QUEST_NIGHT = 5081    -- Quests.lua, quests handed in in the small hours
 
 ns.active = false           -- true while the Midventures view is on screen
 ns.leaderboard = false      -- true while the leaderboard view is on screen

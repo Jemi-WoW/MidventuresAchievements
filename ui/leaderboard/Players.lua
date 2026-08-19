@@ -105,7 +105,7 @@ local function playerTooltip(self)
     -- The combined score, which is what ranks the list.
     GameTooltip:AddLine(' ')
     GameTooltip:AddDoubleLine('Total', BreakUpLargeNumbers(annPoints + midiPoints), 1, 1, 1, 1, 1, 1)
-    if not record.online and not record.isPlayer then
+    if not record.online and not ns.Roster.IsMe(record) then
         GameTooltip:AddLine('Offline - last known score.', 0.6, 0.6, 0.6)
     end
     GameTooltip:Show()
@@ -149,7 +149,7 @@ AchievementFrameCategories_DisplayButton = function(button, element)
     end
 
     -- Our own row is always online, whether or not the guild roster has landed yet.
-    local online = record.online or record.isPlayer
+    local online = record.online or ns.Roster.IsMe(record)
     local dot = statusDot(button)
     dot:SetTexture(online and STATUS_ONLINE or STATUS_OFFLINE)
     dot:Show()

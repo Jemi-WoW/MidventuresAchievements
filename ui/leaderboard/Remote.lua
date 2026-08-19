@@ -134,7 +134,7 @@ local function remoteInfo(id)
 
     info[4] = true
     info[5], info[6], info[7] = earnedOn(record, id)
-    info[13] = record.isPlayer or false
+    info[13] = ns.Roster.IsMe(record)
     info[14] = record.name
     return unpack(info, 1, 15)
 end
