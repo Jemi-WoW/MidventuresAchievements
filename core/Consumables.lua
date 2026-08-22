@@ -12,7 +12,7 @@ CA_Criterias.criterias[ns.CRITERIA_ALCOHOL] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_CONSUME_ITEM] = 1
 CA_Criterias.criterias[ns.CRITERIA_CONSUME_ITEM] = {}
 
--- Booze applies no Drink aura, so it is a list; add ids here to widen it.
+-- Nothing marks an item as booze, so it is a list; add ids here to widen it.
 local ALCOHOL = {
     [2593]  = true, -- Flask of Port
     [2594]  = true, -- Flagon of Dwarven Honeymead
@@ -97,8 +97,15 @@ end
 -- Using an item casts a spell, which is how a specific one is spotted.
 local bySpell, byName, pending = {}, {}, {}
 
+-- Every drink casts Drink and every food casts Food, so those name no item at all.
+local function shared(spellName)
+    return spellName == FOOD_AURA or spellName == DRINK_AURA
+end
+
 local function remember(itemID)
     local spellName, spellID = GetItemSpell(itemID)
+    if spellName and shared(spellName) then spellName, spellID = nil, nil end
+
     if spellID then bySpell[spellID] = itemID end
     if spellName then byName[spellName] = byName[spellName] or itemID end
 
@@ -106,6 +113,36 @@ local function remember(itemID)
     if itemName then byName[itemName] = byName[itemName] or itemID end
 
     return spellID ~= nil or itemName ~= nil
+end
+
+-- Which item the cast came from, named exactly by whatever the player clicked.
+local lastUse, lastUseAt = nil, 0
+
+local function noteUse(itemID)
+    if itemID then lastUse, lastUseAt = itemID, GetTime() end
+end
+
+local function hook(name, fn)
+    if _G[name] then hooksecurefunc(name, fn) end
+end
+
+hook('UseContainerItem', function(bag, slot) noteUse(GetContainerItemID(bag, slot)) end)
+hook('UseInventoryItem', function(slot) noteUse(GetInventoryItemID('player', slot)) end)
+hook('UseAction', function(slot)
+    local kind, id = GetActionInfo(slot)
+    if kind == 'item' then noteUse(tonumber(id)) end
+end)
+
+if GetItemInfoInstant then
+    hook('UseItemByName', function(item) noteUse((GetItemInfoInstant(item))) end)
+end
+
+-- A click is only that item if the spell that followed is the one the item casts.
+local function fromUse(spellID)
+    if not lastUse or GetTime() - lastUseAt > 2 then return end
+
+    local spellName = GetItemSpell(lastUse)
+    if spellName and spellName == GetSpellInfo(spellID) then return lastUse end
 end
 
 -- An item the server has not sent yet answers nothing, so it is asked for again later.
@@ -121,10 +158,15 @@ end
 local function onCast(unit, _, spellID)
     if unit ~= 'player' or not spellID then return end
 
-    local itemID = bySpell[spellID]
-    if not itemID then
-        local name = GetSpellInfo(spellID)
-        itemID = name and byName[name]
+    local itemID = fromUse(spellID)
+    if itemID then
+        lastUse = nil
+    else
+        itemID = bySpell[spellID]
+        if not itemID then
+            local name = GetSpellInfo(spellID)
+            itemID = name and byName[name]
+        end
     end
     if not itemID then return end
 

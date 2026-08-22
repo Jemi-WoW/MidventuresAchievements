@@ -75,7 +75,7 @@ A.INTERRUPTED = ns.Chain(odd, {
     desc = function(n) return ('Interrupt %d casts.'):format(n) end,
     criteria = ns.CRITERIA_INTERRUPTS,
     label = 'Casts interrupted',
-    icons = {'-Ability_Cheapshot', '-Spell_Shadow_ConeOfSilence', '-Spell_Holy_Silence'},
+    icons = {'-Ability_Cheapshot', '-Spell_Shadow_ConeOfSilence', '-spell_shadow_deathscream'},
 })
 
 A.DISPEL_THIS = ns.Chain(odd, {
@@ -151,7 +151,7 @@ A.DEEP_SEA_DIVER = ns.Achievement(odd, {
     points = 20,
     icon   = 'inv_misc_fish_50',
     criteria = {
-        { ns.CRITERIA_ZONE_VISIT, {207}, nil, 'The Great Sea' },
+        { ns.CRITERIA_ZONE_SWIM, {207}, nil, 'The Great Sea' },
     },
 })
 

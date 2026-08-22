@@ -73,7 +73,7 @@ A.HOMETOWN_HERO = ns.Achievement(azeroth, {
     name   = 'Hometown Hero',
     desc   = 'Reach Honored with every home city of your own faction.',
     points = 20,
-    icon   = '-Inv_Banner_02',
+    icon   = '-inv_banner_03',
     criteria = homeCriteria(),
 })
 
@@ -91,7 +91,7 @@ A.HATED = ns.Achievement(azeroth, {
     name   = 'Hated',
     desc   = 'Get somebody, anybody, to Hated.',
     points = 15,
-    icon   = '-Spell_Shadow_Possession',
+    icon   = '-spell_shadow_demonictactics',
     criteria = {
         { ns.CRITERIA_REP_HATED, {ns.REP_ANY_FACTION}, nil, 'A faction that is done with you' },
     },
@@ -114,7 +114,7 @@ A.PERSONA_NON_GRATA = ns.Achievement(azeroth, {
     name     = 'Persona Non Grata',
     desc     = 'Reach Hated with all three Steamwheedle towns.',
     points   = 30,
-    icon     = '-Ability_Rogue_Disguise',
+    icon     = '-ability_racial_shadowmeld',
     previous = A.HATED,
     criteria = steamwheedleCriteria(),
 })

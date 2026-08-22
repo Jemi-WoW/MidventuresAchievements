@@ -91,7 +91,7 @@ A.FLAWLESS = ns.Achievement(anyDungeon, {
     name   = 'Flawless',
     desc   = 'Finish a guild dungeon run without a single one of you dying.',
     points = 25,
-    icon   = '-Spell_Holy_SealOfProtection',
+    icon   = '-spell_holy_sealofsacrifice',
     criteria = {
         { ns.CRITERIA_RUN_FLAWLESS, nil, nil, 'A run nobody died on' },
     },

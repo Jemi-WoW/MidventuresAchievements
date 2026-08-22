@@ -191,7 +191,7 @@ A.PROFESSIONAL_CORPSE = ns.Achievement(milestones, {
     name   = 'Professional Corpse',
     desc   = 'Make dying a career.',
     points = 50,
-    icon   = '-spell_shadow_psychichorrors',
+    icon   = 'spell_shadow_psychichorrors',
     meta   = { A.SKILL_ISSUE[T[500]], A.CORPSE_RUN_CHAMPION, A.WIPE_COMMANDER,
                A.NAKED_AND_AFRAID },
 })
@@ -262,7 +262,7 @@ A.TOURIST_OF_THE_DAMNED = ns.Achievement(milestones, {
     name   = 'Tourist of the Damned',
     desc   = 'Stand in every place worth standing in.',
     points = 40,
-    icon   = '-inv_misc_map02',
+    icon   = 'inv_misc_map02',
     meta   = { A.DEEP_SEA_DIVER, A.MOUNTAIN_GOAT, A.BOOTY_BAY_TOURIST, A.ONE_SMALL_STEP },
 })
 

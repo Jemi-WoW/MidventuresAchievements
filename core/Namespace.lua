@@ -104,6 +104,7 @@ ns.CRITERIA_RUN_CLASSES = 5078    -- GuildDungeons.lua, a run of five different 
 ns.CRITERIA_GOLD_HELD = 5079      -- Money.lua, copper carried right now
 ns.CRITERIA_EMOTE_AT_SPOT = 5080  -- Emotes.lua, {emote token, spot key} performed on the spot
 ns.CRITERIA_QUEST_NIGHT = 5081    -- Quests.lua, quests handed in in the small hours
+ns.CRITERIA_ZONE_SWIM = 5082      -- Zones.lua, {areaID} swum in under your own power
 
 ns.active = false           -- true while the Midventures view is on screen
 ns.leaderboard = false      -- true while the leaderboard view is on screen

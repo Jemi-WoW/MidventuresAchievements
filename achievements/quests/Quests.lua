@@ -45,7 +45,7 @@ A.WANTED_HOGGER = ns.Achievement(azeroth, {
     name    = 'Wanted: Hogger',
     desc    = 'Bring in the most feared gnoll in Elwynn Forest.',
     points  = 15,
-    icon    = '-Ability_Warrior_Rampage',
+    icon    = '-ability_warrior_decisivestrike',
     faction = 'Alliance',
     criteria = {
         { TYPE.COMPLETE_QUEST, {176}, nil, 'Wanted: Hogger' },
@@ -127,7 +127,7 @@ A.DAILY_GRIND = ns.Achievement(dailies, {
     name     = 'Daily Grind',
     desc     = 'Complete 25 daily quests.',
     points   = 15,
-    icon     = '-Inv_Misc_PocketWatch_01',
+    icon     = 'achievement_quests_completed_daily_02',
     previous = A.JUST_THIS_ONCE,
     criteria = {
         { TYPE.COMPLETE_DAILY_QUESTS, nil, 25, 'Daily quests completed' },
@@ -177,14 +177,14 @@ A.QUITTER = ns.Chain(habits, {
     desc = function(n) return ('Give up on %d quests.'):format(n) end,
     criteria = ns.CRITERIA_QUEST_ABANDON,
     label = 'Quests abandoned',
-    icons = {'-Inv_Misc_Bandage_15', '-Spell_Shadow_Cripple', '-Ability_Rogue_FeignDeath'},
+    icons = {'-inv_misc_bandage_netherweave_heavy', '-spell_shadow_curseofmannoroth', '-spell_shadow_deathscream'},
 })
 
 A.HOARDER = ns.Achievement(habits, {
     name   = 'Hoarder',
     desc   = 'Fill your quest log to the last slot.',
     points = 15,
-    icon   = '-Inv_Misc_Bag_10_Green',
+    icon   = '-inv_misc_bag_27',
     criteria = {
         { ns.CRITERIA_QUEST_LOG_FULL, nil, nil, 'A quest log with no room left' },
     },
@@ -194,7 +194,7 @@ A.BENEATH_YOU = ns.Achievement(habits, {
     name   = 'Beneath You',
     desc   = 'Hand in 100 quests that were worth no experience at all.',
     points = 20,
-    icon   = '-Spell_Shadow_Teleport',
+    icon   = '-spell_arcane_teleportshattrath',
     criteria = {
         { ns.CRITERIA_QUEST_NO_XP, nil, 100, 'Quests done for nothing' },
     },
@@ -259,7 +259,7 @@ A.NIGHT_SHIFT = ns.Achievement(habits, {
     name   = 'Night Shift',
     desc   = 'Hand in 50 quests between midnight and six in the morning.',
     points = 20,
-    icon   = '-Spell_Nature_Sleep',
+    icon   = '-spell_holy_mindsooth',
     criteria = {
         { ns.CRITERIA_QUEST_NIGHT, nil, 50, 'Quests handed in in the small hours' },
     },

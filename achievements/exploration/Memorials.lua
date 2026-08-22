@@ -32,7 +32,7 @@ end
 A.MEMORIAL_STARK = bowTo('Rousch', 'Always Ready to Help',
     'Bow to Rousch on the cliffs south of Dun Garok, in Hillsbrad Foothills. '
     .. 'He remembers Anthony Ray Stark, 1961-2005.',
-    '-inv_misc_flower_02')
+    '-inv_rosebouquet01')
 
 A.MEMORIAL_MORALES = bowAt('MEMORIAL_MORALES', {
     zones = {267}, x = 50.2, y = 68.2, radius = 3,
@@ -49,14 +49,14 @@ A.MEMORIAL_OSSEX = bowTo('Captain Armando Ossex', 'Cavalieri dell\'Alba',
 A.MEMORIAL_SARNO = bowTo('Brother Sarno', 'Patience of a Saint',
     'Bow to Brother Sarno in the Cathedral of Light in Stormwind City. '
     .. 'He remembers Richard Sarno, who answered everybody\'s questions.',
-    '-spell_holy_resurrection')
+    '-spell_holy_revivechampion')
 
 -- Kalimdor.
 
 A.MEMORIAL_MITCHEL = bowTo('Crildor', 'He Never Got to Play',
     'Bow to Crildor, who walks between the Cenarion Enclave and the Temple Gardens in '
     .. 'Darnassus. He remembers Mitchel, who died before the game was released.',
-    '-inv_misc_flower_02')
+    '-inv_rosebouquet01')
 
 A.MEMORIAL_KOITER = bowAt('MEMORIAL_KOITER', {
     zones = {17}, x = 47, y = 29, radius = 4,
@@ -75,7 +75,7 @@ A.MEMORIAL_EZRA = bowTo('Ahab Wheathoof', 'Ezra\'s Voice',
 A.MEMORIAL_DAK = bowTo('Caylee Dak', 'Do Not Stand at My Grave',
     'Bow to Caylee Dak on the Aldor Rise in Shattrath City. She stands where Dak Krause '
     .. 'logged out for the last time.',
-    '-spell_holy_resurrection')
+    '-spell_holy_revivechampion')
 
 A.MEMORIAL_ASHES = bowAt('MEMORIAL_ASHES', {
     zones = {3483}, x = 45.0, y = 87.2, radius = 3,
@@ -95,7 +95,7 @@ A.RESPECTS_PAID_AZEROTH = ns.Achievement(memorials, {
     name   = 'Respects Paid: Azeroth',
     desc   = 'Pay your respects at every memorial in Eastern Kingdoms and Kalimdor.',
     points = 40,
-    icon   = '-inv_misc_flower_02',
+    icon   = '-inv_rosebouquet01',
     meta = {
         A.MEMORIAL_STARK,
         A.MEMORIAL_MORALES,

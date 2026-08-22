@@ -11,7 +11,7 @@ A.MADE_IT_MYSELF = ns.Chain(crafting, {
     desc = function(n) return ('Make %d items with your own two hands.'):format(n) end,
     criteria = ns.CRITERIA_CRAFTED,
     label = 'Items made',
-    icons = {'-Inv_Hammer_20', '-Inv_Misc_ArmorKit_04', '-Trade_BlackSmithing'},
+    icons = {'-inv_mace_25', '-Inv_Misc_ArmorKit_04', '-Trade_BlackSmithing'},
 })
 
 A.DUST_TO_DUST = ns.Achievement(crafting, {
@@ -28,7 +28,7 @@ A.GUILD_SUPPLIER = ns.Achievement(crafting, {
     name   = 'Guild Supplier',
     desc   = ('Complete 50 trades with %s guildmates.'):format(ns.GUILD_NAME),
     points = 25,
-    icon   = '-Inv_Misc_Bag_10',
+    icon   = '-inv_misc_bag_27',
     criteria = {
         { ns.CRITERIA_GUILD_TRADES, nil, 50, 'Trades with guildmates' },
     },
@@ -38,7 +38,7 @@ A.ENCHANTERS_FRIEND = ns.Achievement(crafting, {
     name   = "Enchanter's Friend",
     desc   = ('Put an enchant on a %s guildmate\'s gear.'):format(ns.GUILD_NAME),
     points = 20,
-    icon   = '-Spell_Holy_GreaterHeal',
+    icon   = '-spell_holy_surgeoflight',
     criteria = {
         { ns.CRITERIA_ENCHANT_GUILD, nil, nil, 'A guildmate sent away better off' },
     },

@@ -11,7 +11,7 @@ A.SKILL_ISSUE = ns.Chain(death, {
     desc = function(n) return ('Die %d times.'):format(n) end,
     criteria = ns.CRITERIA_DEATHS,
     label = 'Deaths',
-    icons = {'-Inv_Misc_Bone_DwarfSkull_01', '-Spell_Shadow_DeathScream', '-spell_shadow_psychichorrors'},
+    icons = {'-Inv_Misc_Bone_DwarfSkull_01', '-Spell_Shadow_DeathScream', 'spell_shadow_psychichorrors'},
 })
 
 A.LONG_WAY_DOWN = ns.Achievement(death, {

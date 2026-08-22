@@ -16,7 +16,7 @@ A.MAKGORA = ns.Achievement(duels, {
     name   = "Mak'gora",
     desc   = ('Defeat a %s guildmate in a duel.'):format(ns.GUILD_NAME),
     points = 10,
-    icon   = '-Ability_Warrior_Challange',
+    icon   = '-ability_warrior_warcry',
     criteria = {
         { ns.CRITERIA_GUILD_DUEL, nil, 1, 'Guildmates defeated' },
     },
@@ -52,7 +52,7 @@ A.PREMADE = ns.Achievement(battlegrounds, {
     desc   = ('Win a battleground with at least %d %s guildmates in the raid.')
         :format(PREMADE, ns.GUILD_NAME),
     points = 25,
-    icon   = '-Inv_Banner_02',
+    icon   = '-inv_banner_03',
     criteria = {
         { ns.CRITERIA_BG_WIN_GUILD, {PREMADE}, nil, 'A win with the guild along' },
     },
@@ -74,7 +74,7 @@ A.WE_TRIED = ns.Achievement(battlegrounds, {
     name   = 'We Tried',
     desc   = 'Lose 25 battlegrounds. Somebody has to.',
     points = 15,
-    icon   = '-Ability_Rogue_FeignDeath',
+    icon   = '-spell_shadow_deathscream',
     criteria = {
         { ns.CRITERIA_BG_LOSSES, nil, 25, 'Battlegrounds lost' },
     },
@@ -84,7 +84,7 @@ A.CANNON_FODDER = ns.Achievement(battlegrounds, {
     name   = 'Cannon Fodder',
     desc   = 'Die 100 times in battlegrounds.',
     points = 15,
-    icon   = '-Ability_Creature_Cursed_05',
+    icon   = '-ability_creature_cursed_02',
     criteria = {
         { ns.CRITERIA_BG_DEATHS, nil, 100, 'Deaths in battlegrounds' },
     },
@@ -94,7 +94,7 @@ A.CARRIED = ns.Achievement(battlegrounds, {
     name   = 'Carried',
     desc   = 'Win a battleground without a single killing blow or honourable kill.',
     points = 20,
-    icon   = '-Spell_Nature_Sleep',
+    icon   = '-spell_holy_mindsooth',
     criteria = {
         { ns.CRITERIA_BG_CARRIED, nil, nil, 'A win you had no part in' },
     },
@@ -104,7 +104,7 @@ A.GUILD_TEAM = ns.Achievement(arenas, {
     name   = 'Guild Team',
     desc   = ('Win an arena match with nobody but %s on your side.'):format(ns.GUILD_NAME),
     points = 25,
-    icon   = '-Ability_Warrior_Challange',
+    icon   = '-ability_warrior_warcry',
     criteria = {
         { ns.CRITERIA_ARENA_GUILD, nil, 1, 'Arena wins with an all-guild team' },
     },
@@ -126,7 +126,7 @@ A.BLINDFOLDED = ns.Achievement(arenas, {
     name   = 'Blindfolded',
     desc   = 'Lose 50 arena matches. The rating will recover eventually.',
     points = 15,
-    icon   = '-Spell_Shadow_Cripple',
+    icon   = '-spell_shadow_curseofmannoroth',
     criteria = {
         { ns.CRITERIA_ARENA_LOSSES, nil, 50, 'Arena matches lost' },
     },
@@ -157,7 +157,7 @@ A.HUMBLED = ns.Achievement(duels, {
     name   = 'Humbled',
     desc   = ('Lose 50 duels to %s guildmates.'):format(ns.GUILD_NAME),
     points = 15,
-    icon   = '-Ability_Warrior_Disarm',
+    icon   = '-ability_warrior_innerrage',
     criteria = {
         { ns.CRITERIA_DUEL_LOSSES, nil, 50, 'Duels lost' },
     },

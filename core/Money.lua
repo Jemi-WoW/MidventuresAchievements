@@ -88,6 +88,13 @@ local function checkMoney()
     end
 end
 
+-- Rungs added later start empty, so the running totals are pushed again at login.
+local function refill()
+    local record = progress()
+    CA_Criterias:Trigger(ns.CRITERIA_VENDOR_SALES, nil, record.sales or 0, true)
+    CA_Criterias:Trigger(ns.CRITERIA_AUCTIONS, nil, record.auctions or 0, true)
+end
+
 local watcher = CreateFrame('Frame')
 watcher:RegisterEvent('PLAYER_ENTERING_WORLD')
 watcher:RegisterEvent('MERCHANT_SHOW')
@@ -101,6 +108,9 @@ watcher:SetScript('OnEvent', function(_, event)
         merchantOpen = false
     elseif event == 'BAG_UPDATE' then
         C_Timer.After(1, checkBags)
+    elseif event == 'PLAYER_ENTERING_WORLD' then
+        C_Timer.After(1, checkMoney)
+        C_Timer.After(1, refill)
     else
         C_Timer.After(1, checkMoney)
     end

@@ -13,14 +13,14 @@ A.BANDAGE_BRIGADE = ns.Chain(secondary, {
     end,
     criteria = ns.CRITERIA_BANDAGE_GUILD,
     label = 'Guildmates bandaged',
-    icons = {'-Inv_Misc_Bandage_08', '-Inv_Misc_Bandage_12', '-Inv_Misc_Bandage_15'},
+    icons = {'-Inv_Misc_Bandage_08', '-Inv_Misc_Bandage_12', '-inv_misc_bandage_netherweave_heavy'},
 })
 
 A.RUBBISH_ANGLER = ns.Achievement(secondary, {
     name   = 'Rubbish Angler',
     desc   = 'Fish 50 pieces of rubbish out of the water.',
     points = 15,
-    icon   = '-Inv_Boot_02',
+    icon   = '-inv_misc_fish_02',
     criteria = {
         { ns.CRITERIA_JUNK_FISH, nil, 50, 'Rubbish landed' },
     },

@@ -85,16 +85,16 @@ A.GUILD_CHAT_50 = chatter('Write in Guild chat 50 times',
     chatDesc(50), 50, 10, '-Inv_Misc_Note_01', A.GUILD_CHAT_10)
 
 A.GUILD_CHAT_67 = chatter('Write in Guild chat 67 times',
-    chatDesc(67), 67, 10, '-Inv_Misc_Rune_01', A.GUILD_CHAT_50)
+    chatDesc(67), 67, 10, '-inv_misc_rune_07', A.GUILD_CHAT_50)
 
 A.GUILD_CHAT_100 = chatter('Write in Guild chat 100 times',
     chatDesc(100), 100, 15, '-Inv_Misc_Book_09', A.GUILD_CHAT_67)
 
 A.GUILD_CHAT_200 = chatter('Write in Guild chat 200 times',
-    chatDesc(200), 200, 20, '-Inv_Scroll_05', A.GUILD_CHAT_100)
+    chatDesc(200), 200, 20, '-inv_scroll_10', A.GUILD_CHAT_100)
 
 A.GUILD_CHAT_1000 = chatter('Write in Guild chat 1000 Times',
-    chatDesc(1000), 1000, 30, '-Spell_Holy_Silence', A.GUILD_CHAT_200)
+    chatDesc(1000), 1000, 30, '-spell_shadow_deathscream', A.GUILD_CHAT_200)
 
 -- Read off the combat log by core/CritStrike.lua, and only the player's own hits count.
 A.A_REAL_CRITTER = ns.Achievement(combat, {

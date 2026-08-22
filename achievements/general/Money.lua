@@ -70,5 +70,23 @@ A.HOLDING_GOLD = ns.Chain(money, {
     label = 'Gold carried',
     scale = GOLD,
     format = coins,
-    icons = {'-inv_misc_coin_01', '-inv_misc_coin_17', '-inv_misc_coin_08'},
+    icons = {'-inv_misc_coin_02'},
+})
+
+-- Vendor Trash Tycoon sits above the ladder at 10,000, so this stops below it.
+A.VENDOR_SALES = ns.Chain(money, {
+    name = function(n) return ('Sell %d Items to Vendors'):format(n) end,
+    desc = function(n) return ('Sell %d items to vendors.'):format(n) end,
+    criteria = ns.CRITERIA_VENDOR_SALES,
+    label = 'Items sold',
+    icons = {'-inv_misc_coin_06'},
+})
+
+-- Auction Addict still sits at 500, the way Gnome Piggy Bank sits on the gold ladder.
+A.AUCTIONS_POSTED = ns.Chain(money, {
+    name = function(n) return ('Post %d Auctions'):format(n) end,
+    desc = function(n) return ('Post %d auctions.'):format(n) end,
+    criteria = ns.CRITERIA_AUCTIONS,
+    label = 'Auctions posted',
+    icons = {'-inv_misc_elvencoins'},
 })

@@ -12,7 +12,7 @@ A.MINING = ns.Chain(gathering, {
     criteria = ns.CRITERIA_GATHER,
     data = {ns.GATHER_MINING},
     label = 'Veins mined',
-    icons = {'-Inv_Pick_02', '-Inv_Ore_Copper_01', '-Inv_Ore_Thorium_02'},
+    icons = {'-inv_pick_01', '-inv_ore_mithril_01', '-inv_misc_qirajicrystal_02'},
 })
 
 A.HERBALISM = ns.Chain(gathering, {
@@ -21,7 +21,7 @@ A.HERBALISM = ns.Chain(gathering, {
     criteria = ns.CRITERIA_GATHER,
     data = {ns.GATHER_HERBS},
     label = 'Herbs picked',
-    icons = {'-Inv_Misc_Herb_07', '-Inv_Misc_Flower_02', '-Inv_Misc_Herb_11'},
+    icons = {'-inv_mushroom_11', '-inv_rosebouquet01', '-inv_misc_cauldron_nature'},
 })
 
 A.SKINNING = ns.Chain(gathering, {
@@ -30,5 +30,5 @@ A.SKINNING = ns.Chain(gathering, {
     criteria = ns.CRITERIA_GATHER,
     data = {ns.GATHER_SKINNING},
     label = 'Beasts skinned',
-    icons = {'-Inv_Misc_Pelt_Wolf_01', '-Inv_Misc_ArmorKit_17', '-Inv_Misc_Pelt_Bear_03'},
+    icons = {'-Inv_Misc_Pelt_Wolf_01', '-inv_misc_armorkit_14', '-inv_misc_monsterclaw_02'},
 })

@@ -61,7 +61,7 @@ raids.tbc = {
 
     { key = 'HYJAL', name = 'Hyjal Summit', title = 'Summit Meeting',
         boss = 'Archimonde', id = 17968, need = raids.BIG_RAID, points = 40,
-        icon = '-spell_shadow_summoninfernal' },
+        icon = '-spell_fire_felflamebreath' },
 
     { key = 'BLACK_TEMPLE', name = 'Black Temple', title = 'Not Prepared',
         boss = 'Illidan Stormrage', id = 22917, need = raids.BIG_RAID, points = 50,

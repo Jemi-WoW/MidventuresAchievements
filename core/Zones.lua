@@ -5,14 +5,28 @@ if ns.disabled then return end
 CA_Criterias.dataLengths[ns.CRITERIA_ZONE_VISIT] = 1
 CA_Criterias.criterias[ns.CRITERIA_ZONE_VISIT] = {}
 
+-- The same, but you have to get there yourself. A boat or a gryphon does not count.
+CA_Criterias.dataLengths[ns.CRITERIA_ZONE_SWIM] = 1
+CA_Criterias.criterias[ns.CRITERIA_ZONE_SWIM] = {}
+
 -- Either name counts, the same way core/ZoneLevel.lua reads it.
+local function here(areaID)
+    local wanted = AreaTableLocale[areaID]
+    return wanted == GetSubZoneText() or wanted == GetZoneText()
+end
+
 local function check()
-    local subZone, zone = GetSubZoneText(), GetZoneText()
     for areaID in pairs(CA_Criterias.criterias[ns.CRITERIA_ZONE_VISIT]) do
-        local wanted = AreaTableLocale[areaID]
-        if wanted == subZone or wanted == zone then
-            CA_Criterias:Trigger(ns.CRITERIA_ZONE_VISIT, {areaID})
-        end
+        if here(areaID) then CA_Criterias:Trigger(ns.CRITERIA_ZONE_VISIT, {areaID}) end
+    end
+end
+
+-- Zone events fire on arrival, so the swim itself needs watching for.
+local function checkSwim()
+    if not IsSwimming() or UnitOnTaxi('player') or IsMounted() then return end
+
+    for areaID in pairs(CA_Criterias.criterias[ns.CRITERIA_ZONE_SWIM]) do
+        if here(areaID) then CA_Criterias:Trigger(ns.CRITERIA_ZONE_SWIM, {areaID}) end
     end
 end
 
@@ -22,3 +36,5 @@ watcher:RegisterEvent('ZONE_CHANGED_NEW_AREA')
 watcher:RegisterEvent('ZONE_CHANGED')
 watcher:RegisterEvent('ZONE_CHANGED_INDOORS')
 watcher:SetScript('OnEvent', function() C_Timer.After(1, check) end)
+
+C_Timer.NewTicker(2, checkSwim)
