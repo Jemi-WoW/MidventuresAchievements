@@ -41,3 +41,31 @@ A.SUMMONERS_SICKNESS = ns.Achievement(travel, {
         { ns.CRITERIA_SUMMONED, nil, 25, 'Summons taken' },
     },
 })
+
+-- Counted by core/Movement.lua, which reads the client the way JemiStats does.
+A.HAPPY_FEET = ns.Chain(travel, {
+    name = function(n) return ('Jump %d Times'):format(n) end,
+    desc = function(n) return ('Jump %d times.'):format(n) end,
+    criteria = ns.CRITERIA_JUMPS,
+    label = 'Jumps',
+    icons = {'-Inv_Misc_Foot_Centaur'},
+})
+
+-- A million reads as a phone number without them.
+local function commas(number)
+    local text, replaced = tostring(number), 1
+    while replaced > 0 do
+        text, replaced = text:gsub('^(%d+)(%d%d%d)', '%1,%2')
+    end
+    return text
+end
+
+-- Yards come in far faster than anything else, hence the longer ladder in Tiers.lua.
+A.LONG_WALK = ns.Chain(travel, {
+    name = function(n) return ('Walk %s Yards'):format(commas(n)) end,
+    desc = function(n) return ('Cover %s yards on your own two feet.'):format(commas(n)) end,
+    criteria = ns.CRITERIA_YARDS,
+    label = 'Yards walked',
+    walking = true,
+    icons = {'-ability_hunter_pathfinding'},
+})

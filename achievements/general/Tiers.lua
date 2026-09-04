@@ -10,6 +10,11 @@ local POINTS = {5, 5, 10, 10, 10, 15, 20, 25, 30, 35, 50}
 ns.EXTRA_TIERS = {2000, 3000, 4000, 5000}
 local EXTRA_POINTS = {60, 70, 80, 100}
 
+-- Yards pile up far faster than anything else counts, so walking climbs past the rest.
+ns.EXTRA_WALKING_TIERS = {10000, 100000, 200000, 300000, 400000, 500000,
+    1000000, 2000000, 3000000, 4000000, 5000000}
+local EXTRA_WALKING_POINTS = {15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100}
+
 -- Every chain ns.Chain has built, for Extend.lua to come back to.
 ns.chains = {}
 
@@ -49,6 +54,16 @@ function ns.ExtendChains()
         for i, count in ipairs(ns.EXTRA_TIERS) do
             previous = rung(chain.category, chain.def, base + i, count, EXTRA_POINTS[i], previous)
             made[base + i] = previous
+        end
+
+        -- Only a chain that asked for it goes on past the shared top rung.
+        if chain.def.walking then
+            local top = base + #ns.EXTRA_TIERS
+            for i, count in ipairs(ns.EXTRA_WALKING_TIERS) do
+                previous = rung(chain.category, chain.def, top + i, count,
+                    EXTRA_WALKING_POINTS[i], previous)
+                made[top + i] = previous
+            end
         end
     end
 end

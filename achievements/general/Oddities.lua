@@ -206,3 +206,14 @@ A.NAKED_GNOME_RUN = ns.Achievement(odd, {
         { ns.CRITERIA_NAKED_RUN, nil, nil, 'Ironforge reached, still naked' },
     },
 })
+
+-- The name carries a title in game, so the pattern takes whatever is around it.
+A.KISS_THE_BANSHEE = ns.Achievement(odd, {
+    name   = 'Kiss the Banshee Queen',
+    desc   = 'Use /kiss on Sylvanas Windrunner. She has been dead a while.',
+    points = 15,
+    icon   = 'achievement_leader_sylvanas',
+    criteria = {
+        { ns.CRITERIA_EMOTE_AT, {'KISS', '*sylvanas'}, nil, 'Sylvanas kissed' },
+    },
+})

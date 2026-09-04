@@ -6,7 +6,7 @@ local raids = {}
 ns.Raids = raids
 
 raids.SMALL_RAID = 5
-raids.BIG_RAID = 10
+raids.BIG_RAID = 8
 
 raids.classic = {
     { key = 'ONYXIA', name = "Onyxia's Lair", title = 'Big Red Lizard',

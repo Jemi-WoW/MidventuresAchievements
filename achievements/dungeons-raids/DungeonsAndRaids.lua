@@ -29,12 +29,12 @@ tbc.mvCriteriaID = tbc.mvCriteriaID + 1000
 
 local POINTS = 10
 
--- One per dungeon, credited by core/GuildDungeons.lua when the whole group is ours.
+-- One per dungeon, credited by core/GuildDungeons.lua when enough of the group is ours.
 local function guildRun(category, dungeon)
     return ns.Achievement(category, {
         name   = dungeon.title,
-        desc   = ('Defeat %s in %s with a full group of %s guildmates.')
-            :format(dungeon.boss, dungeon.name, ns.GUILD_NAME),
+        desc   = ('Defeat %s in %s with at least %d %s guildmates in the group.')
+            :format(dungeon.boss, dungeon.name, ns.MIN_GUILD_GROUP, ns.GUILD_NAME),
         points = POINTS,
         icon   = dungeon.icon,
         criteria = {
@@ -63,13 +63,13 @@ for i, dungeon in ipairs(ns.Dungeons.tbc) do
 end
 
 A.GUILD_DUNGEON_MASTER = everyDungeon(classic, 'Guild Dungeon Master',
-    ('Complete every WoW Classic dungeon with a full group of %s guildmates.')
-        :format(ns.GUILD_NAME),
+    ('Complete every WoW Classic dungeon with at least %d %s guildmates in the group.')
+        :format(ns.MIN_GUILD_GROUP, ns.GUILD_NAME),
     100, 'achievement_dungeon_classicdungeonmaster', classicRuns)
 
 A.TBC_GUILD_DUNGEON_MASTER = everyDungeon(tbc, 'TBC Guild Dungeon Master',
-    ('Complete every Burning Crusade dungeon with a full group of %s guildmates.')
-        :format(ns.GUILD_NAME),
+    ('Complete every Burning Crusade dungeon with at least %d %s guildmates in the group.')
+        :format(ns.MIN_GUILD_GROUP, ns.GUILD_NAME),
     100, 'achievement_dungeon_outland_dungeon_hero', tbcRuns)
 
 -- How the runs went rather than where; parent category, since either expansion counts.
@@ -78,8 +78,8 @@ local anyDungeon = ns.categories.dungeons
 A.DUNGEON_CRAWLER = ns.Chain(anyDungeon, {
     name = function(n) return ('Complete %d Guild Dungeon Runs'):format(n) end,
     desc = function(n)
-        return ('Finish %d dungeons with a full group of %s guildmates.')
-            :format(n, ns.GUILD_NAME)
+        return ('Finish %d dungeons with at least %d %s guildmates in the group.')
+            :format(n, ns.MIN_GUILD_GROUP, ns.GUILD_NAME)
     end,
     criteria = ns.CRITERIA_GUILD_RUNS,
     label = 'Guild runs finished',
@@ -103,6 +103,6 @@ A.FULL_HOUSE = ns.Achievement(anyDungeon, {
     points = 25,
     icon   = '-spell_holy_prayerofhealing',
     criteria = {
-        { ns.CRITERIA_RUN_CLASSES, nil, nil, 'Five guildmates, five classes' },
+        { ns.CRITERIA_RUN_CLASSES, nil, nil, 'Five classes in one group' },
     },
 })

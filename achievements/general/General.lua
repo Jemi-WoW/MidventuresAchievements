@@ -216,3 +216,14 @@ A.HELPFUL_2000 = helper('Buff 2000 Players', 2000, 35, '-inv_misc_cauldron_natur
 A.HELPFUL_3000 = helper('Buff 3000 Players', 3000, 40, '-spell_holy_revivechampion', A.HELPFUL_2000)
 A.HELPFUL_4000 = helper('Buff 4000 Players', 4000, 45, '-spell_holy_summonchampion', A.HELPFUL_3000)
 A.HELPFUL_5000 = helper('Buff 5000 Players', 5000, 50, 'spell_holy_aspiration', A.HELPFUL_4000)
+
+-- Read off the combat log by core/Healing.lua, from the healer's side of it.
+A.YE_OF_LITTLE_FAITH = ns.Achievement(combat, {
+    name   = 'Ye of Little Faith',
+    desc   = 'Have someone drink a health potion while your heal is already on them.',
+    points = 20,
+    icon   = '-inv_potion_101',
+    criteria = {
+        { ns.CRITERIA_POTION_HEALED, nil, nil, 'Healed, potted anyway' },
+    },
+})

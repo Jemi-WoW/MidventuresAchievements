@@ -105,6 +105,9 @@ ns.CRITERIA_GOLD_HELD = 5079      -- Money.lua, copper carried right now
 ns.CRITERIA_EMOTE_AT_SPOT = 5080  -- Emotes.lua, {emote token, spot key} performed on the spot
 ns.CRITERIA_QUEST_NIGHT = 5081    -- Quests.lua, quests handed in in the small hours
 ns.CRITERIA_ZONE_SWIM = 5082      -- Zones.lua, {areaID} swum in under your own power
+ns.CRITERIA_POTION_HEALED = 5083  -- Healing.lua, someone potted while you were healing them
+ns.CRITERIA_JUMPS = 5084          -- Movement.lua, jumps made
+ns.CRITERIA_YARDS = 5085          -- Movement.lua, yards covered on foot
 
 ns.active = false           -- true while the Midventures view is on screen
 ns.leaderboard = false      -- true while the leaderboard view is on screen

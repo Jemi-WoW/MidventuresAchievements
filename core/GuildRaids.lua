@@ -13,22 +13,8 @@ local function killed()
     return MidventuresProgressDB.guildRaids
 end
 
--- A raid only asks that enough of us are there, counting the player.
-function ns.GuildsInRaid()
-    if not ns.InOurGuild() then return 0 end
-
-    local prefix, slots = 'party', 4
-    if IsInRaid() then prefix, slots = 'raid', 40 end
-
-    local ours = 1
-    for i = 1, slots do
-        local unit = prefix .. i
-        if UnitExists(unit) and not UnitIsUnit(unit, 'player') and UnitIsInMyGuild(unit) then
-            ours = ours + 1
-        end
-    end
-    return ours
-end
+-- A raid only asks that enough of us are there, which core/Guild.lua already counts.
+ns.GuildsInRaid = ns.GuildmatesInGroup
 
 local function evaluate(raid)
     if killed()[raid.id] then

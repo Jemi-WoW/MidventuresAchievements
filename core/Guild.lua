@@ -10,25 +10,29 @@ function ns.InOurGuild()
     return GetGuildInfo('player') == ns.GUILD_NAME
 end
 
--- Every member has to be one of ours, whatever size the group is.
-local MIN_GROUP = 5
+-- Four of the five: one outsider in the group no longer spoils a guild run.
+ns.MIN_GUILD_GROUP = 4
 
-function ns.InGuildParty()
-    if not ns.InOurGuild() then return false end
+-- How many of us are in the group, counting the player, and none of another guild's.
+function ns.GuildmatesInGroup()
+    if not ns.InOurGuild() then return 0 end
 
     -- Raid units include the player, party units do not, hence the check on each one.
     local prefix, slots = 'party', 4
     if IsInRaid() then prefix, slots = 'raid', 40 end
 
-    local members = 1
+    local ours = 1
     for i = 1, slots do
         local unit = prefix .. i
-        if UnitExists(unit) and not UnitIsUnit(unit, 'player') then
-            if not UnitIsInMyGuild(unit) then return false end
-            members = members + 1
+        if UnitExists(unit) and not UnitIsUnit(unit, 'player') and UnitIsInMyGuild(unit) then
+            ours = ours + 1
         end
     end
-    return members >= MIN_GROUP
+    return ours
+end
+
+function ns.InGuildParty()
+    return ns.GuildmatesInGroup() >= ns.MIN_GUILD_GROUP
 end
 
 -- Realm suffixes only show up on some clients, and never mean another realm here.
