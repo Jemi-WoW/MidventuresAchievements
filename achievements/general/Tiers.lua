@@ -10,11 +10,6 @@ local POINTS = {5, 5, 10, 10, 10, 15, 20, 25, 30, 35, 50}
 ns.EXTRA_TIERS = {2000, 3000, 4000, 5000}
 local EXTRA_POINTS = {60, 70, 80, 100}
 
--- Yards pile up far faster than anything else counts, so walking climbs past the rest.
-ns.EXTRA_WALKING_TIERS = {10000, 100000, 200000, 300000, 400000, 500000,
-    1000000, 2000000, 3000000, 4000000, 5000000}
-local EXTRA_WALKING_POINTS = {15, 20, 25, 30, 35, 40, 50, 60, 70, 80, 100}
-
 -- Every chain ns.Chain has built, for Extend.lua to come back to.
 ns.chains = {}
 
@@ -33,11 +28,21 @@ local function rung(category, def, index, count, points, previous)
     })
 end
 
+-- A chain with its own numbers still needs the house rung count, or ids shift under it.
+local function ladder(def, tiers, points, house, housePoints)
+    if not tiers then return house, housePoints end
+    if #tiers ~= #house then
+        error(('Midventures: chain has %d rungs where %d are expected'):format(#tiers, #house))
+    end
+    return tiers, points
+end
+
 -- `name(count)` and `desc(count)` write the wording, `previous` shows one tier at a time.
 function ns.Chain(category, def)
+    local tiers, points = ladder(def, def.tiers, def.points, ns.TIERS, POINTS)
     local previous, made = nil, {}
-    for i, count in ipairs(ns.TIERS) do
-        previous = rung(category, def, i, count, POINTS[i], previous)
+    for i, count in ipairs(tiers) do
+        previous = rung(category, def, i, count, points[i], previous)
         made[i] = previous
     end
 
@@ -45,23 +50,25 @@ function ns.Chain(category, def)
     return made
 end
 
--- The rungs above 1000, hung off the end of every chain already built.
+-- The rungs above the house ladder, hung off the end of every chain already built.
 function ns.ExtendChains()
     local base = #ns.TIERS
     for _, chain in ipairs(ns.chains) do
-        local made = chain.made
+        local def, made = chain.def, chain.made
         local previous = made[base]
-        for i, count in ipairs(ns.EXTRA_TIERS) do
-            previous = rung(chain.category, chain.def, base + i, count, EXTRA_POINTS[i], previous)
+
+        local tiers, points = ladder(def, def.extraTiers, def.extraPoints,
+            ns.EXTRA_TIERS, EXTRA_POINTS)
+        for i, count in ipairs(tiers) do
+            previous = rung(chain.category, def, base + i, count, points[i], previous)
             made[base + i] = previous
         end
 
         -- Only a chain that asked for it goes on past the shared top rung.
-        if chain.def.walking then
+        if def.topTiers then
             local top = base + #ns.EXTRA_TIERS
-            for i, count in ipairs(ns.EXTRA_WALKING_TIERS) do
-                previous = rung(chain.category, chain.def, top + i, count,
-                    EXTRA_WALKING_POINTS[i], previous)
+            for i, count in ipairs(def.topTiers) do
+                previous = rung(chain.category, def, top + i, count, def.topPoints[i], previous)
                 made[top + i] = previous
             end
         end

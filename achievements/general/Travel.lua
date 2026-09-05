@@ -42,15 +42,6 @@ A.SUMMONERS_SICKNESS = ns.Achievement(travel, {
     },
 })
 
--- Counted by core/Movement.lua, which reads the client the way JemiStats does.
-A.HAPPY_FEET = ns.Chain(travel, {
-    name = function(n) return ('Jump %d Times'):format(n) end,
-    desc = function(n) return ('Jump %d times.'):format(n) end,
-    criteria = ns.CRITERIA_JUMPS,
-    label = 'Jumps',
-    icons = {'-Inv_Misc_Foot_Centaur'},
-})
-
 -- A million reads as a phone number without them.
 local function commas(number)
     local text, replaced = tostring(number), 1
@@ -60,12 +51,32 @@ local function commas(number)
     return text
 end
 
--- Yards come in far faster than anything else, hence the longer ladder in Tiers.lua.
+-- Counted by core/Movement.lua, which reads the client the way JemiStats does.
+A.HAPPY_FEET = ns.Chain(travel, {
+    name = function(n) return ('Jump %s Times'):format(commas(n)) end,
+    desc = function(n) return ('Jump %s times.'):format(commas(n)) end,
+    criteria = ns.CRITERIA_JUMPS,
+    label = 'Jumps',
+    icons = {'-Inv_Misc_Foot_Centaur'},
+    tiers  = {1000, 2000, 3000, 5000, 10000, 15000, 25000, 50000, 75000, 100000, 250000},
+    points = {5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 60},
+    extraTiers  = {500000, 1000000, 2500000, 5000000},
+    extraPoints = {70, 80, 90, 100},
+})
+
+-- Yards come in far faster than anything else, hence the ladder running to ten million.
 A.LONG_WALK = ns.Chain(travel, {
     name = function(n) return ('Walk %s Yards'):format(commas(n)) end,
     desc = function(n) return ('Cover %s yards on your own two feet.'):format(commas(n)) end,
     criteria = ns.CRITERIA_YARDS,
     label = 'Yards walked',
-    walking = true,
     icons = {'-ability_hunter_pathfinding'},
+    tiers  = {10000, 20000, 30000, 40000, 50000, 75000,
+        100000, 150000, 200000, 300000, 400000},
+    points = {5, 5, 10, 10, 15, 15, 20, 20, 25, 25, 30},
+    extraTiers  = {500000, 750000, 1000000, 1500000},
+    extraPoints = {30, 35, 40, 45},
+    topTiers  = {2000000, 2500000, 3000000, 3500000, 4000000, 5000000,
+        6000000, 7000000, 8000000, 9000000, 10000000},
+    topPoints = {50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100},
 })
