@@ -108,6 +108,7 @@ ns.CRITERIA_ZONE_SWIM = 5082      -- Zones.lua, {areaID} swum in under your own 
 ns.CRITERIA_POTION_HEALED = 5083  -- Healing.lua, someone potted while you were healing them
 ns.CRITERIA_JUMPS = 5084          -- Movement.lua, jumps made
 ns.CRITERIA_YARDS = 5085          -- Movement.lua, yards covered on foot
+ns.CRITERIA_ZONE_INSIDE = 5086    -- Zones.lua, {areaID} walked into, not flown over
 
 ns.active = false           -- true while the Midventures view is on screen
 ns.leaderboard = false      -- true while the leaderboard view is on screen

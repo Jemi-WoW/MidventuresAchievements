@@ -106,3 +106,14 @@ A.FULL_HOUSE = ns.Achievement(anyDungeon, {
         { ns.CRITERIA_RUN_CLASSES, nil, nil, 'Five classes in one group' },
     },
 })
+
+-- Hinterlands, Jintha'Alor and the Altar of Zanza, all so a gong can be hit once.
+A.HAMMER_TIME = ns.Achievement(classic, {
+    name   = 'Hammer Time',
+    desc   = 'Carry the Mallet of Zul\'Farrak.',
+    points = 20,
+    icon   = '-inv_hammer_23',
+    criteria = {
+        { TYPE.OBTAIN_ITEM, {9240}, nil, 'Mallet of Zul\'Farrak' },
+    },
+})

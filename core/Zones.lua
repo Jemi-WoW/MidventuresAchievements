@@ -9,15 +9,34 @@ CA_Criterias.criterias[ns.CRITERIA_ZONE_VISIT] = {}
 CA_Criterias.dataLengths[ns.CRITERIA_ZONE_SWIM] = 1
 CA_Criterias.criterias[ns.CRITERIA_ZONE_SWIM] = {}
 
+-- Inside the place rather than over it, for areas that read as a subzone from the air.
+CA_Criterias.dataLengths[ns.CRITERIA_ZONE_INSIDE] = 1
+CA_Criterias.criterias[ns.CRITERIA_ZONE_INSIDE] = {}
+
 -- Either name counts, the same way core/ZoneLevel.lua reads it.
 local function here(areaID)
     local wanted = AreaTableLocale[areaID]
     return wanted == GetSubZoneText() or wanted == GetZoneText()
 end
 
+-- Being inside puts you on the area's own map; the exterior belongs to the zone around it.
+local function inside(areaID)
+    local wanted = AreaTableLocale[areaID]
+    if wanted ~= GetZoneText() then return false end
+
+    local mapID = C_Map.GetBestMapForUnit('player')
+    local info = mapID and C_Map.GetMapInfo(mapID)
+    return info ~= nil and info.name == wanted
+end
+
 local function check()
     for areaID in pairs(CA_Criterias.criterias[ns.CRITERIA_ZONE_VISIT]) do
         if here(areaID) then CA_Criterias:Trigger(ns.CRITERIA_ZONE_VISIT, {areaID}) end
+    end
+
+    if UnitOnTaxi('player') then return end
+    for areaID in pairs(CA_Criterias.criterias[ns.CRITERIA_ZONE_INSIDE]) do
+        if inside(areaID) then CA_Criterias:Trigger(ns.CRITERIA_ZONE_INSIDE, {areaID}) end
     end
 end
 

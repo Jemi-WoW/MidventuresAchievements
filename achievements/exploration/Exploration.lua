@@ -166,8 +166,18 @@ end
 
 A.SCARAB_WALL = landmark('Scarab Wall',
     'Stand at the Gates of Ahn\'Qiraj and read the wall.', 15, 'silithus', 3478)
-A.INTO_THE_MOUNTAIN = landmark('Into the Mountain',
-    'Walk into Blackrock Mountain, chain bridge and all.', 15, 'burning_steppes', 25)
+
+-- Its own criteria type; the mountain reads as a subzone to anyone on a flight path over it.
+A.INTO_THE_MOUNTAIN = ns.Achievement(landmarks, {
+    name   = 'Into the Mountain',
+    desc   = 'Walk into Blackrock Mountain from the north or the south, chain bridge and all.',
+    points = 15,
+    icon   = 'burning_steppes',
+    criteria = {
+        { ns.CRITERIA_ZONE_INSIDE, {25}, nil, 'Inside Blackrock Mountain' },
+    },
+})
+
 A.VOLCANO_DIVER = landmark('Volcano Diver',
     'Climb Fire Plume Ridge in Un\'Goro Crater.', 15, 'ungoro', 537)
 A.DARK_PORTAL_SELFIE = landmark('Dark Portal Selfie',
